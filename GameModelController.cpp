@@ -225,7 +225,7 @@ void GameModelController::chargeSurfaceMissile()
 			index = "/0";
 		}
 
-		result = "/home/larry/engine/images/world2/test/gen/missile/test2" + index 
+		result = "images/missile2" + index 
 			+ out.str() + ".png";
 
 		m_missileSurface = IMG_Load(result.c_str());
