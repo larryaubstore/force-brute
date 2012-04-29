@@ -1,119 +1,5 @@
 #include "GameModelControllerTest.h"
 
-void GameModelControllerTest::testHandleKeyEvent()
-{
-
-	MOCKPP_TRY
-  	{
-/*
-		typedef struct{
-		  	Uint8 type;
-		    Uint8 state;
-			SDL_keysym keysym;
-		} SDL_KeyboardEvent;
-*/
-
-/*
-		typedef struct{
-			Uint8 scancode;
-		    SDLKey sym;
-			SDLMod mod;
-		    Uint16 unicode;
-		} SDL_keysym;
-		*/
-
-		SDL_KeyboardEvent keyboardEvent;
-		SDL_keysym key;
-		key.sym = SDLK_LEFT;
-		keyboardEvent.keysym = key;
-
-		GameModelControllerMock mock;
-		//mock.handleKeyEvent_name.addExpected(SDLK_LEFT);
-
-		mock.handleKeyEvent_name.addExpected(SDLK_LEFT);
-
-		// Run Consumer object
-		MOCKPP_STD_NS::cout 
-			<< MOCKPP_STD_NS::endl
-			<< "GameModelControllerTest::testHandleKeyEvent" 
-			<< MOCKPP_STD_NS::endl;
-
-
-		/********************** SCENARIO ****************************/ 
-		//GameModelController gameModelController( &mock );
-		//gameModelController.handleKeyEvent(5);
-
-
-		//mock.handleKeyEvent(&keyboardEvent);
-
-	   	MOCKPP_STD_NS::cout << "Tests finished" << MOCKPP_STD_NS::endl;
-
-		/*********************** VERIFY *****************************/
-		mock.verify();
-
-		MOCKPP_STD_NS::cout 
-			<< "All tests have passed successfully" 
-			<< MOCKPP_STD_NS::endl
-			<< MOCKPP_STD_NS::endl;
-	}
-	MOCKPP_CATCH(MOCKPP_STD_NS::exception &ex)
-	{
-		#ifndef MOCKPP_NO_EXCEPTIONS
-		MOCKPP_STD_NS::cout << MOCKPP_STD_NS::endl
-	     << "Error occured.\n" << ex.what() << MOCKPP_STD_NS::endl
-	     << MOCKPP_STD_NS::endl;
-		#endif
-	}
-}
-
-
-void GameModelControllerTest::testCommunicationWithGameModel()
-{
-
-	MOCKPP_TRY
-  	{
-		GameModelMock mock;
-		LoaderMock loaderMock;
-		FetcherMock fetcherMock;
-
-		SDL_KeyboardEvent keyboardEvent;
-		SDL_keysym key;
-		key.sym = SDLK_LEFT;
-		keyboardEvent.keysym = key;
-		mock.changeDirection_name.addExpected(LEFT);
-
-
-		// Run Consumer object
-		MOCKPP_STD_NS::cout 
-			<< MOCKPP_STD_NS::endl
-			<< "GameModelControllerTest::testCommunicationWithGameModel" 
-			<< MOCKPP_STD_NS::endl;
-
-		GameModelController* controller = new GameModelController(&mock, &loaderMock,
-																&fetcherMock, NULL, 
-																NULL);
-		//controller->handleKeyEvent(&keyboardEvent);
-
-		MOCKPP_STD_NS::cout << "Tests finished" << MOCKPP_STD_NS::endl;
-
-		/*********************** VERIFY *****************************/
-		mock.verify();
-
-		MOCKPP_STD_NS::cout << "All tests have passed successfully" 
-							<< MOCKPP_STD_NS::endl
-							<< MOCKPP_STD_NS::endl;
-	}
-	MOCKPP_CATCH(MOCKPP_STD_NS::exception &ex)
-	{
-		#ifndef MOCKPP_NO_EXCEPTIONS
-		MOCKPP_STD_NS::cout << MOCKPP_STD_NS::endl
-	     << "Error occured.\n" << ex.what() << MOCKPP_STD_NS::endl
-	     << MOCKPP_STD_NS::endl;
-		#endif
-	}
-}
-
-
 void GameModelControllerTest::testPathMissile()
 {
 
@@ -254,18 +140,25 @@ void GameModelControllerTest::testMissileAutoDestruction()
 			gameModel.nextPosition();
 		}
 
-		// Vérifier qu'il n'y plus qu'un missile
-		TEST_ASSERT(gameModel.GetPathMissileList().size() == 1 );
 
-		// On réaffecte le pointeur du missile
-		missile = gameModel.GetPathMissileList()[0].get();
-
-		// Tester si le missile #2 a avancé correctement
-		TEST_ASSERT(missile->getPosition() == 109);
-
-
-
-		MOCKPP_STD_NS::cout << "Tests finished" << MOCKPP_STD_NS::endl;
+		TEST_ASSERT_MSG(true == false, "Segmentation fault to debug");
+//		// Vérifier qu'il n'y plus qu'un missile
+//		TEST_ASSERT(gameModel.GetPathMissileList().size() == 1 );
+//
+//		//missilePtr = gameModel.GetPathMissileList()[0];
+//		vector<PathMissilePtr>::iterator it 
+//			= gameModel.GetPathMissileList().begin();
+//
+//
+//		PathMissilePtr ptrTwo = *it;
+//		IPathMissile* missileTwo = (*it).get();
+//
+//		// Tester si le missile #2 a avancé correctement
+//		TEST_ASSERT(missileTwo->getPosition() == 109);
+//
+//
+//
+//		MOCKPP_STD_NS::cout << "Tests finished" << MOCKPP_STD_NS::endl;
 
 		/*********************** VERIFY *****************************/
 		//mock.verify();
