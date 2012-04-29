@@ -2,11 +2,13 @@
 
 # LIBDIR=  -lSDL -lm  `sdl-config --libs`  -lSDL_image -lcpptest   -lmockpp_cxxtest -L/home/larry/devel/mockpp-1.16.6/mockpp/.libs -lmockpp
 
-LIBDIR=  -L/usr/local/lib -lSDL -lm  -lSDL_image -lcpptest   -lmockpp_cxxtest -lmockpp
+LIBDIR=  -L/usr/local/lib -lSDL -lm  -lSDL_image
+
+LIBDIRTEST=  -L/usr/local/lib -lSDL -lm  -lSDL_image -lcpptest   -lmockpp_cxxtest -lmockpp
 # INCLUDEDIR = -I /home/larry/devel/mockpp-1.16.6/ -I /home/larry/devel/boost_1_47_0 -I . -I /usr/include/SDL/
 # INCLUDEDIR = -I /home/larry/devel/mockpp-1.16.6/ -I . -I  /home/larry/devel/stl3_3
 
-INCLUDEDIR = -I /usr/local/include/SDL/ -I .
+INCLUDEDIR = -I /usr/local/include/SDL/ -I . # -I /usr/include -I /usr/include/SDL
 DEBUG= -g
 
 OBJDIR = bin

@@ -1,5 +1,5 @@
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 #include <string>
 #include <assert.h>
 #include "Timer.h"
@@ -77,12 +77,12 @@ int main( int argc, char* args[] )
 
 	// Direction, position, grid_dimension, 
 	GameModel* gameModel = new GameModel(DOWN, 0, 625, 
-	"/home/larry/engine/images/world2/test/gen/elementtwo/testeau2",
-	"/home/larry/engine/images/world2/test/gen/missile"
+	"images/water",
+	"images/missile"
 	);
 
 	Fetcher* fetcher = new Fetcher(30, 30, 
-		"/home/larry/engine/images/world2/test/gen/elementtwo");
+		"nothing");
 
 
 	Loader* loader = new Loader(fetcher, 7, 30);
