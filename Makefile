@@ -1,14 +1,10 @@
-# LIBDIR=  -lSDL -lm  `sdl-config --libs`  -lSDL_image -lcpptest  -lstdc++ -lmockpp_cxxtest -L/home/larry/devel/mockpp-1.16.6/mockpp/.libs -lmockpp
+LIBDIR=  -lSDL -lm  -lSDL_image
+LIBMOCKPP = /usr/local/lib
+LIBDIRTEST=   $(LIBDIR) -L$(LIBMOCKPP) -lcpptest -lmockpp_cxxtest -lmockpp
 
-# LIBDIR=  -lSDL -lm  `sdl-config --libs`  -lSDL_image -lcpptest   -lmockpp_cxxtest -L/home/larry/devel/mockpp-1.16.6/mockpp/.libs -lmockpp
+INCLUDEDIR = -I /usr/local/include/SDL/ 
+INCLUDEDIRTEST = $(INCLUDEDIR) -I .
 
-LIBDIR=  -L/usr/local/lib -lSDL -lm  -lSDL_image
-
-LIBDIRTEST=  -L/usr/local/lib -lSDL -lm  -lSDL_image -lcpptest   -lmockpp_cxxtest -lmockpp
-# INCLUDEDIR = -I /home/larry/devel/mockpp-1.16.6/ -I /home/larry/devel/boost_1_47_0 -I . -I /usr/include/SDL/
-# INCLUDEDIR = -I /home/larry/devel/mockpp-1.16.6/ -I . -I  /home/larry/devel/stl3_3
-
-INCLUDEDIR = -I /usr/local/include/SDL/ -I . # -I /usr/include -I /usr/include/SDL
 DEBUG= -g
 
 OBJDIR = bin
@@ -18,7 +14,7 @@ DEPDIR = deps
 TESTDIR = test
 MOCKDIR = test/mock
 
-all: EngineVideo TestSuite
+all: EngineVideo 
 
 EngineVideo : $(OBJDIR)/main.o $(OBJDIR)/Fetcher.o $(OBJDIR)/Timer.o $(OBJDIR)/GameModel.o $(OBJDIR)/GameModelController.o $(OBJDIR)/Loader.o $(OBJDIR)/Rule.o $(OBJDIR)/RuleFetcher.o $(OBJDIR)/PathMissile.o
 		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -o EngineVideo $(OBJDIR)/main.o $(OBJDIR)/Fetcher.o \
@@ -57,7 +53,7 @@ $(OBJDIR)/PathMissile.o : PathMissile.cpp
 
 
 TestSuite : $(OBJDIR)/ExampleTestSuite.o $(OBJDIR)/FetcherTest.o $(OBJDIR)/Fetcher.o $(OBJDIR)/GameModelControllerTest.o $(OBJDIR)/GameModelControllerMock.o $(OBJDIR)/GameModelMock.o $(OBJDIR)/FetcherMock.o $(OBJDIR)/LoaderTest.o $(OBJDIR)/Loader.o $(OBJDIR)/LoaderMock.o $(OBJDIR)/RuleFetcherTest.o $(OBJDIR)/RuleFetcherMock.o $(OBJDIR)/RuleFetcher.o $(OBJDIR)/Rule.o
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -o $(TESTDIR)/TestSuite \
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -o $(TESTDIR)/TestSuite \
 		$(OBJDIR)/ExampleTestSuite.o \
 		$(OBJDIR)/GameModelControllerTest.o \
 		$(OBJDIR)/FetcherTest.o \
@@ -78,39 +74,43 @@ TestSuite : $(OBJDIR)/ExampleTestSuite.o $(OBJDIR)/FetcherTest.o $(OBJDIR)/Fetch
 		$(OBJDIR)/PathMissile.o
 
 $(OBJDIR)/ExampleTestSuite.o : $(TESTDIR)/ExampleTestSuite.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(TESTDIR)/ExampleTestSuite.cpp -o $(OBJDIR)/ExampleTestSuite.o
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/ExampleTestSuite.cpp -o $(OBJDIR)/ExampleTestSuite.o
 
 
 $(OBJDIR)/FetcherTest.o : $(TESTDIR)/FetcherTest.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(TESTDIR)/FetcherTest.cpp -o $(OBJDIR)/FetcherTest.o
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/FetcherTest.cpp -o $(OBJDIR)/FetcherTest.o
 
 $(OBJDIR)/GameModelControllerTest.o : $(TESTDIR)/GameModelControllerTest.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(TESTDIR)/GameModelControllerTest.cpp -o $(OBJDIR)/GameModelControllerTest.o
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/GameModelControllerTest.cpp -o $(OBJDIR)/GameModelControllerTest.o
 
 $(OBJDIR)/LoaderTest.o: $(TESTDIR)/LoaderTest.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(TESTDIR)/LoaderTest.cpp -o $(OBJDIR)/LoaderTest.o		
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/LoaderTest.cpp -o $(OBJDIR)/LoaderTest.o		
 
 $(OBJDIR)/RuleFetcherTest.o: $(TESTDIR)/RuleFetcherTest.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(TESTDIR)/RuleFetcherTest.cpp -o $(OBJDIR)/RuleFetcherTest.o
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/RuleFetcherTest.cpp -o $(OBJDIR)/RuleFetcherTest.o
 
 # MOCK OBJECTS
 $(OBJDIR)/GameModelControllerMock.o: $(MOCKDIR)/GameModelControllerMock.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(MOCKDIR)/GameModelControllerMock.cpp -o $(OBJDIR)/GameModelControllerMock.o
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(MOCKDIR)/GameModelControllerMock.cpp -o $(OBJDIR)/GameModelControllerMock.o
 
 $(OBJDIR)/GameModelMock.o: $(MOCKDIR)/GameModelMock.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(MOCKDIR)/GameModelMock.cpp -o $(OBJDIR)/GameModelMock.o
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(MOCKDIR)/GameModelMock.cpp -o $(OBJDIR)/GameModelMock.o
 
 $(OBJDIR)/FetcherMock.o: $(MOCKDIR)/FetcherMock.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(MOCKDIR)/FetcherMock.cpp -o $(OBJDIR)/FetcherMock.o		
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(MOCKDIR)/FetcherMock.cpp -o $(OBJDIR)/FetcherMock.o		
 
 $(OBJDIR)/LoaderMock.o: $(MOCKDIR)/LoaderMock.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(MOCKDIR)/LoaderMock.cpp -o $(OBJDIR)/LoaderMock.o		
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(MOCKDIR)/LoaderMock.cpp -o $(OBJDIR)/LoaderMock.o		
 
 $(OBJDIR)/RuleFetcherMock.o: $(MOCKDIR)/RuleFetcherMock.cpp
-		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c $(MOCKDIR)/RuleFetcherMock.cpp -o $(OBJDIR)/RuleFetcherMock.o		
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(MOCKDIR)/RuleFetcherMock.cpp -o $(OBJDIR)/RuleFetcherMock.o		
+
+export LD_LIBRARY_PATH = $(LIBMOCKPP)
 
 clean: 
 	rm $(OBJDIR)/*.o
+	rm EngineVideo
+	rm $(TESTDIR)/TestSuite
 
 
 
