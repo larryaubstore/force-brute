@@ -1,14 +1,11 @@
 force-brute
 ===========
 
-UBUNTU PREREQUISITES
-===========
+### UBUNTU PREREQUISITES
 sudo apt-get install libsdl1.2-dev libsdl-image1.2-dev libboost1.40-dev libcpptest-dev
 
-build
-===========
+### To build:
 make
 
-build with unit-test and mockpp
-===========
+### To build with unit tests
 make TestSuite
