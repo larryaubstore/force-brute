@@ -3,11 +3,13 @@
 
     <title>Test Rendering 2D</title>
 
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="jquery/jquery-1.7.2.js"></script>
     <script type="text/javascript" src="forcebrute.js"></script>
     <script type="text/javascript">
 
         $(document).ready(function() {
+            FORCEBRUTE.BindEvents();
             FORCEBRUTE.RenderImages();
         });
         
@@ -20,6 +22,9 @@
 <body>
 
     <canvas id="canvas" width="1305" height="734"></canvas>
+
+    <div class="white button" id="testbutton">Test</div>
+    
 
 </body>
 
