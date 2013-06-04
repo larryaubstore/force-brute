@@ -38,7 +38,7 @@ var FORCEBRUTE = (function () {
     // 0001.jpg, 0002, jpg 
     for (counter = 1; counter < 10; counter += 1) {
         myImagesList.push("../images/water/v2/000" + counter + ".jpg");
-        myImagesListGrid.push("../images/grid/v7/000" + counter + ".png");
+        myImagesListGrid.push("../images/grid/v8/000" + counter + ".png");
         myImagesBoatExplosion.push("../images/explosion/testCollision/000" + counter + ".png");
     }
 
@@ -46,7 +46,7 @@ var FORCEBRUTE = (function () {
     // 0010.jpg, 0011.jpg, 0012.jpg, 0013.jpg
     for (counter = 10; counter <= 30; counter += 1) {
         myImagesList.push("../images/water/v2/00" + counter + ".jpg");
-        myImagesListGrid.push("../images/grid/v7/00" + counter + ".png");
+        myImagesListGrid.push("../images/grid/v8/00" + counter + ".png");
         myImagesBoatExplosion.push("../images/explosion/testCollision/00" + counter + ".png");
     }
 
@@ -162,7 +162,8 @@ var FORCEBRUTE = (function () {
 
             if (myGridVisible === true) {
                 // Dessiner la grille blanche
-                ctx.drawImage(imgGrid, 0, 0);
+                //ctx.drawImage(imgGrid, 0, 0);
+                ctx.drawImage(testGridImage, 0, 0);
             }
 
             // Dessiner le bateau qui explose

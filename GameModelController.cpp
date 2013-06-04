@@ -4,6 +4,7 @@
 bool GameModelController::handleKeyEvent()
 {
 
+	bool result = false;
 	ControllerEvent controllerEvent;
 	memset(&controllerEvent, 0, sizeof(ControllerEvent));
 	SDL_Event event;
@@ -66,9 +67,9 @@ bool GameModelController::handleKeyEvent()
 	}
 
 
-	if(controllerEvent.keyboard[SDLK_ESCAPE] == 1)
+	if(controllerEvent.keyboard[SDLK_q] == 1)
 	{
-		return true;
+		result = true;
 	}
 		
 	if(	controllerEvent.keyboard[SDLK_LEFT] == 1 && 
@@ -101,19 +102,17 @@ bool GameModelController::handleKeyEvent()
 		m_gameModel->changeDirection(LEFT_DOWN);
 	}
 	
-	return false;
+	return result;
 }
 
 GameModelController::GameModelController(IGameModel* gameModel, 
 										ILoader* loader,
-										IFetcher* fetcher,
 										SDL_Surface* a_screen,
 										SDL_Surface* a_empty
 										)
 {
 	this->m_gameModel = gameModel;
 	this->m_loader = loader;
-	this->m_fetcher = fetcher;
 	this->m_empty = a_empty;
 	this->m_surface = NULL;
 	this->m_screen = a_screen;
@@ -169,10 +168,10 @@ void GameModelController::applySurfaces()
 
 
 	// Appliquer missile
-	if(m_missileSurface != NULL)
-	{
-   		SDL_BlitSurface(m_missileSurface, NULL, m_screen, NULL);
-	}
+	//if(m_missileSurface != NULL)
+	//{
+  // 		SDL_BlitSurface(m_missileSurface, NULL, m_screen, NULL);
+	//}
 }
 
 //void GameModelController::applySurfaceMissile()
@@ -254,11 +253,13 @@ void GameModelController::freeSurfaces()
 		m_surface = NULL;
 	}
 
+	/*
 	if(m_missileSurface != NULL)
 	{
 		SDL_FreeSurface(m_missileSurface);
 		m_missileSurface = NULL;
 	}
+	*/
 }
 
 

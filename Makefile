@@ -20,7 +20,7 @@ EngineVideo : $(OBJDIR)/main.o $(OBJDIR)/Fetcher.o $(OBJDIR)/Timer.o $(OBJDIR)/G
 		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -o EngineVideo $(OBJDIR)/main.o $(OBJDIR)/Fetcher.o \
 		$(OBJDIR)/Timer.o $(OBJDIR)/GameModel.o $(OBJDIR)/GameModelController.o $(OBJDIR)/Loader.o \
 		$(OBJDIR)/Rule.o $(OBJDIR)/RuleFetcher.o \
-		$(OBJDIR)/PathMissile.o
+		$(OBJDIR)/PathMissile.o `sdl-config --libs --cflags` -lSDL_image
 
 $(OBJDIR)/Timer.o : Timer.cpp
 		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c Timer.cpp -o $(OBJDIR)/Timer.o
@@ -71,7 +71,7 @@ TestSuite : $(OBJDIR)/ExampleTestSuite.o $(OBJDIR)/FetcherTest.o $(OBJDIR)/Fetch
 		$(OBJDIR)/RuleFetcherMock.o \
 		$(OBJDIR)/RuleFetcher.o \
 		$(OBJDIR)/Rule.o \
-		$(OBJDIR)/PathMissile.o
+		$(OBJDIR)/PathMissile.o `sdl-config --libs --cflags` -lSDL_image
 
 $(OBJDIR)/ExampleTestSuite.o : $(TESTDIR)/ExampleTestSuite.cpp
 		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/ExampleTestSuite.cpp -o $(OBJDIR)/ExampleTestSuite.o

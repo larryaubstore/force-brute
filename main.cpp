@@ -76,7 +76,7 @@ int main( int argc, char* args[] )
 {
 
 	// Direction, position, grid_dimension, 
-	GameModel* gameModel = new GameModel(DOWN, 0, 625, 
+	GameModel* gameModel = new GameModel(DOWN, 1, 625, 
 	"images/water",
 	"images/missile"
 	);
@@ -124,7 +124,6 @@ int main( int argc, char* args[] )
 
 	controller = 
 		new GameModelController((IGameModel*)gameModel, (ILoader*)loader, 
-								(IFetcher*)fetcher, 
 								screen, 
 								empty);
 
@@ -145,41 +144,45 @@ int main( int argc, char* args[] )
 
     while( quit == false )
     {
-        //Start the frame timer
-        fps.start();
+      //Start the frame timer
+      fps.start();
 
-		quit = controller->handleKeyEvent();
+			quit = controller->handleKeyEvent();
 
-		controller->changePosition();
+			if(quit == true) {
+        printf("FIN ...\n");
+			}
 
-		if(imageChargee == true)
-		{
-			controller->applySurfaces();
+			controller->changePosition();
 
-			controller->flipSurfaces();
+			if(imageChargee == true && quit == false)
+			{
+				controller->applySurfaces();
 
-			controller->nextPosition();
+				controller->flipSurfaces();
 
-			controller->freeSurfaces();
+				controller->nextPosition();
 
-			if ( SDL_mutexP(mutex) < 0 ) {
-				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
-				exit(1);
-	    	}
+				controller->freeSurfaces();
 
-			imageChargee = false;
+				if ( SDL_mutexP(mutex) < 0 ) {
+					fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
+					exit(1);
+				}
 
-			if ( SDL_mutexV(mutex) < 0 ) {
-				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
-				exit(1);
-	    	}
+				imageChargee = false;
 
-    	    if(  fps.get_ticks() < (1000 / FRAMES_PER_SECOND)  )
-        	{
-            	//Sleep the remaining frame time
-	            SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
-    	    }
+				if ( SDL_mutexV(mutex) < 0 ) {
+					fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
+					exit(1);
+				}
+
+				if(  fps.get_ticks() < (1000 / FRAMES_PER_SECOND)  )
+				{
+					//Sleep the remaining frame time
+					SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
+				}
+			}
 		}
-    }
     return 0;
 }

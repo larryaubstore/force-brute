@@ -24,7 +24,6 @@ class GameModelController : public IGameModelController
 	private:
 		IGameModel* m_gameModel;
 		ILoader* m_loader;
-		IFetcher* m_fetcher;
 		SDL_Surface* m_surface;
 		SDL_Surface* m_screen;
 		SDL_Surface* m_empty;
@@ -54,7 +53,6 @@ class GameModelController : public IGameModelController
 
 		GameModelController(IGameModel* gameModel, 
 							ILoader* loader, 
-							IFetcher* fetcher,
 							SDL_Surface* a_screen, 
 							SDL_Surface* a_empty);
 		~GameModelController();	
