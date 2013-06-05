@@ -42,8 +42,6 @@ static bool quit = false;
 static SDL_Thread *threadChargementImage = NULL;
 static bool imageChargee = false;
 
-
-
 SDL_Event event;
 
 int SDLCALL fonctionChargementImage(void *data)
@@ -76,7 +74,7 @@ int main( int argc, char* args[] )
 {
 
 	// Direction, position, grid_dimension, 
-	GameModel* gameModel = new GameModel(DOWN, 1, 625, 
+	GameModel* gameModel = new GameModel(IDLE, 1, 625, 
 	"images/water",
 	"images/missile"
 	);
@@ -89,100 +87,86 @@ int main( int argc, char* args[] )
 	loader->initialize(1);
 
 
-    /*
-     *  Initialise libSDL
-     */
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTTHREAD) == -1)
-    {
-        printf("cannot initialize SDL\n");
-        return EXIT_FAILURE;
-    }
-
-    SDL_Surface *screen, *empty, *frame_surface, *layer;
-
-
-    empty = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEOWIDTH, VIDEOHEIGHT,
-                                 32, 0, 0, 0, 0);
-
 	/*
-    ctx.surf = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEOWIDTH, VIDEOHEIGHT,
-                                    16, 0x001f, 0x07e0, 0xf800, 0);
-									*/
-
-    mutex = SDL_CreateMutex();
-
-    //int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
-    int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF;
-
-    screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, options);
-    if(!screen)
-    {
-        printf("cannot set video mode\n");
-        return EXIT_FAILURE;
-    }
-
-
-	controller = 
-		new GameModelController((IGameModel*)gameModel, (ILoader*)loader, 
-								screen, 
-								empty);
-
-	// Création du thread pour charger les images
-	if ( (threadChargementImage=
-		SDL_CreateThread(fonctionChargementImage, NULL)) == NULL )
+	 *  Initialise libSDL
+	 */
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTTHREAD) == -1)
 	{
-        printf("Impossible de créer le thread --> Chargement image\n");
-        return EXIT_FAILURE;
+			printf("cannot initialize SDL\n");
+			return EXIT_FAILURE;
+	}
+
+	SDL_Surface *screen, *empty, *frame_surface, *layer;
+
+
+	empty = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEOWIDTH, VIDEOHEIGHT,
+															 32, 0, 0, 0, 0);
+
+	mutex = SDL_CreateMutex();
+
+	//int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
+	int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF;
+
+	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, options);
+	if(!screen)
+	{
+		printf("cannot set video mode\n");
+		return EXIT_FAILURE;
 	}
 
 
-    //Quit flag
-    quit = false;
+	controller = new GameModelController((IGameModel*)gameModel, (ILoader*)loader, screen, empty);
 
-    //The frame rate regulator
-    Timer fps;
+	// Création du thread pour charger les images
+	if ( (threadChargementImage = SDL_CreateThread(fonctionChargementImage, NULL)) == NULL ) {
+ 		printf("Impossible de créer le thread --> Chargement image\n");
+  	return EXIT_FAILURE;
+	}
 
-    while( quit == false )
-    {
-      //Start the frame timer
-      fps.start();
 
-			quit = controller->handleKeyEvent();
+	//Quit flag
+	quit = false;
 
-			if(quit == true) {
-        printf("FIN ...\n");
+	//The frame rate regulator
+	Timer fps;
+
+	while( quit == false ) {
+		//Start the frame timer
+		fps.start();
+
+		quit = controller->handleKeyEvent();
+
+		if(quit == true) {
+			printf("FIN ...\n");
+		}
+
+		if(imageChargee == true && quit == false) {
+			controller->applySurfaces();
+
+			controller->flipSurfaces();
+
+			controller->nextPosition();
+
+			controller->freeSurfaces();
+
+			if ( SDL_mutexP(mutex) < 0 ) {
+				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
+				exit(1);
 			}
 
-			controller->changePosition();
+			imageChargee = false;
 
-			if(imageChargee == true && quit == false)
+			if ( SDL_mutexV(mutex) < 0 ) {
+				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
+				exit(1);
+			}
+
+			if(  fps.get_ticks() < (1000 / FRAMES_PER_SECOND)  )
 			{
-				controller->applySurfaces();
-
-				controller->flipSurfaces();
-
-				controller->nextPosition();
-
-				controller->freeSurfaces();
-
-				if ( SDL_mutexP(mutex) < 0 ) {
-					fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
-					exit(1);
-				}
-
-				imageChargee = false;
-
-				if ( SDL_mutexV(mutex) < 0 ) {
-					fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
-					exit(1);
-				}
-
-				if(  fps.get_ticks() < (1000 / FRAMES_PER_SECOND)  )
-				{
-					//Sleep the remaining frame time
-					SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
-				}
+				//Sleep the remaining frame time
+				SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
 			}
 		}
-    return 0;
+	}
+	return 0;
 }

@@ -9,3 +9,7 @@ make
 
 ### To build with unit tests
 make TestSuite
+
+
+### Blender
+blender -b water.blend -o // -F JPEG -x 1 -s 1 -e 80 -a
