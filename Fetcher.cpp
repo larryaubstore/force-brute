@@ -19,33 +19,6 @@ Fetcher::~Fetcher()
 }
 
 
-/**
-* @brief This method converts the position into the dimension of map. 
-*
-* @param position The raw position. 
-*
-* @return The position converted. 
-*/
-int Fetcher::GetRelativePositionInTheMap(int position)
-{
-	/****
-		WRONG PROBLEM TO FIX
-		********/
-
-	int positionConverted = position;
-	int grid_dimensionByDimension = m_grid_dimension * m_grid_dimension;
-	if(position < 0)
-	{
-		positionConverted = position + grid_dimensionByDimension;
-	}
-	else if(position > grid_dimensionByDimension)
-	{
-		positionConverted = position - grid_dimensionByDimension;
-	}
-	return positionConverted;
-}
-
-
 std::string Fetcher::GetFileNameLinkedToPosition(int position)
 {
 	return(GetFileNameLinkedToPosition(position, m_prefix));

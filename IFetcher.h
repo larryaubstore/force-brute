@@ -14,7 +14,6 @@ class IFetcher
         virtual string GetFileNameLinkedToPosition(int position,
 												std::string fetcher_directory) = 0;
 
-		virtual int GetRelativePositionInTheMap(int position) = 0;
 
 		virtual void SetPrefix(std::string prefix) = 0;
 

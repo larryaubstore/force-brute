@@ -1,9 +1,9 @@
 LIBDIR=  -lSDL -lm  -lSDL_image
 LIBMOCKPP = /usr/local/lib
-LIBDIRTEST=   $(LIBDIR) -L$(LIBMOCKPP) -lcpptest -lmockpp_cxxtest -lmockpp
+LIBDIRTEST=   $(LIBDIR) -lcpptest -lmockpp_cxxtest -lmockpp
 
-INCLUDEDIR = -I /usr/local/include/SDL/ 
-INCLUDEDIRTEST = $(INCLUDEDIR) -I .
+INCLUDEDIR =  
+INCLUDEDIRTEST = -I . 
 
 DEBUG= -g
 
@@ -52,7 +52,7 @@ $(OBJDIR)/PathMissile.o : PathMissile.cpp
 
 
 
-TestSuite : $(OBJDIR)/ExampleTestSuite.o $(OBJDIR)/FetcherTest.o $(OBJDIR)/Fetcher.o $(OBJDIR)/GameModelControllerTest.o $(OBJDIR)/GameModelControllerMock.o $(OBJDIR)/GameModelMock.o $(OBJDIR)/FetcherMock.o $(OBJDIR)/LoaderTest.o $(OBJDIR)/Loader.o $(OBJDIR)/LoaderMock.o $(OBJDIR)/RuleFetcherTest.o $(OBJDIR)/RuleFetcherMock.o $(OBJDIR)/RuleFetcher.o $(OBJDIR)/Rule.o
+TestSuite : EngineVideo $(OBJDIR)/ExampleTestSuite.o $(OBJDIR)/FetcherTest.o $(OBJDIR)/Fetcher.o $(OBJDIR)/GameModelControllerTest.o $(OBJDIR)/GameModelControllerMock.o $(OBJDIR)/GameModelMock.o $(OBJDIR)/FetcherMock.o $(OBJDIR)/LoaderTest.o $(OBJDIR)/Loader.o $(OBJDIR)/LoaderMock.o $(OBJDIR)/RuleFetcherTest.o $(OBJDIR)/RuleFetcherMock.o $(OBJDIR)/RuleFetcher.o $(OBJDIR)/Rule.o
 		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -o $(TESTDIR)/TestSuite \
 		$(OBJDIR)/ExampleTestSuite.o \
 		$(OBJDIR)/GameModelControllerTest.o \
@@ -71,7 +71,7 @@ TestSuite : $(OBJDIR)/ExampleTestSuite.o $(OBJDIR)/FetcherTest.o $(OBJDIR)/Fetch
 		$(OBJDIR)/RuleFetcherMock.o \
 		$(OBJDIR)/RuleFetcher.o \
 		$(OBJDIR)/Rule.o \
-		$(OBJDIR)/PathMissile.o `sdl-config --libs --cflags` -lSDL_image
+		$(OBJDIR)/PathMissile.o `sdl-config --libs --cflags` -lSDL_image $(LIBDIRTEST)
 
 $(OBJDIR)/ExampleTestSuite.o : $(TESTDIR)/ExampleTestSuite.cpp
 		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/ExampleTestSuite.cpp -o $(OBJDIR)/ExampleTestSuite.o
@@ -105,7 +105,6 @@ $(OBJDIR)/LoaderMock.o: $(MOCKDIR)/LoaderMock.cpp
 $(OBJDIR)/RuleFetcherMock.o: $(MOCKDIR)/RuleFetcherMock.cpp
 		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(MOCKDIR)/RuleFetcherMock.cpp -o $(OBJDIR)/RuleFetcherMock.o		
 
-export LD_LIBRARY_PATH = $(LIBMOCKPP)
 
 clean: 
 	rm $(OBJDIR)/*.o

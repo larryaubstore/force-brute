@@ -18,7 +18,7 @@ void GameModelControllerTest::testPathMissile()
 
 		GameModelController* controller = new GameModelController(&gameModel, 
 																  &loaderMock,
-																&fetcherMock, NULL, 
+																NULL, 
 																NULL);
 
 		gameModel.nextPosition();
@@ -90,7 +90,7 @@ void GameModelControllerTest::testMissileAutoDestruction()
 
 		GameModelController* controller = new GameModelController(&gameModel, 
 																  &loaderMock,
-																&fetcherMock, NULL, 
+																NULL, 
 																NULL);
 
 		// Position GameModel

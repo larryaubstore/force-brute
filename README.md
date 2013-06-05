@@ -9,7 +9,15 @@ make
 
 ### To build with unit tests
 make TestSuite
+./TestSuite --html > report.html
 
 
 ### Blender
 blender -b water.blend -o // -F JPEG -x 1 -s 1 -e 80 -a
+
+
+### cscope
+cscope -R -b
+
+### ctags
+ctags -R
