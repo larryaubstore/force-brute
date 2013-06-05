@@ -50,7 +50,13 @@ int GameModel::nextPosition()
 	switch(this->m_direction)
 	{
 		case DOWN:
-			m_position = m_position - (1 * m_vitesse );
+
+			// Patch to solve the event queue problem.
+			// The event queue is not empty at the beginning even if no keys
+			// are pressed. 
+			if(m_position > (1 * m_vitesse) ) {
+				m_position = m_position - (1 * m_vitesse );
+			}
 			break;
 		case DOWN_RIGHT:
 			m_position = m_position + ((m_grid_dimension - 1) * m_vitesse );
