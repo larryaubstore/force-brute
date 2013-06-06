@@ -21,3 +21,6 @@ cscope -R -b
 
 ### ctags
 ctags -R
+
+### doxygen
+doxygen

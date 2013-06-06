@@ -11,22 +11,19 @@
 #include "GameModelControllerTest.h"
 #include "LoaderTest.h"
 #include "RuleFetcherTest.h"
+#include "scene/AnimationTest.h"
 
 using namespace std;
 
 
-class ExampleTestSuite : public Test::Suite
+class ForceBruteTestSuite : public Test::Suite
 {
     public:
-        ExampleTestSuite()
+        ForceBruteTestSuite()
         {
-            TEST_ADD(ExampleTestSuite::first_test)
-            TEST_ADD(ExampleTestSuite::second_test)
+
         }
                                 
-    private:
-        void first_test();
-        void second_test();
 };
 
 static void
@@ -80,11 +77,11 @@ int main(int argc, char* argv[])
         // Demonstrates the ability to use multiple test suites
         //
         Test::Suite ts;
-        ts.add(auto_ptr<Test::Suite>(new ExampleTestSuite));
         ts.add(auto_ptr<Test::Suite>(new FetcherTest));
         ts.add(auto_ptr<Test::Suite>(new GameModelControllerTest));
         ts.add(auto_ptr<Test::Suite>(new LoaderTest));
-		ts.add(auto_ptr<Test::Suite>(new RuleFetcherTest));
+				ts.add(auto_ptr<Test::Suite>(new RuleFetcherTest));
+				ts.add(auto_ptr<Test::Suite>(new AnimationTest));
         // Run the tests
         //
         auto_ptr<Test::Output> output(cmdline(argc, argv));
