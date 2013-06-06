@@ -12,6 +12,7 @@
 #include "LoaderTest.h"
 #include "RuleFetcherTest.h"
 #include "scene/AnimationTest.h"
+#include "scene/SceneStackTest.h"
 
 using namespace std;
 
@@ -82,6 +83,7 @@ int main(int argc, char* argv[])
         ts.add(auto_ptr<Test::Suite>(new LoaderTest));
 				ts.add(auto_ptr<Test::Suite>(new RuleFetcherTest));
 				ts.add(auto_ptr<Test::Suite>(new AnimationTest));
+				ts.add(auto_ptr<Test::Suite>(new SceneStackTest));
         // Run the tests
         //
         auto_ptr<Test::Output> output(cmdline(argc, argv));

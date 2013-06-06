@@ -16,11 +16,11 @@ MOCKDIR = test/mock
 
 all: EngineVideo 
 
-EngineVideo : $(OBJDIR)/main.o $(OBJDIR)/Fetcher.o $(OBJDIR)/Timer.o $(OBJDIR)/GameModel.o $(OBJDIR)/GameModelController.o $(OBJDIR)/Loader.o $(OBJDIR)/Rule.o $(OBJDIR)/RuleFetcher.o $(OBJDIR)/PathMissile.o $(OBJDIR)/Animation.o
+EngineVideo : $(OBJDIR)/main.o $(OBJDIR)/Fetcher.o $(OBJDIR)/Timer.o $(OBJDIR)/GameModel.o $(OBJDIR)/GameModelController.o $(OBJDIR)/Loader.o $(OBJDIR)/Rule.o $(OBJDIR)/RuleFetcher.o $(OBJDIR)/PathMissile.o $(OBJDIR)/Animation.o $(OBJDIR)/SceneStack.o
 		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -o EngineVideo $(OBJDIR)/main.o $(OBJDIR)/Fetcher.o \
 		$(OBJDIR)/Timer.o $(OBJDIR)/GameModel.o $(OBJDIR)/GameModelController.o $(OBJDIR)/Loader.o \
 		$(OBJDIR)/Rule.o $(OBJDIR)/RuleFetcher.o \
-		$(OBJDIR)/PathMissile.o $(OBJDIR)/Animation.o `sdl-config --libs --cflags` -lSDL_image
+		$(OBJDIR)/PathMissile.o $(OBJDIR)/Animation.o $(OBJDIR)/SceneStack.o `sdl-config --libs --cflags` -lSDL_image
 
 $(OBJDIR)/Timer.o : Timer.cpp
 		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c Timer.cpp -o $(OBJDIR)/Timer.o
@@ -52,10 +52,12 @@ $(OBJDIR)/PathMissile.o : PathMissile.cpp
 $(OBJDIR)/Animation.o : scene/Animation.cpp
 		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c scene/Animation.cpp -o $(OBJDIR)/Animation.o
 
+$(OBJDIR)/SceneStack.o : scene/SceneStack.cpp
+		g++ $(DEBUG) $(INCLUDEDIR) $(LIBDIR) -c scene/SceneStack.cpp -o $(OBJDIR)/SceneStack.o
 
 
 
-TestSuite : EngineVideo $(OBJDIR)/ForceBruteTestSuite.o $(OBJDIR)/FetcherTest.o $(OBJDIR)/Fetcher.o $(OBJDIR)/GameModelControllerTest.o $(OBJDIR)/GameModelControllerMock.o $(OBJDIR)/GameModelMock.o $(OBJDIR)/FetcherMock.o $(OBJDIR)/LoaderTest.o $(OBJDIR)/Loader.o $(OBJDIR)/LoaderMock.o $(OBJDIR)/RuleFetcherTest.o $(OBJDIR)/RuleFetcherMock.o $(OBJDIR)/RuleFetcher.o $(OBJDIR)/Rule.o $(OBJDIR)/Animation.o $(OBJDIR)/AnimationTest.o
+TestSuite : EngineVideo $(OBJDIR)/ForceBruteTestSuite.o $(OBJDIR)/FetcherTest.o $(OBJDIR)/Fetcher.o $(OBJDIR)/GameModelControllerTest.o $(OBJDIR)/GameModelControllerMock.o $(OBJDIR)/GameModelMock.o $(OBJDIR)/FetcherMock.o $(OBJDIR)/LoaderTest.o $(OBJDIR)/Loader.o $(OBJDIR)/LoaderMock.o $(OBJDIR)/RuleFetcherTest.o $(OBJDIR)/RuleFetcherMock.o $(OBJDIR)/RuleFetcher.o $(OBJDIR)/Rule.o $(OBJDIR)/Animation.o $(OBJDIR)/AnimationTest.o $(OBJDIR)/SceneStackTest.o
 		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -o $(TESTDIR)/TestSuite \
 		$(OBJDIR)/ForceBruteTestSuite.o \
 		$(OBJDIR)/GameModelControllerTest.o \
@@ -76,7 +78,9 @@ TestSuite : EngineVideo $(OBJDIR)/ForceBruteTestSuite.o $(OBJDIR)/FetcherTest.o 
 		$(OBJDIR)/Rule.o \
 		$(OBJDIR)/Animation.o \
 		$(OBJDIR)/AnimationTest.o \
-		$(OBJDIR)/PathMissile.o `sdl-config --libs --cflags` -lSDL_image $(LIBDIRTEST)
+		$(OBJDIR)/PathMissile.o \
+	  $(OBJDIR)/SceneStack.o \
+		$(OBJDIR)/SceneStackTest.o `sdl-config --libs --cflags` -lSDL_image $(LIBDIRTEST)
 
 $(OBJDIR)/ForceBruteTestSuite.o : $(TESTDIR)/ForceBruteTestSuite.cpp
 		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/ForceBruteTestSuite.cpp -o $(OBJDIR)/ForceBruteTestSuite.o
@@ -111,6 +115,10 @@ $(OBJDIR)/RuleFetcherMock.o: $(MOCKDIR)/RuleFetcherMock.cpp
 
 $(OBJDIR)/AnimationTest.o : $(TESTDIR)/scene/AnimationTest.cpp
 		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/scene/AnimationTest.cpp -o $(OBJDIR)/AnimationTest.o
+
+$(OBJDIR)/SceneStackTest.o : $(TESTDIR)/scene/SceneStackTest.cpp
+		g++ $(DEBUG) $(INCLUDEDIRTEST) $(LIBDIRTEST) -c $(TESTDIR)/scene/SceneStackTest.cpp -o $(OBJDIR)/SceneStackTest.o
+
 
 clean: 
 	rm $(OBJDIR)/*.o
