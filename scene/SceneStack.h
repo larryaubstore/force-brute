@@ -22,7 +22,7 @@ class SceneStack : public ISceneStack
 	private:
 			
 		std::vector<AnimationPtr> m_AnimationList;
-
+		std::vector<AnimationPtr> m_AnimationListForRendering;
 
 	public:
 		/**
@@ -45,7 +45,12 @@ class SceneStack : public ISceneStack
 											int a_currentFrame);
 
 	
-	 std::vector<AnimationPtr> GetAnimationList();
+	 	std::vector<AnimationPtr> GetAnimationList();
+
+
+		void GetAnimationForRendering();
+
+		void NextPosition();
 
 
 };

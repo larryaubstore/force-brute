@@ -49,3 +49,53 @@ void SceneStack::Push(std::string a_name,
 	m_AnimationList.push_back(ptr);
 }
 
+void SceneStack::NextPosition() {
+
+	AnimationPtr ptr;
+	for(int i = 0; i < m_AnimationList.size(); i++) {
+		ptr = m_AnimationList[i];
+	}	
+}
+
+void SceneStack::GetAnimationForRendering() {
+
+	m_AnimationListForRendering.clear();
+
+//	std::vector<AnimationPtr>::iterator begin = m_AnimationListForRendering.begin();
+//	std::vector<AnimationPtr>::iterator end = m_AnimationListForRendering.end();
+
+	std::vector<AnimationPtr>::iterator begin; 
+	std::vector<AnimationPtr>::iterator end;
+		
+	AnimationPtr ptr;
+	for(int i = 0; i < m_AnimationList.size(); i++) {
+		ptr = m_AnimationList[i];
+
+
+		//IAnimation* test = ptr.get();
+
+		begin = m_AnimationListForRendering.begin();
+		end = m_AnimationListForRendering.end();
+
+		//Animation test = *ptr;
+
+		if(std::find(begin, end, ptr) == end) {
+			//m_AnimationListForRendering.push_back(ptr);
+		//}
+		
+	}	
+
+	
+
+
+//	if(std::find(v.begin(), v.end(), x) != v.end()) {
+//			/* v contains x */
+//	} else {
+//			/* v does not contain x */
+//	}
+
+
+
+}
+
+

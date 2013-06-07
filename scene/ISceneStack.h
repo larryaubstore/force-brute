@@ -19,6 +19,8 @@ class ISceneStack
 											int a_yPos, 
 											int a_currentFrame) = 0;
 
+		virtual void NextPosition() = 0;
+
 		virtual ~ISceneStack() {};
 
 };
