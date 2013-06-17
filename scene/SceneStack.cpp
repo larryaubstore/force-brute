@@ -82,6 +82,8 @@ void SceneStack::GetAnimationForRendering() {
 		if(std::find(begin, end, ptr) == end) {
 			//m_AnimationListForRendering.push_back(ptr);
 		//}
+		//
+		}
 		
 	}	
 

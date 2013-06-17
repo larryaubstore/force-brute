@@ -20,7 +20,7 @@ include $(CLEAR_VARS)
 
 
 LOCAL_MODULE    := force-brute
-LOCAL_SRC_FILES := ballfield.cpp
+LOCAL_SRC_FILES := ballfield.cpp ../../Timer.cpp ../../Fetcher.cpp ../../GameModel.cpp ../../GameModelController.cpp ../../Loader.cpp ../../Rule.cpp ../../RuleFetcher.cpp ../../PathMissile.cpp ../../scene/Animation.cpp ../../scene/SceneStack.cpp
 # for native audio
 LOCAL_LDLIBS    += -lOpenSLES
 # for logging
