@@ -37,4 +37,12 @@ LOCAL_C_INCLUDES += /home/larry/devel/force-brute/android/jni/sdl-1.2/include /h
 #include $(LOCAL_PATH)/plasma/Android.mk
 #include $(LOCAL_PATH)/sdl-1.2/Android.mk
 
+LOCAL_CFLAGS += -I$(LOCAL_PATH)/boost/include/boost-1_53 -DBOOST_ANDROID
+LOCAL_LDLIBS += -L$(LOCAL_PATH)/boost/lib/ -lboost_system-gcc-mt-1_53
+
+LOCAL_CPPFLAGS += -fexceptions
+LOCAL_CPPFLAGS += -frtti
+
+APP_STL := gnustl_static
+
 include $(BUILD_SHARED_LIBRARY)

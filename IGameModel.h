@@ -5,7 +5,12 @@
 #include <vector>
 
 #include "EDirection.h"
-#include <boost/shared_ptr.hpp>
+
+#ifdef BOOST_ANDROID
+	#include <boost/smart_ptr/shared_ptr.hpp>
+#else
+	#include <boost/shared_ptr.hpp>
+#endif
 
 #include "TypeDefEngine.h"
 
