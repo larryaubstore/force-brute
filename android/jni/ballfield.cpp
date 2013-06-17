@@ -22,6 +22,7 @@
 #include <Loader.h>
 #include <IFetcher.h>
 #include <Fetcher.h>
+#include <Timer.h>
 
 #define fprintf(X, ...) __android_log_print(ANDROID_LOG_INFO, "Ballfield", __VA_ARGS__)
 #define printf(...) __android_log_print(ANDROID_LOG_INFO, "Ballfield", __VA_ARGS__)
@@ -33,6 +34,8 @@
 #define	SCREEN_W	640
 #define	SCREEN_H	480
 
+//The frames per second
+const int FRAMES_PER_SECOND = 30;
 
 /*----------------------------------------------------------
 	main()
@@ -40,6 +43,8 @@
 static bool imageChargee = false;
 static SDL_mutex *mutex = NULL;
 static GameModelController* controller = NULL;
+static SDL_Thread *threadChargementImage = NULL;
+static bool quit = false;
 
 int SDLCALL fonctionChargementImage(void *data)
 {
@@ -69,6 +74,9 @@ int SDLCALL fonctionChargementImage(void *data)
 
 int main(int argc, char* argv[])
 {
+#include <android/log.h>
+
+	__android_log_write(ANDROID_LOG_INFO, "LARRY", "Message LARRY");
 	// Direction, position, grid_dimension, 
 	GameModel* gameModel = new GameModel(IDLE, 1, 625, 
 	"images/water",
@@ -83,7 +91,13 @@ int main(int argc, char* argv[])
 	loader->initialize(1);
 
 
-	SDL_Surface* screen;
+	SDL_Surface* screen, *empty, *frame_surface, *layer;
+
+	empty = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_W, SCREEN_H,
+															 32, 0, 0, 0, 0);
+
+	mutex = SDL_CreateMutex();
+
 	int bpp = 16;
 	int flags = SDL_HWSURFACE;
 
@@ -95,6 +109,58 @@ int main(int argc, char* argv[])
 	{
 		fprintf(stderr, "Failed to open screen!\n");
 		exit(-1);
+	}
+
+	controller = new GameModelController((IGameModel*)gameModel, (ILoader*)loader, screen, empty);
+
+	// Création du thread pour charger les images
+	if ( (threadChargementImage = SDL_CreateThread(fonctionChargementImage, NULL)) == NULL ) {
+ 		printf("Impossible de créer le thread --> Chargement image\n");
+  	return EXIT_FAILURE;
+	}
+
+	//Quit flag
+	quit = false;
+
+	//The frame rate regulator
+	Timer fps;
+	while( quit == false ) {
+		//Start the frame timer
+		fps.start();
+
+		quit = controller->handleKeyEvent();
+
+		if(quit == true) {
+			printf("FIN ...\n");
+		}
+
+		if(imageChargee == true && quit == false) {
+			controller->applySurfaces();
+
+			controller->flipSurfaces();
+
+			controller->nextPosition();
+
+			controller->freeSurfaces();
+
+			if ( SDL_mutexP(mutex) < 0 ) {
+				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
+				exit(1);
+			}
+
+			imageChargee = false;
+
+			if ( SDL_mutexV(mutex) < 0 ) {
+				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
+				exit(1);
+			}
+
+			if(  fps.get_ticks() < (1000 / FRAMES_PER_SECOND)  )
+			{
+				//Sleep the remaining frame time
+				SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
+			}
+		}
 	}
 
 	SDL_WM_SetCaption("Ballfield", "Ballfield");

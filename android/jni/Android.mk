@@ -16,10 +16,8 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-#include $(call all-subdir-makefiles)\
-
-
-LOCAL_MODULE    := force-brute
+#LOCAL_MODULE    := force-brute
+LOCAL_MODULE    := application
 LOCAL_SRC_FILES := ballfield.cpp ../../Timer.cpp ../../Fetcher.cpp ../../GameModel.cpp ../../GameModelController.cpp ../../Loader.cpp ../../Rule.cpp ../../RuleFetcher.cpp ../../PathMissile.cpp ../../scene/Animation.cpp ../../scene/SceneStack.cpp
 # for native audio
 LOCAL_LDLIBS    += -lOpenSLES
@@ -28,17 +26,13 @@ LOCAL_LDLIBS    += -llog
 # for native asset manager
 LOCAL_LDLIBS    += -landroid -lsdl-1.2 -lsdl_image
 
-#/home/larry/devel/force-brute/android/jni/libs/armeabi-v7a
-LOCAL_LDFLAGS := -L/home/larry/devel/force-brute/android/jni/libs/armeabi-v7a
+LOCAL_LDLIBS    += -L$(LOCAL_PATH)/sdl-1.2/libs -L$(LOCAL_PATH)/sdl_image/libs 
 
-#LOCAL_C_INCLUDES += $(LOCAL_PATH)/sdl-1.2/include /home/larry/devel/force-brute
+
 LOCAL_C_INCLUDES += /home/larry/devel/force-brute/android/jni/sdl-1.2/include /home/larry/devel/force-brute/android/jni/sdl_image/include /home/larry/devel/force-brute
 
-#include $(LOCAL_PATH)/plasma/Android.mk
-#include $(LOCAL_PATH)/sdl-1.2/Android.mk
-
 LOCAL_CFLAGS += -I$(LOCAL_PATH)/boost/include/boost-1_53 -DBOOST_ANDROID
-LOCAL_LDLIBS += -L$(LOCAL_PATH)/boost/lib/ -lboost_system-gcc-mt-1_53
+LOCAL_LDLIBS += -L$(LOCAL_PATH)/boost/lib/ -lboost_system-gcc-mt-1_53 -L$(SYSROOT)/usr/lib -llog 
 
 LOCAL_CPPFLAGS += -fexceptions
 LOCAL_CPPFLAGS += -frtti
@@ -46,3 +40,5 @@ LOCAL_CPPFLAGS += -frtti
 APP_STL := gnustl_static
 
 include $(BUILD_SHARED_LIBRARY)
+
+# bug copie manuel des .so dans repertoire libs pour ant debug

@@ -7,7 +7,11 @@
 #include "EDirection.h"
 #include "IRule.h"
 
-#include <boost/shared_ptr.hpp>
+#ifdef BOOST_ANDROID
+	#include <boost/smart_ptr/shared_ptr.hpp>
+#else
+	#include <boost/shared_ptr.hpp>
+#endif
 
 using namespace std;
 
