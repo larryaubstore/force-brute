@@ -104,6 +104,8 @@ int main(int argc, char* argv[])
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 	SDL_EnableUNICODE(1);
 
+	atexit(SDL_Quit);
+
 	screen = SDL_SetVideoMode(SCREEN_W, SCREEN_H, bpp, flags);
 	if(!screen)
 	{
