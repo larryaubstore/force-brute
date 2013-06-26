@@ -1,11 +1,14 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+#include <SDL_rotozoom.h>
+
 #include <string>
 #include <assert.h>
 #include "Timer.h"
 #include <vector>
 #include <string>
 #include <sstream>
+#include "SEvent.h"
 
 
 #define WIDTH 1305 
@@ -34,7 +37,10 @@ SDL_Surface *screen = NULL;
 SDL_Surface *empty = NULL;
 SDL_Surface *surface = NULL;
 SDL_Surface *layer = NULL;
+SDL_Surface *zoomsurface = NULL;
 SDL_RWops* temp_rwop;
+
+int scalefactor = 100;
 
 static SDL_mutex *mutex = NULL;
 static bool quit = false;
@@ -96,16 +102,86 @@ int SDLCALL fonctionChargementImage(void *data)
 }
 
 bool handleKeyEvent() {
-	return false;
+	//return false;
+	//
+	bool result = false;
+	ControllerEvent controllerEvent;
+	memset(&controllerEvent, 0, sizeof(ControllerEvent));
+	SDL_Event event;
+	SDLMod mod;
+	int counterKeydown = 0;
+	while(SDL_PollEvent(&event))
+	{
+		switch(event.type)
+		{
+			case SDL_KEYDOWN:
+				counterKeydown++;
+				controllerEvent.keyboard[event.key.keysym.sym] = 1;
+				break;
+			case SDL_KEYUP:
+				controllerEvent.keyboard[event.key.keysym.sym] = 0;
+				break;
+		}
+	}
+
+	//scalefactor = 0;
+	if(controllerEvent.keyboard[SDLK_UP] == 1)
+	{
+
+		scalefactor = 1;
+		//m_gameModel->changeDirection(UP);
+	}
+
+	if(controllerEvent.keyboard[SDLK_DOWN] == 1)
+	{
+		//scalefactor = -1;
+		//m_gameModel->changeDirection(DOWN);
+	}
+
+	if(controllerEvent.keyboard[SDLK_q] == 1)
+	{
+		result = true;
+	}
+
+	return result;
+
 }
 
 void applySurfaces()
 {
+	SDL_Rect r;
+	r.x = 0;
+	r.y = 0;
+	r.w = 1920;
+	r.h = 1080;
+
+	SDL_Rect rzoom;
+	rzoom.x = 0;
+	rzoom.y = 0;
+	rzoom.w = 1920 / 4;
+	rzoom.h = 1080 / 4;
 
 	// Appliquer surface de base
 	if(surface != NULL)
 	{
-		SDL_BlitSurface(surface, NULL, screen, NULL);
+		//SDL_BlitSurface(surface, NULL, screen, NULL);
+		//
+
+		//surface->w = 1920 / 2;
+		//surface->h = 1080 / 2;
+		//SDL_Surface* rotozoomSurface	(	SDL_Surface * 	src,
+		//double 	angle,
+		//double 	zoom,
+		//int 	smooth 
+		//)	
+		//
+	
+		printf("SCALE FACTOR %i\n", scalefactor);	
+		zoomsurface = rotozoomSurface(surface, 0, 0.5, 1);	
+		//zoomsurface = rotozoomSurface(surface, 0, scalefactor, 1);	
+		//SDL_BlitSurface(surface, &r, screen, &r);
+
+		SDL_BlitSurface(zoomsurface, &r, screen, &r);
 	} else {
 		printf("SURFACE NULL !!!!! \n");
 	}
@@ -124,7 +200,9 @@ void freeSurfaces()
 	if(surface != NULL)
 	{
 		SDL_FreeSurface(surface);
+		SDL_FreeSurface(zoomsurface);
 		surface = NULL;
+		zoomsurface = NULL;
 	}
 }
 
