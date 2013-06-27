@@ -40,7 +40,6 @@ SDL_Surface *layer = NULL;
 SDL_Surface *zoomsurface = NULL;
 SDL_RWops* temp_rwop;
 
-int scalefactor = 100;
 
 static SDL_mutex *mutex = NULL;
 static bool quit = false;
@@ -48,6 +47,8 @@ static SDL_Thread *threadChargementImage = NULL;
 static bool imageChargee = false;
 
 SDL_Event event;
+int scalefactor = 0;
+int delta = 0;
 
 SDL_Surface* loadSDLSurface(std::string fileName)
 {
@@ -110,6 +111,7 @@ bool handleKeyEvent() {
 	SDL_Event event;
 	SDLMod mod;
 	int counterKeydown = 0;
+	delta = 0;
 	while(SDL_PollEvent(&event))
 	{
 		switch(event.type)
@@ -128,7 +130,7 @@ bool handleKeyEvent() {
 	if(controllerEvent.keyboard[SDLK_UP] == 1)
 	{
 
-		scalefactor = 1;
+		//scalefactor = 1;
 		//m_gameModel->changeDirection(UP);
 	}
 
@@ -137,6 +139,27 @@ bool handleKeyEvent() {
 		//scalefactor = -1;
 		//m_gameModel->changeDirection(DOWN);
 	}
+
+	if(controllerEvent.keyboard[SDLK_LEFT] == 1)
+	{
+		//scalefactor = -1;
+		//m_gameModel->changeDirection(DOWN);
+	}
+
+	if(controllerEvent.keyboard[SDLK_a] == 1)
+	{
+		delta = -2;
+		//scalefactor -= 1;
+		//SDL_Delay(1);
+	}
+
+	if(controllerEvent.keyboard[SDLK_b] == 1)
+	{
+		delta = +2;
+		//scalefactor += 1;
+		//SDL_Delay(1);
+	}
+
 
 	if(controllerEvent.keyboard[SDLK_q] == 1)
 	{
@@ -161,6 +184,8 @@ void applySurfaces()
 	rzoom.w = 1920 / 4;
 	rzoom.h = 1080 / 4;
 
+	double scalecon = scalefactor  / 500.0f;
+
 	// Appliquer surface de base
 	if(surface != NULL)
 	{
@@ -176,9 +201,12 @@ void applySurfaces()
 		//)	
 		//
 	
-		printf("SCALE FACTOR %i\n", scalefactor);	
-		zoomsurface = rotozoomSurface(surface, 0, 0.5, 1);	
-		//zoomsurface = rotozoomSurface(surface, 0, scalefactor, 1);	
+		//printf("SCALE FACTOR %i\n", scalefactor);	
+		//zoomsurface = rotozoomSurface(surface, 0, 0.5, 1);	
+		//
+
+		//printf("SCALE FACTOR %i %f\n", scalefactor, scalecon);	
+		zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);	
 		//SDL_BlitSurface(surface, &r, screen, &r);
 
 		SDL_BlitSurface(zoomsurface, &r, screen, &r);
@@ -209,6 +237,8 @@ void freeSurfaces()
 
 int main( int argc, char* args[] )
 {
+
+	scalefactor = 500;
 	/*
 	 *  Initialise libSDL
 	 */
@@ -260,6 +290,7 @@ int main( int argc, char* args[] )
 
 		if(imageChargee == true && quit == false) {
 
+			scalefactor += delta;
 			applySurfaces();
 
 			flipSurfaces();
