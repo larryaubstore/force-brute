@@ -29,6 +29,8 @@ const int FRAME_DIMENSION = 120;
 const int FRAMES_PER_SECOND = 30;
 
 int counter = 0;
+int currentFrame = 0;
+int currentFrameCloud = 0;
 
 //The surfaces
 SDL_Surface *background = NULL;
@@ -40,6 +42,9 @@ SDL_Surface *layer = NULL;
 SDL_Surface *zoomsurface = NULL;
 SDL_Surface *cloudsurface = NULL;
 SDL_Surface *zoomcloud = NULL;
+
+
+std::vector<SDL_Surface*> surfVector;
 
 SDL_RWops* temp_rwop;
 
@@ -86,6 +91,19 @@ void chargeSurface()
 	if(cloudsurface == NULL) {
 		printf("CLOUD\n");
 		cloudsurface = loadSDLSurface("cloudguru2.png");
+	}
+
+	if(surfVector.size() < 10) {
+		surfVector.push_back(loadSDLSurface("guru/0001.png"));
+		surfVector.push_back(loadSDLSurface("guru/0002.png"));
+		surfVector.push_back(loadSDLSurface("guru/0003.png"));
+		surfVector.push_back(loadSDLSurface("guru/0004.png"));
+		surfVector.push_back(loadSDLSurface("guru/0005.png"));
+		surfVector.push_back(loadSDLSurface("guru/0006.png"));
+		surfVector.push_back(loadSDLSurface("guru/0007.png"));
+		surfVector.push_back(loadSDLSurface("guru/0008.png"));
+		surfVector.push_back(loadSDLSurface("guru/0009.png"));
+		surfVector.push_back(loadSDLSurface("guru/0010.png"));
 	}
 
 	//chargeSurfaceMissile();
@@ -204,6 +222,13 @@ void applySurfaces()
 	// Appliquer surface de base
 	if(surface != NULL)
 	{
+
+
+		cloudsurface =  surfVector[currentFrameCloud];
+		if( (currentFrame  % 3) == 0) {
+			currentFrameCloud = (currentFrameCloud + 1) % 10;
+		}
+
 		zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);	
 		zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);	
 
@@ -354,6 +379,8 @@ int main( int argc, char* args[] )
 				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
 				exit(1);
 			}
+
+			currentFrame = (currentFrame + 1) % 30;
 
 			if(  fps.get_ticks() < (1000 / FRAMES_PER_SECOND)  )
 			{
