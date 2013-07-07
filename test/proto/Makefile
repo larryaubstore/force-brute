@@ -10,7 +10,7 @@ INCLUDE = -I /home/larry/devel/force-brute
 
 LIBS	=  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL -lSDL_image -lSDL_gfx
 
-TARGETS = zoom$(EXE) Timer.o
+TARGETS = zoom$(EXE) tile$(EXE) Timer.o
 
 all: $(TARGETS)
 
@@ -20,6 +20,8 @@ Timer.o : ../../Timer.cpp
 zoom$(EXE): $(srcdir)/zoom.cpp Timer.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
+tile$(EXE): $(srcdir)/tile.cpp Timer.o
+	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:
 	rm -f $(TARGETS)
