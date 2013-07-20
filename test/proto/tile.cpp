@@ -38,10 +38,12 @@ SDL_Surface *message = NULL;
 SDL_Surface *screen = NULL;
 SDL_Surface *empty = NULL;
 SDL_Surface *surface = NULL;
+SDL_Surface *surfacePlat = NULL;
 SDL_Surface *layer = NULL;
 SDL_Surface *zoomsurface = NULL;
 SDL_Surface *cloudsurface = NULL;
 SDL_Surface *zoomcloud = NULL;
+SDL_Surface *zoommontagne = NULL;
 
 
 std::vector<SDL_Surface*> surfVector;
@@ -83,10 +85,15 @@ SDL_Surface* loadSDLSurface(std::string fileName)
 void chargeSurface()
 {
 	if(surface == NULL) {
-
 		printf("LOAD\n");
 		surface = loadSDLSurface("0001.png"); 
 	}
+
+	if(surfacePlat == NULL) {
+		printf("LOAD\n");
+		surfacePlat = loadSDLSurface("0002.png"); 
+	}
+  
 
 	if(cloudsurface == NULL) {
 		printf("CLOUD\n");
@@ -181,14 +188,14 @@ bool handleKeyEvent() {
 
 	if(controllerEvent.keyboard[SDLK_a] == 1)
 	{
-		delta = -8;
+		delta = -1;
 		//scalefactor -= 1;
 		//SDL_Delay(1);
 	}
 
 	if(controllerEvent.keyboard[SDLK_b] == 1)
 	{
-		delta = +8;
+		delta = +1;
 		//scalefactor += 1;
 		//SDL_Delay(1);
 	}
@@ -206,8 +213,13 @@ bool handleKeyEvent() {
 void applySurfaces()
 {
 	SDL_Rect r;
-	r.x = -120;
-	r.y = -120;
+//	r.x = -120;
+//	r.y = -120;
+//	r.w = 1920;
+//	r.h = 1080;
+
+  r.x = 0;
+	r.y = 0;
 	r.w = 1920;
 	r.h = 1080;
 
@@ -231,47 +243,43 @@ void applySurfaces()
 
 		zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);	
 		zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);	
+		zoommontagne = rotozoomSurface(surfacePlat, 0, scalecon, 1);	
 
-		SDL_BlitSurface(zoomsurface, &r, screen, NULL);
-		SDL_BlitSurface(zoomcloud, &r, screen, NULL);
+    int xConst = 225;
+    int yConst = 101;
 
-		r.x -= 91;
-		r.y -= 40;
-		SDL_BlitSurface(zoomsurface, &r, screen, NULL);
-		SDL_BlitSurface(zoomcloud, &r, screen, NULL);
+    for(int i = -1; i < 6; i++) {
+      for(int j = -1; j < 7; j++) {
+		    r.x = - (xConst *  i);
+    		r.y = - (yConst * j);
+	  	  SDL_BlitSurface(zoommontagne, &r, screen, NULL);
+      }
+  
+    }
 
-		r.x -= 91;
-		r.y -= 40;
-		SDL_BlitSurface(zoomsurface, &r, screen, NULL);
-		SDL_BlitSurface(zoomcloud, &r, screen, NULL);
+    
+		//r.x = -116;
+		//r.y = -58;
+    for(int i = -1; i < 6; i++) {
+      for(int j = -1; j < 7; j++) {
+		    r.x = - (xConst *  i) - (225 / 2 );
+    		r.y = - (yConst * j) - (101 / 2 );
+	  	  SDL_BlitSurface(zoomsurface, &r, screen, NULL);
+      }
+  
+    }
 
 
-		r.x -= 91;
-		r.y -= 40;
-		SDL_BlitSurface(zoomsurface, &r, screen, NULL);
-		SDL_BlitSurface(zoomcloud, &r, screen, NULL);
-
-
-		r.x = -120;
-		r.y = -120;
-
-		r.x += 91;
-		r.y -= 40;
-		SDL_BlitSurface(zoomsurface, &r, screen, NULL);
-		SDL_BlitSurface(zoomcloud, &r, screen, NULL);
-
-		r.x += 91;
-		r.y -= 40;
-		SDL_BlitSurface(zoomsurface, &r, screen, NULL);
-		SDL_BlitSurface(zoomcloud, &r, screen, NULL);
-
-		r.x = -120;
-		r.y = -120;
-
-		r.x -= 91;
-		r.y += 40;
-		SDL_BlitSurface(zoomsurface, &r, screen, NULL);
-		SDL_BlitSurface(zoomcloud, &r, screen, NULL);
+//		r.x -= 230;
+//		SDL_BlitSurface(zoommontagne, &r, screen, NULL);
+//
+//
+//		r.x = -116;
+//		r.y = -58;
+//		SDL_BlitSurface(zoommontagne, &r, screen, NULL);
+//
+//		r.x -= 230;
+//		SDL_BlitSurface(zoommontagne, &r, screen, NULL);
 
 	} else {
 		printf("SURFACE NULL !!!!! \n");
@@ -301,7 +309,7 @@ void freeSurfaces()
 int main( int argc, char* args[] )
 {
 
-	scalefactor = /*500*/ 64;
+	scalefactor = 500 /*64*/;
 	/*
 	 *  Initialise libSDL
 	 */

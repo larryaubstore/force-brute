@@ -72,7 +72,13 @@ SDL_Surface* loadSDLSurface(std::string fileName)
 
 void chargeSurface()
 {
-	surface = loadSDLSurface("monkey0001.jpg"); 
+	if(surface == NULL) {
+
+		printf("LOAD\n");
+		surface = loadSDLSurface("monkey0001.jpg"); 
+	}
+
+
 	//chargeSurfaceMissile();
 }
 
@@ -148,14 +154,14 @@ bool handleKeyEvent() {
 
 	if(controllerEvent.keyboard[SDLK_a] == 1)
 	{
-		delta = -2;
+		delta = -8;
 		//scalefactor -= 1;
 		//SDL_Delay(1);
 	}
 
 	if(controllerEvent.keyboard[SDLK_b] == 1)
 	{
-		delta = +2;
+		delta = +8;
 		//scalefactor += 1;
 		//SDL_Delay(1);
 	}
@@ -227,9 +233,9 @@ void freeSurfaces()
 	SDL_BlitSurface(empty, NULL, screen, NULL);
 	if(surface != NULL)
 	{
-		SDL_FreeSurface(surface);
+		//SDL_FreeSurface(surface);
 		SDL_FreeSurface(zoomsurface);
-		surface = NULL;
+		//surface = NULL;
 		zoomsurface = NULL;
 	}
 }
