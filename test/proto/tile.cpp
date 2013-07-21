@@ -94,113 +94,102 @@ void chargeSurface()
   }
   
 
-	if(cloudsurface == NULL) {
-		printf("CLOUD\n");
-		cloudsurface = loadSDLSurface("cloudguru2.png");
-	}
+  if(cloudsurface == NULL) {
+    printf("CLOUD\n");
+    cloudsurface = loadSDLSurface("cloudguru2.png");
+  }
 
-	if(surfVector.size() < 10) {
-		surfVector.push_back(loadSDLSurface("guru/0001.png"));
-		surfVector.push_back(loadSDLSurface("guru/0002.png"));
-		surfVector.push_back(loadSDLSurface("guru/0003.png"));
-		surfVector.push_back(loadSDLSurface("guru/0004.png"));
-		surfVector.push_back(loadSDLSurface("guru/0005.png"));
-		surfVector.push_back(loadSDLSurface("guru/0006.png"));
-		surfVector.push_back(loadSDLSurface("guru/0007.png"));
-		surfVector.push_back(loadSDLSurface("guru/0008.png"));
-		surfVector.push_back(loadSDLSurface("guru/0009.png"));
-		surfVector.push_back(loadSDLSurface("guru/0010.png"));
-	}
-
-	//chargeSurfaceMissile();
+  if(surfVector.size() < 10) {
+    surfVector.push_back(loadSDLSurface("guru/0001.png"));
+    surfVector.push_back(loadSDLSurface("guru/0002.png"));
+    surfVector.push_back(loadSDLSurface("guru/0003.png"));
+    surfVector.push_back(loadSDLSurface("guru/0004.png"));
+    surfVector.push_back(loadSDLSurface("guru/0005.png"));
+    surfVector.push_back(loadSDLSurface("guru/0006.png"));
+    surfVector.push_back(loadSDLSurface("guru/0007.png"));
+    surfVector.push_back(loadSDLSurface("guru/0008.png"));
+    surfVector.push_back(loadSDLSurface("guru/0009.png"));
+    surfVector.push_back(loadSDLSurface("guru/0010.png"));
+  }
 }
 
 int SDLCALL fonctionChargementImage(void *data)
 {
 
-	while(1)
-	{
-		if(imageChargee == false)
-		{
-			// LOCK
-			if ( SDL_mutexP(mutex) < 0 ) {
-				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
-				exit(1);
-	    	}
+  while(1) {
+    if(imageChargee == false) {
+      // LOCK
+      if ( SDL_mutexP(mutex) < 0 ) {
+        fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
+        exit(1);
+      }
 
-			chargeSurface();
-			imageChargee = true;
+      chargeSurface();
+      imageChargee = true;
 
-			// UNLOCK
-			if ( SDL_mutexV(mutex) < 0 ) {
-				fprintf(stderr, "Couldn't unlock mutex: %s", SDL_GetError());
-				exit(1);
-			}
-		}
-		SDL_Delay(10);
-	}
+      // UNLOCK
+      if ( SDL_mutexV(mutex) < 0 ) {
+        fprintf(stderr, "Couldn't unlock mutex: %s", SDL_GetError());
+        exit(1);
+      }
+    }
+    SDL_Delay(10);
+  }
 }
 
 bool handleKeyEvent() {
-	//return false;
-	//
-	bool result = false;
-	ControllerEvent controllerEvent;
-	memset(&controllerEvent, 0, sizeof(ControllerEvent));
-	SDL_Event event;
-	SDLMod mod;
+  //return false;
+  //
+  bool result = false;
+  ControllerEvent controllerEvent;
+  memset(&controllerEvent, 0, sizeof(ControllerEvent));
+  SDL_Event event;
+  SDLMod mod;
 
   int xPos = 0;
   int yPos = 0;
   Uint8 mouseState = SDL_GetMouseState(&xPos, &yPos);
 
-	int counterKeydown = 0;
-	delta = 0;
+  int counterKeydown = 0;
+  delta = 0;
   shiftX = 0;
   shiftY = 0;
-	while(SDL_PollEvent(&event))
-	{
-		switch(event.type)
-		{
-			case SDL_KEYDOWN:
-				counterKeydown++;
-				controllerEvent.keyboard[event.key.keysym.sym] = 1;
-				break;
-			case SDL_KEYUP:
-				controllerEvent.keyboard[event.key.keysym.sym] = 0;
-				break;
-		}
-	}
+  while(SDL_PollEvent(&event)) {
+    switch(event.type) {
+      case SDL_KEYDOWN:
+        counterKeydown++;
+        controllerEvent.keyboard[event.key.keysym.sym] = 1;
+        break;
+      case SDL_KEYUP:
+        controllerEvent.keyboard[event.key.keysym.sym] = 0;
+        break;
+    }
+  }
 
   //printf("X => %i Y => %i\n", xPos, yPos);
+  //scalefactor = 0;
+  if(controllerEvent.keyboard[SDLK_UP] == 1) {
 
-	//scalefactor = 0;
-	if(controllerEvent.keyboard[SDLK_UP] == 1)
-	{
+    //scalefactor = 1;
+    //m_gameModel->changeDirection(UP);
+  }
 
-		//scalefactor = 1;
-		//m_gameModel->changeDirection(UP);
-	}
+  if(controllerEvent.keyboard[SDLK_DOWN] == 1) {
+    //scalefactor = -1;
+    //m_gameModel->changeDirection(DOWN);
+  }
 
-	if(controllerEvent.keyboard[SDLK_DOWN] == 1)
-	{
-		//scalefactor = -1;
-		//m_gameModel->changeDirection(DOWN);
-	}
-
-	if(controllerEvent.keyboard[SDLK_c] == 1 || xPos > (VIDEOWIDTH - 100))
-	{
+  if(controllerEvent.keyboard[SDLK_c] == 1 || xPos > (VIDEOWIDTH - 100)) {
     shiftX += 5;
-		//scalefactor = -1;
-		//m_gameModel->changeDirection(DOWN);
-	}
+    //scalefactor = -1;
+    //m_gameModel->changeDirection(DOWN);
+  }
 
-	if(controllerEvent.keyboard[SDLK_d] == 1 || xPos < (0 + 100))
-	{
+  if(controllerEvent.keyboard[SDLK_d] == 1 || xPos < (0 + 100)) {
     shiftX -= 5;
-		//scalefactor = -1;
-		//m_gameModel->changeDirection(DOWN);
-	}
+    //scalefactor = -1;
+    //m_gameModel->changeDirection(DOWN);
+  }
 
   if(yPos < 100) {
     shiftY -= 5;
@@ -211,52 +200,47 @@ bool handleKeyEvent() {
   }
 
 
-	if(controllerEvent.keyboard[SDLK_a] == 1)
-	{
-		delta = -1;
-		//scalefactor -= 1;
-		//SDL_Delay(1);
-	}
+  if(controllerEvent.keyboard[SDLK_a] == 1) {
+    delta = -1;
+    //scalefactor -= 1;
+    //SDL_Delay(1);
+  }
 
-	if(controllerEvent.keyboard[SDLK_b] == 1)
-	{
-		delta = +1;
-		//scalefactor += 1;
-		//SDL_Delay(1);
-	}
+  if(controllerEvent.keyboard[SDLK_b] == 1) {
+    delta = +1;
+    //scalefactor += 1;
+    //SDL_Delay(1);
+  }
 
 
-	if(controllerEvent.keyboard[SDLK_q] == 1)
-	{
-		result = true;
-	}
-
-	return result;
-
+  if(controllerEvent.keyboard[SDLK_q] == 1) {
+    result = true;
+  }
+  return result;
 }
 
 void applySurfaces()
 {
-	SDL_Rect r;
+  SDL_Rect r;
   r.x = 0;
-	r.y = 0;
-	r.w = 1920;
-	r.h = 1080;
+  r.y = 0;
+  r.w = 1920;
+  r.h = 1080;
 
-	SDL_Rect rzoom;
-	rzoom.x = 0;
-	rzoom.y = 0;
-	rzoom.w = 1920 / 4;
-	rzoom.h = 1080 / 4;
+  SDL_Rect rzoom;
+  rzoom.x = 0;
+  rzoom.y = 0;
+  rzoom.w = 1920 / 4;
+  rzoom.h = 1080 / 4;
 
-	double scalecon = scalefactor  / 500.0f;
+  double scalecon = scalefactor  / 500.0f;
 
-	// Appliquer surface de base
+// Appliquer surface de base
   if(surface != NULL) {
-//		cloudsurface =  surfVector[currentFrameCloud];
-//		if( (currentFrame  % 3) == 0) {
-//			currentFrameCloud = (currentFrameCloud + 1) % 10;
-//		}
+//cloudsurface =  surfVector[currentFrameCloud];
+//if( (currentFrame  % 3) == 0) {
+//currentFrameCloud = (currentFrameCloud + 1) % 10;
+//}
 //zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);
 
     zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);
@@ -319,74 +303,72 @@ int main( int argc, char* args[] ) {
 
 
 
-	empty = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEOWIDTH, VIDEOHEIGHT,
-															 32, 0, 0, 0, 0);
+  empty = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEOWIDTH, VIDEOHEIGHT,
+     32, 0, 0, 0, 0);
 
-	mutex = SDL_CreateMutex();
+  mutex = SDL_CreateMutex();
 
-	int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF /*| SDL_FULLSCREEN*/;
+  int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF /*| SDL_FULLSCREEN*/;
 
-	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, options);
-	if(!screen)
-	{
-		printf("cannot set video mode\n");
-		return EXIT_FAILURE;
-	}
+  screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, options);
+  if(!screen) {
+    printf("cannot set video mode\n");
+    return EXIT_FAILURE;
+  }
 
-	// Création du thread pour charger les images
-	if ( (threadChargementImage = SDL_CreateThread(fonctionChargementImage, NULL)) == NULL ) {
- 		printf("Impossible de créer le thread --> Chargement image\n");
-  	return EXIT_FAILURE;
-	}
+  // Création du thread pour charger les images
+  if ( (threadChargementImage = SDL_CreateThread(fonctionChargementImage, NULL)) == NULL ) {
+    printf("Impossible de créer le thread --> Chargement image\n");
+    return EXIT_FAILURE;
+  }
 
 
-	//Quit flag
-	quit = false;
+  //Quit flag
+  quit = false;
 
-	//The frame rate regulator
-	Timer fps;
+  //The frame rate regulator
+  Timer fps;
 
-	while( quit == false ) {
-		//Start the frame timer
-		fps.start();
+  while( quit == false ) {
+    //Start the frame timer
+    fps.start();
 
-		quit = handleKeyEvent();
+    quit = handleKeyEvent();
 
-		if(quit == true) {
-			printf("FIN ...\n");
-		}
+    if(quit == true) {
+      printf("FIN ...\n");
+    }
 
-		if(imageChargee == true && quit == false) {
+    if(imageChargee == true && quit == false) {
 
-			scalefactor += delta;
+      scalefactor += delta;
       permanentShiftX += shiftX;
       permanentShiftY += shiftY;
-			applySurfaces();
+      applySurfaces();
 
-			flipSurfaces();
+      flipSurfaces();
 
-			freeSurfaces();
+      freeSurfaces();
 
-			if ( SDL_mutexP(mutex) < 0 ) {
-				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
-				exit(1);
-			}
+      if ( SDL_mutexP(mutex) < 0 ) {
+        fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
+        exit(1);
+      }
 
-			imageChargee = false;
+      imageChargee = false;
 
-			if ( SDL_mutexV(mutex) < 0 ) {
-				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
-				exit(1);
-			}
+      if ( SDL_mutexV(mutex) < 0 ) {
+        fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
+        exit(1);
+      }
 
-			currentFrame = (currentFrame + 1) % 30;
+      currentFrame = (currentFrame + 1) % 30;
 
-			if(  fps.get_ticks() < (1000 / FRAMES_PER_SECOND)  )
-			{
-				//Sleep the remaining frame time
-				SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
-			}
-		}
-	}
-	return 0;
+      if(  fps.get_ticks() < (1000 / FRAMES_PER_SECOND)  ) {
+        //Sleep the remaining frame time
+        SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );
+      }
+    }
+  }
+  return 0;
 }
