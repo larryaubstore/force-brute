@@ -81,8 +81,7 @@ SDL_Surface* loadSDLSurface(std::string fileName) {
   return NULL;
 }
 
-void chargeSurface()
-{
+void chargeSurface() {
   if(surface == NULL) {
     printf("LOAD\n");
     surface = loadSDLSurface("0001.png"); 
@@ -113,8 +112,7 @@ void chargeSurface()
   }
 }
 
-int SDLCALL fonctionChargementImage(void *data)
-{
+int SDLCALL fonctionChargementImage(void *data) {
 
   while(1) {
     if(imageChargee == false) {
@@ -219,8 +217,7 @@ bool handleKeyEvent() {
   return result;
 }
 
-void applySurfaces()
-{
+void applySurfaces() {
   SDL_Rect r;
   r.x = 0;
   r.y = 0;
@@ -269,15 +266,13 @@ void applySurfaces()
   }
 }
 
-void flipSurfaces()
-{
+void flipSurfaces() {
   SDL_Flip(screen);
 }
 
 
 
-void freeSurfaces()
-{
+void freeSurfaces() {
   SDL_BlitSurface(empty, NULL, screen, NULL);
   if(surface != NULL) {
     //SDL_FreeSurface(surface);
