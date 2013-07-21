@@ -14,13 +14,16 @@ TARGETS = zoom$(EXE) tile$(EXE) Timer.o
 
 all: $(TARGETS)
 
+DynamicGrid.o : common/DynamicGrid.cpp
+	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
+
 Timer.o : ../../Timer.cpp
 	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
 
 zoom$(EXE): $(srcdir)/zoom.cpp Timer.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
-tile$(EXE): $(srcdir)/tile.cpp Timer.o
+tile$(EXE): $(srcdir)/tile.cpp Timer.o DynamicGrid.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:
