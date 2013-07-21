@@ -232,16 +232,22 @@ void applySurfaces() {
 
   double scalecon = scalefactor  / 500.0f;
 
-// Appliquer surface de base
+  // Appliquer surface de base
   if(surface != NULL) {
-//cloudsurface =  surfVector[currentFrameCloud];
-//if( (currentFrame  % 3) == 0) {
-//currentFrameCloud = (currentFrameCloud + 1) % 10;
-//}
-//zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);
+
+    //cloudsurface =  surfVector[currentFrameCloud];
+    //if( (currentFrame  % 3) == 0) {
+    //currentFrameCloud = (currentFrameCloud + 1) % 10;
+    //}
+    //zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);
 
     zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);
     zoommontagne = rotozoomSurface(surfacePlat, 0, scalecon, 1);
+
+    // Taille du pavé, largeur + hauteur
+    // Déplacement vertical et horizontal 
+    // Facteur de zoom
+    // Position x et y
 
     int xConst = 225;
     int yConst = 101;
