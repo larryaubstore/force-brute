@@ -42,7 +42,6 @@ SDL_Surface *surfacePlat = NULL;
 SDL_Surface *layer = NULL;
 SDL_Surface *zoomsurface = NULL;
 SDL_Surface *cloudsurface = NULL;
-SDL_Surface *zoomcloud = NULL;
 SDL_Surface *zoommontagne = NULL;
 
 
@@ -59,6 +58,8 @@ static bool imageChargee = false;
 SDL_Event event;
 int scalefactor = 0;
 int delta = 0;
+int shiftX = 0;
+int permanentShiftX = 0;
 
 SDL_Surface* loadSDLSurface(std::string fileName)
 {
@@ -152,6 +153,7 @@ bool handleKeyEvent() {
 	SDLMod mod;
 	int counterKeydown = 0;
 	delta = 0;
+  shiftX = 0;
 	while(SDL_PollEvent(&event))
 	{
 		switch(event.type)
@@ -180,8 +182,16 @@ bool handleKeyEvent() {
 		//m_gameModel->changeDirection(DOWN);
 	}
 
-	if(controllerEvent.keyboard[SDLK_LEFT] == 1)
+	if(controllerEvent.keyboard[SDLK_c] == 1)
 	{
+    shiftX += 5;
+		//scalefactor = -1;
+		//m_gameModel->changeDirection(DOWN);
+	}
+
+	if(controllerEvent.keyboard[SDLK_d] == 1)
+	{
+    shiftX -= 5;
 		//scalefactor = -1;
 		//m_gameModel->changeDirection(DOWN);
 	}
@@ -213,11 +223,6 @@ bool handleKeyEvent() {
 void applySurfaces()
 {
 	SDL_Rect r;
-//	r.x = -120;
-//	r.y = -120;
-//	r.w = 1920;
-//	r.h = 1080;
-
   r.x = 0;
 	r.y = 0;
 	r.w = 1920;
@@ -234,15 +239,13 @@ void applySurfaces()
 	// Appliquer surface de base
 	if(surface != NULL)
 	{
-
-
-		cloudsurface =  surfVector[currentFrameCloud];
-		if( (currentFrame  % 3) == 0) {
-			currentFrameCloud = (currentFrameCloud + 1) % 10;
-		}
-
+//		cloudsurface =  surfVector[currentFrameCloud];
+//		if( (currentFrame  % 3) == 0) {
+//			currentFrameCloud = (currentFrameCloud + 1) % 10;
+//		}
+		//zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);	
+		
 		zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);	
-		zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);	
 		zoommontagne = rotozoomSurface(surfacePlat, 0, scalecon, 1);	
 
     int xConst = 225;
@@ -250,37 +253,21 @@ void applySurfaces()
 
     for(int i = -1; i < 6; i++) {
       for(int j = -1; j < 7; j++) {
-		    r.x = - (xConst *  i);
+		    r.x = - (xConst *  i) + permanentShiftX;
     		r.y = - (yConst * j);
 	  	  SDL_BlitSurface(zoommontagne, &r, screen, NULL);
       }
   
     }
 
-    
-		//r.x = -116;
-		//r.y = -58;
     for(int i = -1; i < 6; i++) {
       for(int j = -1; j < 7; j++) {
-		    r.x = - (xConst *  i) - (225 / 2 );
+		    r.x = - (xConst *  i) - (225 / 2 ) + permanentShiftX;
     		r.y = - (yConst * j) - (101 / 2 );
 	  	  SDL_BlitSurface(zoomsurface, &r, screen, NULL);
       }
   
     }
-
-
-//		r.x -= 230;
-//		SDL_BlitSurface(zoommontagne, &r, screen, NULL);
-//
-//
-//		r.x = -116;
-//		r.y = -58;
-//		SDL_BlitSurface(zoommontagne, &r, screen, NULL);
-//
-//		r.x -= 230;
-//		SDL_BlitSurface(zoommontagne, &r, screen, NULL);
-
 	} else {
 		printf("SURFACE NULL !!!!! \n");
 	}
@@ -300,8 +287,11 @@ void freeSurfaces()
 	{
 		//SDL_FreeSurface(surface);
 		SDL_FreeSurface(zoomsurface);
+		SDL_FreeSurface(zoommontagne);
 		//surface = NULL;
 		zoomsurface = NULL;
+		zoommontagne = NULL;
+
 	}
 }
 
@@ -326,7 +316,6 @@ int main( int argc, char* args[] )
 
 	mutex = SDL_CreateMutex();
 
-	//int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
 	int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF;
 
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, options);
@@ -362,19 +351,12 @@ int main( int argc, char* args[] )
 		if(imageChargee == true && quit == false) {
 
 			scalefactor += delta;
+      permanentShiftX += shiftX;
 			applySurfaces();
 
 			flipSurfaces();
 
 			freeSurfaces();
-
-//			controller->applySurfaces();
-//
-//			controller->flipSurfaces();
-//
-//			controller->nextPosition();
-//
-//			controller->freeSurfaces();
 
 			if ( SDL_mutexP(mutex) < 0 ) {
 				fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());
