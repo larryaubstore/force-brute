@@ -61,39 +61,35 @@ int delta = 0;
 int shiftX = 0;
 int permanentShiftX = 0;
 
-SDL_Surface* loadSDLSurface(std::string fileName)
-{
-	SDL_Surface* surface;
-	FILE *fp = fopen(fileName.data(), "rb");
-	if( fp == NULL ) {
-		SDL_SetError("Couldn't open %s", fp);
-	}
-	else
-	{
-		temp_rwop = SDL_RWFromFP(fp, 0);
-		//surface = IMG_LoadJPG_RW(temp_rwop);
+SDL_Surface* loadSDLSurface(std::string fileName) {
+  SDL_Surface* surface;
+  FILE *fp = fopen(fileName.data(), "rb");
+  if( fp == NULL ) {
+    SDL_SetError("Couldn't open %s", fp);
+  } else {
+    temp_rwop = SDL_RWFromFP(fp, 0);
+    //surface = IMG_LoadJPG_RW(temp_rwop);
+    surface = IMG_Load_RW(temp_rwop, 0);
 
-		surface = IMG_Load_RW(temp_rwop, 0);
-
-		SDL_FreeRW(temp_rwop);
-		temp_rwop = NULL;
-		fclose(fp);
-		return surface;
-	}
-	return NULL;
+    SDL_FreeRW(temp_rwop);
+    temp_rwop = NULL;
+    fclose(fp);
+    return surface;
+  }
+  return NULL;
 }
 
 void chargeSurface()
 {
-	if(surface == NULL) {
-		printf("LOAD\n");
-		surface = loadSDLSurface("0001.png"); 
-	}
+  if(surface == NULL) {
+    printf("LOAD\n");
+    surface = loadSDLSurface("0001.png"); 
+  }
 
-	if(surfacePlat == NULL) {
-		printf("LOAD\n");
-		surfacePlat = loadSDLSurface("0002.png"); 
-	}
+  if(surfacePlat == NULL) {
+    printf("LOAD\n");
+    surfacePlat = loadSDLSurface("0002.png"); 
+  }
   
 
 	if(cloudsurface == NULL) {
@@ -237,77 +233,70 @@ void applySurfaces()
 	double scalecon = scalefactor  / 500.0f;
 
 	// Appliquer surface de base
-	if(surface != NULL)
-	{
+  if(surface != NULL) {
 //		cloudsurface =  surfVector[currentFrameCloud];
 //		if( (currentFrame  % 3) == 0) {
 //			currentFrameCloud = (currentFrameCloud + 1) % 10;
 //		}
-		//zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);	
-		
-		zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);	
-		zoommontagne = rotozoomSurface(surfacePlat, 0, scalecon, 1);	
+//zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);
+
+    zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);
+    zoommontagne = rotozoomSurface(surfacePlat, 0, scalecon, 1);
 
     int xConst = 225;
     int yConst = 101;
 
     for(int i = -1; i < 6; i++) {
       for(int j = -1; j < 7; j++) {
-		    r.x = - (xConst *  i) + permanentShiftX;
-    		r.y = - (yConst * j);
-	  	  SDL_BlitSurface(zoommontagne, &r, screen, NULL);
+        r.x = - ((xConst *  i) + permanentShiftX) * scalecon;
+        r.y = - ((yConst * j)) * scalecon;
+        SDL_BlitSurface(zoommontagne, &r, screen, NULL);
       }
-  
     }
 
     for(int i = -1; i < 6; i++) {
       for(int j = -1; j < 7; j++) {
-		    r.x = - (xConst *  i) - (225 / 2 ) + permanentShiftX;
-    		r.y = - (yConst * j) - (101 / 2 );
-	  	  SDL_BlitSurface(zoomsurface, &r, screen, NULL);
+        r.x = - ((xConst *  i) - (225 / 2 ) + permanentShiftX) * scalecon;
+        r.y = - ((yConst * j) - (101 / 2 )) * scalecon;
+        SDL_BlitSurface(zoomsurface, &r, screen, NULL);
       }
-  
     }
-	} else {
-		printf("SURFACE NULL !!!!! \n");
-	}
+  } else {
+    printf("SURFACE NULL !!!!! \n");
+  }
 }
 
 void flipSurfaces()
 {
-	SDL_Flip(screen);
+  SDL_Flip(screen);
 }
 
 
 
 void freeSurfaces()
 {
-	SDL_BlitSurface(empty, NULL, screen, NULL);
-	if(surface != NULL)
-	{
-		//SDL_FreeSurface(surface);
-		SDL_FreeSurface(zoomsurface);
-		SDL_FreeSurface(zoommontagne);
-		//surface = NULL;
-		zoomsurface = NULL;
-		zoommontagne = NULL;
-
-	}
+  SDL_BlitSurface(empty, NULL, screen, NULL);
+  if(surface != NULL) {
+    //SDL_FreeSurface(surface);
+    SDL_FreeSurface(zoomsurface);
+    SDL_FreeSurface(zoommontagne);
+    //surface = NULL;
+    zoomsurface = NULL;
+    zoommontagne = NULL;
+  }
 }
 
 
-int main( int argc, char* args[] )
-{
+int main( int argc, char* args[] ) {
 
-	scalefactor = 500 /*64*/;
-	/*
-	 *  Initialise libSDL
-	 */
-	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTTHREAD) == -1)
-	{
-			printf("cannot initialize SDL\n");
-			return EXIT_FAILURE;
-	}
+  scalefactor = 500 /*64*/;
+  /*
+   *  Initialise libSDL
+   */
+  if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTTHREAD) == -1) {
+    printf("cannot initialize SDL\n");
+    return EXIT_FAILURE;
+  }
 
 
 
