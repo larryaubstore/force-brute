@@ -59,7 +59,9 @@ SDL_Event event;
 int scalefactor = 0;
 int delta = 0;
 int shiftX = 0;
+int shiftY = 0;
 int permanentShiftX = 0;
+int permanentShiftY = 0;
 
 SDL_Surface* loadSDLSurface(std::string fileName) {
   SDL_Surface* surface;
@@ -147,9 +149,15 @@ bool handleKeyEvent() {
 	memset(&controllerEvent, 0, sizeof(ControllerEvent));
 	SDL_Event event;
 	SDLMod mod;
+
+  int xPos = 0;
+  int yPos = 0;
+  Uint8 mouseState = SDL_GetMouseState(&xPos, &yPos);
+
 	int counterKeydown = 0;
 	delta = 0;
   shiftX = 0;
+  shiftY = 0;
 	while(SDL_PollEvent(&event))
 	{
 		switch(event.type)
@@ -163,6 +171,8 @@ bool handleKeyEvent() {
 				break;
 		}
 	}
+
+  //printf("X => %i Y => %i\n", xPos, yPos);
 
 	//scalefactor = 0;
 	if(controllerEvent.keyboard[SDLK_UP] == 1)
@@ -178,19 +188,28 @@ bool handleKeyEvent() {
 		//m_gameModel->changeDirection(DOWN);
 	}
 
-	if(controllerEvent.keyboard[SDLK_c] == 1)
+	if(controllerEvent.keyboard[SDLK_c] == 1 || xPos > (VIDEOWIDTH - 100))
 	{
     shiftX += 5;
 		//scalefactor = -1;
 		//m_gameModel->changeDirection(DOWN);
 	}
 
-	if(controllerEvent.keyboard[SDLK_d] == 1)
+	if(controllerEvent.keyboard[SDLK_d] == 1 || xPos < (0 + 100))
 	{
     shiftX -= 5;
 		//scalefactor = -1;
 		//m_gameModel->changeDirection(DOWN);
 	}
+
+  if(yPos < 100) {
+    shiftY -= 5;
+  }
+
+  if(yPos > (VIDEOHEIGHT - 100) ) {
+    shiftY += 5;
+  }
+
 
 	if(controllerEvent.keyboard[SDLK_a] == 1)
 	{
@@ -249,7 +268,7 @@ void applySurfaces()
     for(int i = -1; i < 6; i++) {
       for(int j = -1; j < 7; j++) {
         r.x = - ((xConst *  i) + permanentShiftX) * scalecon;
-        r.y = - ((yConst * j)) * scalecon;
+        r.y = - ((yConst * j) + permanentShiftY) * scalecon;
         SDL_BlitSurface(zoommontagne, &r, screen, NULL);
       }
     }
@@ -257,7 +276,7 @@ void applySurfaces()
     for(int i = -1; i < 6; i++) {
       for(int j = -1; j < 7; j++) {
         r.x = - ((xConst *  i) - (225 / 2 ) + permanentShiftX) * scalecon;
-        r.y = - ((yConst * j) - (101 / 2 )) * scalecon;
+        r.y = - ((yConst * j) - (101 / 2 ) + permanentShiftY) * scalecon;
         SDL_BlitSurface(zoomsurface, &r, screen, NULL);
       }
     }
@@ -305,7 +324,7 @@ int main( int argc, char* args[] ) {
 
 	mutex = SDL_CreateMutex();
 
-	int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF;
+	int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF /*| SDL_FULLSCREEN*/;
 
 	screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, options);
 	if(!screen)
@@ -341,6 +360,7 @@ int main( int argc, char* args[] ) {
 
 			scalefactor += delta;
       permanentShiftX += shiftX;
+      permanentShiftY += shiftY;
 			applySurfaces();
 
 			flipSurfaces();
