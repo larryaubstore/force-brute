@@ -1,8 +1,11 @@
 #include "TestDynamicGrid.h"
 
-void TestDynamicGrid::testConfigFileReading()
+void TestDynamicGrid::testTileRendering()
 {
 
+    SurfaceSharedPtr surfaceSharedPtr;
+    TileSharedPtr firstTile(new Tile(0, 0, surfaceSharedPtr));
+    //boost::shared_ptr<DynamicGrid> DynamicGridSharedPtr(new ;
 //		GameModel gameModel(UP, 0, 0, "", "");
 //		LoaderMock loaderMock;
 //		FetcherMock fetcherMock;

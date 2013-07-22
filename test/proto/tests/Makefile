@@ -29,7 +29,7 @@ TestDynamicGrid.o: TestDynamicGrid.cpp
 ProtoTestSuite.o : ProtoTestSuite.cpp 
 	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
 
-ProtoTestSuite$(EXE): $(srcdir)/ProtoTestSuite.cpp TestDynamicGrid.o
+ProtoTestSuite$(EXE): $(srcdir)/ProtoTestSuite.cpp TestDynamicGrid.o DynamicGrid.o Tile.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:
