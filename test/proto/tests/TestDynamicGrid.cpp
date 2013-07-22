@@ -3,45 +3,22 @@
 void TestDynamicGrid::testTileRendering()
 {
 
-    SurfaceSharedPtr surfaceSharedPtr;
-    TileSharedPtr firstTile(new Tile(0, 0, surfaceSharedPtr));
-    //boost::shared_ptr<DynamicGrid> DynamicGridSharedPtr(new ;
-//		GameModel gameModel(UP, 0, 0, "", "");
-//		LoaderMock loaderMock;
-//		FetcherMock fetcherMock;
-//
-//
-//		GameModelController* controller = new GameModelController(&gameModel, 
-//																  &loaderMock,
-//																NULL, 
-//																NULL);
-//
-//		gameModel.nextPosition();
-//		TEST_ASSERT(gameModel.getPosition() == 1);
-//
-//
-//
-//		printf("Ajout Missile \n");
-//		gameModel.lanceMissile();
-//		TEST_ASSERT(gameModel.GetPathMissileList().size() == 1 );
-//		PathMissilePtr missilePtr = gameModel.GetPathMissileList()[0];
-//		IPathMissile* missile = missilePtr.get();
-//
-//		
-//		printf("Test coordonnées missile - Position 1\n");
-//		TEST_ASSERT(missile->getPosition() == 1);
-//		TEST_ASSERT(missile->getEndPosition() == 121);
-//		TEST_ASSERT(missile->getStartPosition() == 1);
-//
-//
-//		// Avancer à la prochaine position
-//		gameModel.nextPosition();
-//		TEST_ASSERT(missile->getPosition() == 2);
-//		TEST_ASSERT(missile->getEndPosition() == 121);
-//		TEST_ASSERT(missile->getStartPosition() == 1);
-//
-//
-//		/*********************** VERIFY *****************************/
-//		//mock.verify();
+    std::vector<TileSharedPtr> tile_vector;
 
+    SurfaceSharedPtr surface_ptr;
+    TileSharedPtr tile_ptr(new Tile(0, 0, surface_ptr));
+    tile_vector.push_back(tile_ptr);
+
+    tile_ptr.reset(new Tile(1, 0, surface_ptr));
+    tile_vector.push_back(tile_ptr);
+
+    tile_ptr.reset(new Tile(1, 0, surface_ptr));
+    tile_vector.push_back(tile_ptr);
+
+    boost::shared_ptr<DynamicGrid> dynamicGrid_ptr(new DynamicGrid(50, 50, 100, 100, 1.0d, tile_vector));
+
+
+    std::vector<TileSharedPtr> tileConverted_vector = dynamicGrid_ptr->GetTileConverted();
+
+    TEST_ASSERT(tileConverted_vector.size() == 3);
 }

@@ -16,6 +16,10 @@ class Tile: public ITile
 	public:
 		Tile(int xPos, int yPos, SurfaceSharedPtr surface);
 		~Tile();
+
+    virtual int GetXPos();
+    virtual int GetYPos();
+    virtual SurfaceSharedPtr GetSurface();
 };
 
 

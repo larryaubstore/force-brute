@@ -16,4 +16,15 @@ Tile::~Tile()
 
 }
 
+int Tile::GetXPos() {
+  return _xPos;
+}
 
+
+int Tile::GetYPos() {
+  return _yPos;
+}
+
+SurfaceSharedPtr Tile::GetSurface() {
+  return _surface;
+}

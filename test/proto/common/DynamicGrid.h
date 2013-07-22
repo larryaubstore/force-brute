@@ -4,6 +4,7 @@
 
 #include "TypeDefEngine.h"
 #include "IDynamicGrid.h"
+#include "Tile.h"
 
 //#include "SDL/SDL.h"
 //#include "SDL/SDL_image.h"
@@ -34,14 +35,18 @@ class DynamicGrid: public IDynamicGrid
     int _shiftX;
     int _shiftY;
     std::vector<TileSharedPtr> _tileList;
+    double _zoomFactor;
 
 	public:
 		DynamicGrid(int tileWidth, 
                 int tileHeight, 
                 int shiftX, 
                 int shiftY,
+                double zoomFactor,
                 std::vector<TileSharedPtr> tileList);
 		~DynamicGrid();
+
+    std::vector<TileSharedPtr> GetTileConverted();
 };
 
 

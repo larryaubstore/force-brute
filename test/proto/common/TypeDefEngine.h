@@ -2,8 +2,6 @@
 #define TYPE_DEF_ENGINE_H
 
 #include "ITile.h"
-
-//#include "Tile.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 
