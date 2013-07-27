@@ -10,6 +10,9 @@
 #include <sstream>
 #include "SEvent.h"
 
+#include "common/DynamicGrid.h"
+#include "common/Tile.h"
+
 
 #define WIDTH 1305 
 #define HEIGHT 734 
@@ -248,7 +251,9 @@ void applySurfaces() {
     // Déplacement vertical et horizontal 
     // Facteur de zoom
     // Position x et y
+    //
 
+    
     int xConst = 225;
     int yConst = 101;
 
@@ -293,6 +298,7 @@ void freeSurfaces() {
 
 int main( int argc, char* args[] ) {
 
+
   scalefactor = 500 /*64*/;
   /*
    *  Initialise libSDL
@@ -322,6 +328,27 @@ int main( int argc, char* args[] ) {
     printf("Impossible de créer le thread --> Chargement image\n");
     return EXIT_FAILURE;
   }
+
+  std::vector<TileSharedPtr> tile_vector;
+
+  SurfaceSharedPtr surface_ptr;
+  TileSharedPtr tile_ptr(new Tile(0, 0, surface_ptr));
+  tile_vector.push_back(tile_ptr);
+
+  tile_ptr.reset(new Tile(1, 0, surface_ptr));
+  tile_vector.push_back(tile_ptr);
+
+  tile_ptr.reset(new Tile(2, 0, surface_ptr));
+  tile_vector.push_back(tile_ptr);
+
+
+  boost::shared_ptr< DynamicGrid<TileSharedPtr>  > dynamicGrid_ptr(new DynamicGrid<TileSharedPtr>(225, 
+                                                                 101, 
+                                                                 permanentShiftX, 
+                                                                 permanentShiftY, 
+                                                                 1.0d, 
+                                                                 tile_vector));
+
 
 
   //Quit flag

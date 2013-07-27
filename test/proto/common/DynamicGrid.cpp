@@ -1,15 +1,15 @@
-#include "DynamicGrid.h"
 
 
 /**
 * @brief Constructor
 */
-DynamicGrid::DynamicGrid(int tileWidth, 
+template <typename T> 
+DynamicGrid<T>::DynamicGrid(int tileWidth, 
                          int tileHeight, 
                          int shiftX, 
                          int shiftY,
                          double zoomFactor,
-                         std::vector<TileSharedPtr> tileList)
+                         std::vector<T> tileList)
 {
   this->_tileWidth = tileWidth;
   this->_tileHeight = tileHeight;
@@ -19,7 +19,8 @@ DynamicGrid::DynamicGrid(int tileWidth,
   this->_zoomFactor = zoomFactor;
 }
 
-DynamicGrid::~DynamicGrid()
+template <typename T> 
+DynamicGrid<T>::~DynamicGrid()
 {
 
 }
@@ -27,13 +28,14 @@ DynamicGrid::~DynamicGrid()
 //r.x = - ((xConst *  i) - (225 / 2 ) + permanentShiftX) * scalecon;
 //r.y = - ((yConst * j) - (101 / 2 ) + permanentShiftY) * scalecon;
 
-std::vector<TileSharedPtr> DynamicGrid::GetTileConverted() {
+template <typename T> 
+std::vector<T> DynamicGrid<T>::GetTileConverted() {
 
-  std::vector<TileSharedPtr> tile_vector;
-  TileSharedPtr tile_ptr;
+  std::vector<T> tile_vector;
+  T tile_ptr;
   int x = 0;
   int y = 0;
-  for (std::vector<TileSharedPtr>::iterator it = _tileList.begin() ; it != _tileList.end(); ++it) {
+  for (typename std::vector<T>::iterator it = _tileList.begin() ; it != _tileList.end(); ++it) {
 
     x = - ((_tileWidth *  (*it)->GetXPos()) - (_tileWidth / 2 ) + _shiftX) * _zoomFactor;
     y = - ((_tileHeight * (*it)->GetYPos()) - (_tileHeight / 2 ) + _shiftY) * _zoomFactor;

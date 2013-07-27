@@ -5,16 +5,15 @@ srcdir  = .
 CC      = g++
 EXE	= 
 CFLAGS  = -g -O2 -I/usr/include/SDL -I/usr/local/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL
-#CFLAGS  = -g -I/usr/include/SDL 
 INCLUDE = -I /home/larry/devel/force-brute 
 
 LIBS	=  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL -lSDL_image -lSDL_gfx
 
-TARGETS = zoom$(EXE) tile$(EXE) Timer.o
+TARGETS = tile$(EXE) Timer.o Tile.o
 
-all: $(TARGETS)
+all: $(TARGETS) 
 
-DynamicGrid.o : common/DynamicGrid.cpp
+Tile.o : common/Tile.cpp
 	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
 
 Timer.o : ../../Timer.cpp
@@ -23,7 +22,7 @@ Timer.o : ../../Timer.cpp
 zoom$(EXE): $(srcdir)/zoom.cpp Timer.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
-tile$(EXE): $(srcdir)/tile.cpp Timer.o DynamicGrid.o
+tile$(EXE): $(srcdir)/tile.cpp Timer.o Tile.o common/DynamicGrid.h 
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:

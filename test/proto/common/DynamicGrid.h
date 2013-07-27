@@ -20,12 +20,12 @@
 //
 #include <vector>
 
-
 // Taille du pavé, largeur + hauteur
 // Déplacement vertical et horizontal 
 // Facteur de zoom
 // Position x et y
 
+template <typename T>
 class DynamicGrid: public IDynamicGrid
 {
 	private:
@@ -34,8 +34,10 @@ class DynamicGrid: public IDynamicGrid
     int _tileHeight;
     int _shiftX;
     int _shiftY;
-    std::vector<TileSharedPtr> _tileList;
+    
+    std::vector<T> _tileList;
     double _zoomFactor;
+
 
 	public:
 		DynamicGrid(int tileWidth, 
@@ -43,11 +45,12 @@ class DynamicGrid: public IDynamicGrid
                 int shiftX, 
                 int shiftY,
                 double zoomFactor,
-                std::vector<TileSharedPtr> tileList);
+                std::vector<T> tileList);
 		~DynamicGrid();
 
-    std::vector<TileSharedPtr> GetTileConverted();
+    std::vector<T> GetTileConverted();
 };
 
+#include "DynamicGrid.cpp"
 
 #endif
