@@ -1,6 +1,6 @@
 # Makefile to build the SDL tests
 
-srcdir  = . 
+srcdir  = .
 
 CC      = g++
 EXE	= 
