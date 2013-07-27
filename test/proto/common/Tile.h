@@ -5,8 +5,11 @@
 #include "ITile.h"
 
 
+
+template <typename T>
 class Tile: public ITile
 {
+  typedef boost::shared_ptr<T> SurfaceSharedPtr;
 	private:
 
     int _xPos;
@@ -22,5 +25,7 @@ class Tile: public ITile
     virtual SurfaceSharedPtr GetSurface();
 };
 
+
+#include "Tile.cpp"
 
 #endif

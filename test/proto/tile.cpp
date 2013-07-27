@@ -329,20 +329,20 @@ int main( int argc, char* args[] ) {
     return EXIT_FAILURE;
   }
 
+  typename Tile<SDL_Surface>::SurfaceSharedPtr surface_ptr;
   std::vector<TileSharedPtr> tile_vector;
 
-  SurfaceSharedPtr surface_ptr;
-  TileSharedPtr tile_ptr(new Tile(0, 0, surface_ptr));
+  TileSharedPtr tile_ptr(new Tile<SDL_Surface>(0, 0, surface_ptr));
   tile_vector.push_back(tile_ptr);
 
-  tile_ptr.reset(new Tile(1, 0, surface_ptr));
+  tile_ptr.reset(new Tile<SDL_Surface>(1, 0, surface_ptr));
   tile_vector.push_back(tile_ptr);
 
-  tile_ptr.reset(new Tile(2, 0, surface_ptr));
+  tile_ptr.reset(new Tile<SDL_Surface>(2, 0, surface_ptr));
   tile_vector.push_back(tile_ptr);
 
 
-  boost::shared_ptr< DynamicGrid<TileSharedPtr>  > dynamicGrid_ptr(new DynamicGrid<TileSharedPtr>(225, 
+  boost::shared_ptr< DynamicGrid  > dynamicGrid_ptr(new DynamicGrid(225, 
                                                                  101, 
                                                                  permanentShiftX, 
                                                                  permanentShiftY, 

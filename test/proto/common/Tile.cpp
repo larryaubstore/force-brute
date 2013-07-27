@@ -4,27 +4,34 @@
 /**
 * @brief Constructor
 */
-Tile::Tile(int xPos, int yPos, SurfaceSharedPtr surface)
+
+
+template <typename T>
+Tile<T>::Tile(int xPos, int yPos, SurfaceSharedPtr surface)
 {
   this->_xPos = xPos;
   this->_yPos = yPos;
   this->_surface = surface;
 }
 
-Tile::~Tile()
+template <typename T>
+Tile<T>::~Tile()
 {
 
 }
 
-int Tile::GetXPos() {
+template <typename T>
+int Tile<T>::GetXPos() {
   return _xPos;
 }
 
 
-int Tile::GetYPos() {
+template <typename T>
+int Tile<T>::GetYPos() {
   return _yPos;
 }
 
-SurfaceSharedPtr Tile::GetSurface() {
+template <typename T>
+typename Tile<T>::SurfaceSharedPtr Tile<T>::GetSurface() {
   return _surface;
 }

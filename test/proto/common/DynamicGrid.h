@@ -25,7 +25,6 @@
 // Facteur de zoom
 // Position x et y
 
-template <typename T>
 class DynamicGrid: public IDynamicGrid
 {
 	private:
@@ -35,7 +34,7 @@ class DynamicGrid: public IDynamicGrid
     int _shiftX;
     int _shiftY;
     
-    std::vector<T> _tileList;
+    std::vector<TileSharedPtr> _tileList;
     double _zoomFactor;
 
 
@@ -45,12 +44,10 @@ class DynamicGrid: public IDynamicGrid
                 int shiftX, 
                 int shiftY,
                 double zoomFactor,
-                std::vector<T> tileList);
+                std::vector<TileSharedPtr> tileList);
 		~DynamicGrid();
 
-    std::vector<T> GetTileConverted();
+    std::vector<TileSharedPtr> GetTileConverted();
 };
-
-#include "DynamicGrid.cpp"
 
 #endif

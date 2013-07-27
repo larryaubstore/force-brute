@@ -9,20 +9,26 @@ INCLUDE = -I /home/larry/devel/force-brute
 
 LIBS	=  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL -lSDL_image -lSDL_gfx
 
-TARGETS = tile$(EXE) Timer.o Tile.o
+TARGETS = tile$(EXE) Timer.o DynamicGrid.o
 
 all: $(TARGETS) 
 
-Tile.o : common/Tile.cpp
-	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
+#Tile.o : common/Tile.cpp
+#	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
 
 Timer.o : ../../Timer.cpp
+	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
+
+DynamicGrid.o : common/DynamicGrid.cpp
 	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
 
 zoom$(EXE): $(srcdir)/zoom.cpp Timer.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
-tile$(EXE): $(srcdir)/tile.cpp Timer.o Tile.o common/DynamicGrid.h 
+
+
+
+tile$(EXE): $(srcdir)/tile.cpp Timer.o common/Tile.h DynamicGrid.o 
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:

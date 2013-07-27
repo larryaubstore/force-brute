@@ -12,7 +12,6 @@
 	#include <boost/shared_ptr.hpp>
 #endif
 
-typedef boost::shared_ptr<SDL_Surface> SurfaceSharedPtr;
 typedef boost::shared_ptr<ITile> TileSharedPtr;
 
 #endif
