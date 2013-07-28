@@ -7,15 +7,9 @@
 template <typename T>
 class Renderer: public IRenderer<T>
 {
-	private:
-
-//    int _xPos;
-//    int _yPos;
-//    SurfaceSharedPtr _surface;
-
-	public:
-		Renderer();
-		~Renderer();
+  public:
+    Renderer();
+    ~Renderer();
 
     virtual void BlitSurface();
     virtual void ZoomSurface();
@@ -24,6 +18,7 @@ class Renderer: public IRenderer<T>
     virtual void FlipSurface();
 
     virtual std::vector<T> GetLoadedSurfaces(); 
+    virtual DynamicGridSharedPtr GetDynamicGrid();
 };
 
 

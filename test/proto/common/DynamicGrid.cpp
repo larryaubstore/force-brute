@@ -8,8 +8,7 @@ DynamicGrid::DynamicGrid(int tileWidth,
                          int shiftX, 
                          int shiftY,
                          double zoomFactor,
-                         std::vector<TileSharedPtr> tileList)
-{
+                         std::vector<TileSharedPtr> tileList) {
   this->_tileWidth = tileWidth;
   this->_tileHeight = tileHeight;
   this->_shiftX = shiftX;
@@ -18,8 +17,7 @@ DynamicGrid::DynamicGrid(int tileWidth,
   this->_zoomFactor = zoomFactor;
 }
 
-DynamicGrid::~DynamicGrid()
-{
+DynamicGrid::~DynamicGrid() {
 
 }
 

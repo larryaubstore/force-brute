@@ -39,7 +39,8 @@ std::vector<T> Renderer<T>::GetLoadedSurfaces() {
 
   return NULL;
 }
-//template <typename T>
-//typename Tile<T>::SurfaceSharedPtr Tile<T>::GetSurface() {
-//  return _surface;
-//}
+
+template <typename T>
+DynamicGridSharedPtr Renderer<T>::GetDynamicGrid() {
+  return NULL;
+}

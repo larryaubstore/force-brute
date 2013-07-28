@@ -5,7 +5,7 @@ void TestDynamicGrid::testTileRendering()
 
     std::vector<TileSharedPtr> tile_vector;
 
-    typename Tile<SDL_Surface>::SurfaceSharedPtr surface_ptr;
+    SurfaceSharedPtr<SDL_Surface>::type surface_ptr;
     TileSharedPtr tile_ptr(new Tile<SDL_Surface>(0, 0, surface_ptr));
     tile_vector.push_back(tile_ptr);
 

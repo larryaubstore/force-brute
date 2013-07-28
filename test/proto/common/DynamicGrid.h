@@ -48,6 +48,8 @@ class DynamicGrid: public IDynamicGrid
 		~DynamicGrid();
 
     std::vector<TileSharedPtr> GetTileConverted();
+
+    DynamicGridSharedPtr GetDynamicGrid();
 };
 
 #endif
