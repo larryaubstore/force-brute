@@ -9,23 +9,22 @@
 template <typename T>
 class Tile: public ITile
 {
-  typedef boost::shared_ptr<T> SurfaceSharedPtr;
-	private:
+  private:
 
     int _xPos;
     int _yPos;
-    SurfaceSharedPtr _surface;
+    typename SurfaceSharedPtr<T>::type _surface;
 
-	public:
-		Tile(int xPos, int yPos, SurfaceSharedPtr surface);
-		~Tile();
+  public:
+    Tile(int xPos, int yPos, typename SurfaceSharedPtr<T>::type surface);
+    ~Tile();
 
     virtual int GetXPos();
     virtual int GetYPos();
-    virtual SurfaceSharedPtr GetSurface();
+    virtual typename SurfaceSharedPtr<T>::type GetSurface();
 };
 
 
-#include "Tile.cpp"
+#include "Tile.tpp"
 
 #endif

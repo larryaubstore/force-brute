@@ -14,4 +14,9 @@
 
 typedef boost::shared_ptr<ITile> TileSharedPtr;
 
+template <typename T>
+struct SurfaceSharedPtr {
+  typedef boost::shared_ptr<T> type;
+};
+
 #endif

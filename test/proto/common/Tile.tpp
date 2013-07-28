@@ -7,16 +7,14 @@
 
 
 template <typename T>
-Tile<T>::Tile(int xPos, int yPos, SurfaceSharedPtr surface)
-{
+Tile<T>::Tile(int xPos, int yPos, typename SurfaceSharedPtr<T>::type surface) {
   this->_xPos = xPos;
   this->_yPos = yPos;
   this->_surface = surface;
 }
 
 template <typename T>
-Tile<T>::~Tile()
-{
+Tile<T>::~Tile() {
 
 }
 
@@ -32,6 +30,7 @@ int Tile<T>::GetYPos() {
 }
 
 template <typename T>
-typename Tile<T>::SurfaceSharedPtr Tile<T>::GetSurface() {
+typename SurfaceSharedPtr<T>::type Tile<T>::GetSurface() {
+
   return _surface;
 }

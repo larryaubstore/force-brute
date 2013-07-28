@@ -28,7 +28,7 @@ zoom$(EXE): $(srcdir)/zoom.cpp Timer.o
 
 
 
-tile$(EXE): $(srcdir)/tile.cpp Timer.o common/Tile.h DynamicGrid.o 
+tile$(EXE): $(srcdir)/tile.cpp Timer.o common/Tile.h common/Renderer.h DynamicGrid.o 
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:

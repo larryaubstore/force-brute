@@ -329,7 +329,7 @@ int main( int argc, char* args[] ) {
     return EXIT_FAILURE;
   }
 
-  typename Tile<SDL_Surface>::SurfaceSharedPtr surface_ptr;
+  SurfaceSharedPtr<SDL_Surface>::type surface_ptr;
   std::vector<TileSharedPtr> tile_vector;
 
   TileSharedPtr tile_ptr(new Tile<SDL_Surface>(0, 0, surface_ptr));
