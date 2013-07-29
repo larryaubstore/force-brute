@@ -11,11 +11,11 @@
 
 #include "IDynamicGrid.h"
 
+#include "TypeDefEngine.h"
+
 template <typename T>
 class IRenderer
 {
-  typedef boost::shared_ptr<IDynamicGrid> DynamicGridSharedPtr;
-  typedef boost::shared_ptr<T> SurfaceSharedPtr;
 
 	public:
 
@@ -28,7 +28,7 @@ class IRenderer
     virtual void FlipSurface() = 0;
 
     virtual DynamicGridSharedPtr GetDynamicGrid() = 0;
-    virtual std::vector<SurfaceSharedPtr> GetLoadedSurfaces() = 0; 
+    virtual std::vector<boost::shared_ptr<T> > GetLoadedSurfaces() = 0; 
 };
 
 #endif

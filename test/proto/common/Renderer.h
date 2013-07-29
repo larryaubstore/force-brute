@@ -4,11 +4,12 @@
 #include "IRenderer.h"
 #include "TypeDefEngine.h"
 
-template <typename T>
-class Renderer: public IRenderer<T>
+class Renderer: public IRenderer<SDL_Surface>
 {
+  private:
+    DynamicGridSharedPtr _dynamicGridSharedPtr;
   public:
-    Renderer();
+    Renderer(DynamicGridSharedPtr dynamicGridSharedPtr);
     ~Renderer();
 
     virtual void BlitSurface();
@@ -17,11 +18,10 @@ class Renderer: public IRenderer<T>
     virtual void FreeSurface();
     virtual void FlipSurface();
 
-    virtual std::vector<T> GetLoadedSurfaces(); 
+    virtual std::vector<SurfaceSharedPtr<SDL_Surface>::type> GetLoadedSurfaces(); 
     virtual DynamicGridSharedPtr GetDynamicGrid();
 };
 
 
-#include "Renderer.tpp"
 
 #endif
