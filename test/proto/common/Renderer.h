@@ -4,17 +4,23 @@
 #include "IRenderer.h"
 #include "TypeDefEngine.h"
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL_rotozoom.h>
+
+
 class Renderer: public IRenderer<SDL_Surface>
 {
   private:
     DynamicGridSharedPtr _dynamicGridSharedPtr;
+    SDL_Surface* _screen; 
   public:
     Renderer(DynamicGridSharedPtr dynamicGridSharedPtr);
     ~Renderer();
 
     virtual void BlitSurface();
     virtual void ZoomSurface();
-    virtual void LoadSurface();
+    virtual SDL_Surface* LoadSurface(std::string fileName);
     virtual void FreeSurface();
     virtual void FlipSurface();
 

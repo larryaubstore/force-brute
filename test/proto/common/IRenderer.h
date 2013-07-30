@@ -23,7 +23,7 @@ class IRenderer
 
     virtual void BlitSurface() = 0;
     virtual void ZoomSurface() = 0;
-    virtual void LoadSurface() = 0;
+    virtual T* LoadSurface(std::string fileName) = 0;
     virtual void FreeSurface() = 0;
     virtual void FlipSurface() = 0;
 

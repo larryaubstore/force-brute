@@ -27,7 +27,7 @@
 
 class DynamicGrid: public IDynamicGrid
 {
-	private:
+  private:
 
     int _tileWidth;
     int _tileHeight;
@@ -38,18 +38,18 @@ class DynamicGrid: public IDynamicGrid
     double _zoomFactor;
 
 
-	public:
-		DynamicGrid(int tileWidth, 
+  public:
+    DynamicGrid(int tileWidth, 
                 int tileHeight, 
                 int shiftX, 
                 int shiftY,
                 double zoomFactor,
                 std::vector<TileSharedPtr> tileList);
-		~DynamicGrid();
+    ~DynamicGrid();
 
-    std::vector<TileSharedPtr> GetTileConverted();
+    virtual std::vector<TileSharedPtr> GetTileConverted();
 
-    DynamicGridSharedPtr GetDynamicGrid();
+    virtual void Zoom(double factor);
 };
 
 #endif

@@ -18,4 +18,5 @@ struct SurfaceSharedPtr {
 };
 
 typedef boost::shared_ptr<IDynamicGrid> DynamicGridSharedPtr;
+typedef boost::shared_ptr<ITile> TileSharedPtr;
 #endif

@@ -18,17 +18,17 @@
 
 
                                                                                         
-class TestDynamicGrid : public Test::Suite
-{
+class TestDynamicGrid : public Test::Suite {
 
-	public:
-		TestDynamicGrid() 
-		{
-			TEST_ADD(TestDynamicGrid::testTileRendering);
-		}
+  public:
+    TestDynamicGrid() {
+      TEST_ADD(TestDynamicGrid::testTileRendering);
+      TEST_ADD(TestDynamicGrid::testZoom);
+    }
 
-	private:
-		void testTileRendering();
+  private:
+    void testTileRendering();
+    void testZoom();
 };
 
 

@@ -2,13 +2,17 @@
 #define I_DYNAMIC_GRID_H
 
 #include <vector>
+
+#include "TypeDefEngine.h"
 #include "ITile.h"
 
 class IDynamicGrid
 {
   public:
-    typedef boost::shared_ptr<ITile> TileSharedPtr;
     virtual std::vector<TileSharedPtr> GetTileConverted() = 0;
+
+    virtual void Zoom(double factor) = 0;
+
     virtual ~IDynamicGrid() {};
 };
 

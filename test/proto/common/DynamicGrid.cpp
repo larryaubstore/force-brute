@@ -36,3 +36,7 @@ std::vector<TileSharedPtr> DynamicGrid::GetTileConverted() {
   }
   return tile_vector;
 }
+
+void DynamicGrid::Zoom(double factor) {
+  this->_zoomFactor = factor;
+}
