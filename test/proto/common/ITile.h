@@ -7,18 +7,15 @@
 	#include <boost/shared_ptr.hpp>
 #endif
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-
 class ITile
 {
-	public:
+  public:
 
     virtual ~ITile() {};
 
     virtual int GetXPos() = 0;
     virtual int GetYPos() = 0;
-    virtual boost::shared_ptr<SDL_Surface> GetSurface() = 0;
+    virtual double GetZoomFactor() = 0;
 };
 
 #endif

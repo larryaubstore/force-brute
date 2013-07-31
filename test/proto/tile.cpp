@@ -332,13 +332,13 @@ int main( int argc, char* args[] ) {
   SurfaceSharedPtr<SDL_Surface>::type surface_ptr;
   std::vector<TileSharedPtr> tile_vector;
 
-  TileSharedPtr tile_ptr(new Tile<SDL_Surface>(0, 0, surface_ptr));
+  TileSharedPtr tile_ptr(new Tile(0, 0, 1.0d));
   tile_vector.push_back(tile_ptr);
 
-  tile_ptr.reset(new Tile<SDL_Surface>(1, 0, surface_ptr));
+  tile_ptr.reset(new Tile(1, 0, 1.0d));
   tile_vector.push_back(tile_ptr);
 
-  tile_ptr.reset(new Tile<SDL_Surface>(2, 0, surface_ptr));
+  tile_ptr.reset(new Tile(2, 0, 1.0d));
   tile_vector.push_back(tile_ptr);
 
 

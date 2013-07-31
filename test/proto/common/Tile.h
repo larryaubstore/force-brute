@@ -6,25 +6,21 @@
 
 
 
-template <typename T>
 class Tile: public ITile
 {
   private:
-
     int _xPos;
     int _yPos;
-    typename SurfaceSharedPtr<T>::type _surface;
+    double _zoomFactor;
 
   public:
-    Tile(int xPos, int yPos, typename SurfaceSharedPtr<T>::type surface);
+
+    Tile(int xPos, int yPos, double zoomFactor);
     ~Tile();
 
     virtual int GetXPos();
     virtual int GetYPos();
-    virtual typename SurfaceSharedPtr<T>::type GetSurface();
+    virtual double GetZoomFactor();
 };
-
-
-#include "Tile.tpp"
 
 #endif

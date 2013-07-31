@@ -9,6 +9,7 @@
 #include <cpptest.h>
 #include <exception>
 #include <iostream>
+#include <stdio.h>
 
 #ifdef BOOST_ANDROID
   #include <boost/smart_ptr/shared_ptr.hpp>

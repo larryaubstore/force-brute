@@ -9,6 +9,7 @@
 
 class ITile;
 class IDynamicGrid;
+class IConfigFileReader;
 
 typedef boost::shared_ptr<ITile> TileSharedPtr;
 
@@ -19,4 +20,5 @@ struct SurfaceSharedPtr {
 
 typedef boost::shared_ptr<IDynamicGrid> DynamicGridSharedPtr;
 typedef boost::shared_ptr<ITile> TileSharedPtr;
+typedef boost::shared_ptr<IConfigFileReader> ConfigFileReaderSharedPtr;
 #endif

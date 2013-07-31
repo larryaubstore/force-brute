@@ -25,8 +25,7 @@
 // Facteur de zoom
 // Position x et y
 
-class DynamicGrid: public IDynamicGrid
-{
+class DynamicGrid: public IDynamicGrid {
   private:
 
     int _tileWidth;

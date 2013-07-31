@@ -2,6 +2,7 @@
 #define I_CONFIG_FILE_READER_H
 
 #include "TypeDefEngine.h"
+#include <vector>
 
 class IConfigFileReader
 {
@@ -14,7 +15,7 @@ class IConfigFileReader
 
     virtual ~IConfigFileReader() {};
 
-    virtual std::vector<TileSharedPtr> ReadFile() = 0;
+    virtual std::vector<TileSharedPtr> ReadFile(std::string filename) = 0;
 };
 
 #endif

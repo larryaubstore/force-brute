@@ -9,7 +9,7 @@ INCLUDE = -I /home/larry/devel/force-brute -I ../common
 
 LIBS	=  -lcpptest -lm -lSDL -lSDL_image -lSDL_gfx
 
-TARGETS = ProtoTestSuite$(EXE) TestDynamicGrid.o DynamicGrid.o Renderer.o 
+TARGETS = ProtoTestSuite$(EXE) TestDynamicGrid.o DynamicGrid.o Renderer.o Tile.o
 
 all: $(TARGETS)
 
@@ -31,7 +31,7 @@ DynamicGrid.o: ../common/DynamicGrid.cpp
 TestDynamicGrid.o: TestDynamicGrid.cpp
 	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
 
-ProtoTestSuite$(EXE): $(srcdir)/ProtoTestSuite.cpp TestDynamicGrid.o DynamicGrid.o Renderer.o ../common/Tile.h 
+ProtoTestSuite$(EXE): $(srcdir)/ProtoTestSuite.cpp TestDynamicGrid.o DynamicGrid.o Renderer.o Tile.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:

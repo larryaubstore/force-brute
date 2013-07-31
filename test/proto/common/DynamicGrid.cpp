@@ -31,7 +31,7 @@ std::vector<TileSharedPtr> DynamicGrid::GetTileConverted() {
 
     x = - ((_tileWidth *  (*it)->GetXPos()) - (_tileWidth / 2 ) + _shiftX) * _zoomFactor;
     y = - ((_tileHeight * (*it)->GetYPos()) - (_tileHeight / 2 ) + _shiftY) * _zoomFactor;
-    tile_ptr.reset(new Tile<SDL_Surface>(x, y, (*it)->GetSurface()));
+    tile_ptr.reset(new Tile(x, y, _zoomFactor));
     tile_vector.push_back(tile_ptr);
   }
   return tile_vector;
