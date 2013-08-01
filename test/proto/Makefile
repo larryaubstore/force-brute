@@ -11,7 +11,7 @@ INCLUDE = -I /home/larry/devel/force-brute -I /home/larry/apps/sauce
 
 LIBS	=  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL -lSDL_image -lSDL_gfx
 
-TARGETS = tile$(EXE) Timer.o DynamicGrid.o Renderer.o Tile.o ConfigFileReader.o
+TARGETS = tile$(EXE) Timer.o DynamicGrid.o Renderer.o Tile.o ConfigFileReader.o Injector.o
 
 all: $(TARGETS) 
 
@@ -33,13 +33,16 @@ Renderer.o : common/Renderer.cpp
 Tile.o : common/Tile.cpp
 	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
 
+Injector.o : common/Injector.cpp
+	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
+
 zoom$(EXE): $(srcdir)/zoom.cpp Timer.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 
 
 
-tile$(EXE): $(srcdir)/tile.cpp Timer.o Tile.o Renderer.o DynamicGrid.o ConfigFileReader.o $(saucelib)/libunittest.a common/DependencyInjection.h
+tile$(EXE): $(srcdir)/tile.cpp Timer.o Tile.o Renderer.o DynamicGrid.o ConfigFileReader.o Injector.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:

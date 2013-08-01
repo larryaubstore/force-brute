@@ -26,6 +26,7 @@ class IRenderer
     virtual T* LoadSurface(std::string fileName) = 0;
     virtual void FreeSurface() = 0;
     virtual void FlipSurface() = 0;
+    virtual void Run() = 0;
 
     virtual DynamicGridSharedPtr GetDynamicGrid() = 0;
     virtual std::vector<boost::shared_ptr<T> > GetLoadedSurfaces() = 0; 

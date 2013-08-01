@@ -7,9 +7,14 @@
 	#include <boost/shared_ptr.hpp>
 #endif
 
+#include <SDL/SDL.h>
+
 class ITile;
 class IDynamicGrid;
 class IConfigFileReader;
+
+template <typename T>
+class IRenderer;
 
 typedef boost::shared_ptr<ITile> TileSharedPtr;
 
@@ -21,4 +26,13 @@ struct SurfaceSharedPtr {
 typedef boost::shared_ptr<IDynamicGrid> DynamicGridSharedPtr;
 typedef boost::shared_ptr<ITile> TileSharedPtr;
 typedef boost::shared_ptr<IConfigFileReader> ConfigFileReaderSharedPtr;
+typedef boost::shared_ptr<IRenderer<SDL_Surface> > RendererSharedPtr;
+
+
+class {
+public:
+    template<typename T>
+    operator boost::shared_ptr<T>() { return boost::shared_ptr<T>(); }
+} NULL_PTR;
+
 #endif

@@ -1,8 +1,8 @@
 #include "ConfigFileReader.h"
 
 
-ConfigFileReader::ConfigFileReader() {
-
+ConfigFileReader::ConfigFileReader(std::string filename) {
+  this->_filename = filename;
 }
 
 

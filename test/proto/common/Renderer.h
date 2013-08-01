@@ -14,11 +14,9 @@ class Renderer: public IRenderer<SDL_Surface>
   private:
     DynamicGridSharedPtr _dynamicGridSharedPtr;
     SDL_Surface* _screen; 
+    std::string _filename;
   public:
-    //Renderer(DynamicGridSharedPtr dynamicGridSharedPtr);
-    //Renderer(std::string filename);
-    
-    Renderer(ConfigFileReaderSharedPtr configFileReaderSharedPtr); 
+    Renderer(std::string filename);
     ~Renderer();
 
     virtual void BlitSurface();
@@ -26,6 +24,7 @@ class Renderer: public IRenderer<SDL_Surface>
     virtual SDL_Surface* LoadSurface(std::string fileName);
     virtual void FreeSurface();
     virtual void FlipSurface();
+    virtual void Run();
 
     virtual std::vector<SurfaceSharedPtr<SDL_Surface>::type> GetLoadedSurfaces(); 
     virtual DynamicGridSharedPtr GetDynamicGrid();

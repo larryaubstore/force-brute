@@ -1,15 +1,8 @@
 #include "Renderer.h"
 
-//Renderer::Renderer(DynamicGridSharedPtr dynamicGridSharedPtr) {
-//  this->_dynamicGridSharedPtr = dynamicGridSharedPtr;
-//}
-
-
-Renderer::Renderer(ConfigFileReaderSharedPtr configFileReaderSharedPtr) {
-//Renderer::Renderer(std::string filename) {
-  //this->_dynamicGridSharedPtr = dynamicGridSharedPtr;
+Renderer::Renderer(std::string filename) {
+  this->_filename = filename;
 }
-
 
 Renderer::~Renderer() {
 
@@ -46,6 +39,10 @@ void Renderer::FreeSurface() {
 }
 
 void Renderer::FlipSurface() {
+
+}
+
+void Renderer::Run() {
 
 }
 
