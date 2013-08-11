@@ -73,7 +73,6 @@ SDL_Surface* loadSDLSurface(std::string fileName) {
     SDL_SetError("Couldn't open %s", fp);
   } else {
     temp_rwop = SDL_RWFromFP(fp, 0);
-    //surface = IMG_LoadJPG_RW(temp_rwop);
     surface = IMG_Load_RW(temp_rwop, 0);
 
     SDL_FreeRW(temp_rwop);
@@ -95,23 +94,9 @@ void chargeSurface() {
     surfacePlat = loadSDLSurface("0002.png"); 
   }
   
-
   if(cloudsurface == NULL) {
     printf("CLOUD\n");
     cloudsurface = loadSDLSurface("cloudguru2.png");
-  }
-
-  if(surfVector.size() < 10) {
-    surfVector.push_back(loadSDLSurface("guru/0001.png"));
-    surfVector.push_back(loadSDLSurface("guru/0002.png"));
-    surfVector.push_back(loadSDLSurface("guru/0003.png"));
-    surfVector.push_back(loadSDLSurface("guru/0004.png"));
-    surfVector.push_back(loadSDLSurface("guru/0005.png"));
-    surfVector.push_back(loadSDLSurface("guru/0006.png"));
-    surfVector.push_back(loadSDLSurface("guru/0007.png"));
-    surfVector.push_back(loadSDLSurface("guru/0008.png"));
-    surfVector.push_back(loadSDLSurface("guru/0009.png"));
-    surfVector.push_back(loadSDLSurface("guru/0010.png"));
   }
 }
 
@@ -139,8 +124,6 @@ int SDLCALL fonctionChargementImage(void *data) {
 }
 
 bool handleKeyEvent() {
-  //return false;
-  //
   bool result = false;
   ControllerEvent controllerEvent;
   memset(&controllerEvent, 0, sizeof(ControllerEvent));
@@ -167,29 +150,12 @@ bool handleKeyEvent() {
     }
   }
 
-  //printf("X => %i Y => %i\n", xPos, yPos);
-  //scalefactor = 0;
-  if(controllerEvent.keyboard[SDLK_UP] == 1) {
-
-    //scalefactor = 1;
-    //m_gameModel->changeDirection(UP);
-  }
-
-  if(controllerEvent.keyboard[SDLK_DOWN] == 1) {
-    //scalefactor = -1;
-    //m_gameModel->changeDirection(DOWN);
-  }
-
   if(controllerEvent.keyboard[SDLK_c] == 1 || xPos > (VIDEOWIDTH - 100)) {
     shiftX += 5;
-    //scalefactor = -1;
-    //m_gameModel->changeDirection(DOWN);
   }
 
   if(controllerEvent.keyboard[SDLK_d] == 1 || xPos < (0 + 100)) {
     shiftX -= 5;
-    //scalefactor = -1;
-    //m_gameModel->changeDirection(DOWN);
   }
 
   if(yPos < 100) {
@@ -200,19 +166,13 @@ bool handleKeyEvent() {
     shiftY += 5;
   }
 
-
   if(controllerEvent.keyboard[SDLK_a] == 1) {
     delta = -1;
-    //scalefactor -= 1;
-    //SDL_Delay(1);
   }
 
   if(controllerEvent.keyboard[SDLK_b] == 1) {
     delta = +1;
-    //scalefactor += 1;
-    //SDL_Delay(1);
   }
-
 
   if(controllerEvent.keyboard[SDLK_q] == 1) {
     result = true;
@@ -238,22 +198,9 @@ void applySurfaces() {
   // Appliquer surface de base
   if(surface != NULL) {
 
-    //cloudsurface =  surfVector[currentFrameCloud];
-    //if( (currentFrame  % 3) == 0) {
-    //currentFrameCloud = (currentFrameCloud + 1) % 10;
-    //}
-    //zoomcloud = rotozoomSurface(cloudsurface, 0, scalecon, 1);
-
     zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);
     zoommontagne = rotozoomSurface(surfacePlat, 0, scalecon, 1);
 
-    // Taille du pavé, largeur + hauteur
-    // Déplacement vertical et horizontal 
-    // Facteur de zoom
-    // Position x et y
-    //
-
-    
     int xConst = 225;
     int yConst = 101;
 
@@ -286,10 +233,8 @@ void flipSurfaces() {
 void freeSurfaces() {
   SDL_BlitSurface(empty, NULL, screen, NULL);
   if(surface != NULL) {
-    //SDL_FreeSurface(surface);
     SDL_FreeSurface(zoomsurface);
     SDL_FreeSurface(zoommontagne);
-    //surface = NULL;
     zoomsurface = NULL;
     zoommontagne = NULL;
   }
@@ -299,7 +244,9 @@ void freeSurfaces() {
 int main( int argc, char* args[] ) {
 
 
-  scalefactor = 500 /*64*/;
+  //scalefactor = 500;
+  scalefactor = 325;
+
   /*
    *  Initialise libSDL
    */
@@ -307,8 +254,6 @@ int main( int argc, char* args[] ) {
     printf("cannot initialize SDL\n");
     return EXIT_FAILURE;
   }
-
-
 
   empty = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEOWIDTH, VIDEOHEIGHT,
      32, 0, 0, 0, 0);
