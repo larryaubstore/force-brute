@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <map>
 #include "SEvent.h"
 
 #include "common/DynamicGrid.h"
@@ -42,13 +43,28 @@ SDL_Surface *screen = NULL;
 SDL_Surface *empty = NULL;
 SDL_Surface *surface = NULL;
 SDL_Surface *surfacePlat = NULL;
+SDL_Surface *surfacePlatNonCarre = NULL;
+
 SDL_Surface *layer = NULL;
 SDL_Surface *zoomsurface = NULL;
 SDL_Surface *cloudsurface = NULL;
 SDL_Surface *zoommontagne = NULL;
+SDL_Surface *zoomplatnoncarre = NULL;
 
+//std::vector<SDL_Surface*> surfVector;
+//
+std::map <std::string, SDL_Surface*> surfMap;
+std::vector <std::string> notLoadedSurfVector;
 
-std::vector<SDL_Surface*> surfVector;
+struct Position {
+  int x;
+  int y;
+  std::string id;
+  Position(int x, int y, std::string id) : x(x), y(y), id(id) { }
+};
+
+std::vector<Position> positionVector;
+
 
 SDL_RWops* temp_rwop;
 
@@ -63,8 +79,13 @@ int scalefactor = 0;
 int delta = 0;
 int shiftX = 0;
 int shiftY = 0;
+int shiftConstX = 0;
+int shiftConstY = 0;
 int permanentShiftX = 0;
 int permanentShiftY = 0;
+
+int xConst = 163;
+int yConst = 72;
 
 SDL_Surface* loadSDLSurface(std::string fileName) {
   SDL_Surface* surface;
@@ -84,20 +105,10 @@ SDL_Surface* loadSDLSurface(std::string fileName) {
 }
 
 void chargeSurface() {
-  if(surface == NULL) {
-    printf("LOAD\n");
-    surface = loadSDLSurface("0001.png"); 
+  for (std::vector<std::string>::iterator it = notLoadedSurfVector.begin() ; it != notLoadedSurfVector.end(); ++it) {
+    surfMap[(*it)] = loadSDLSurface((*it) + ".png");
   }
-
-  if(surfacePlat == NULL) {
-    printf("LOAD\n");
-    surfacePlat = loadSDLSurface("0002.png"); 
-  }
-  
-  if(cloudsurface == NULL) {
-    printf("CLOUD\n");
-    cloudsurface = loadSDLSurface("cloudguru2.png");
-  }
+  notLoadedSurfVector.clear();
 }
 
 int SDLCALL fonctionChargementImage(void *data) {
@@ -138,6 +149,8 @@ bool handleKeyEvent() {
   delta = 0;
   shiftX = 0;
   shiftY = 0;
+  shiftConstY = 0;
+  shiftConstX = 0;
   while(SDL_PollEvent(&event)) {
     switch(event.type) {
       case SDL_KEYDOWN:
@@ -174,6 +187,14 @@ bool handleKeyEvent() {
     delta = +1;
   }
 
+  if(controllerEvent.keyboard[SDLK_c] == 1) {
+    shiftConstY = -1;
+  }
+
+  if(controllerEvent.keyboard[SDLK_d] == 1) {
+    shiftConstY = +1;
+  }
+
   if(controllerEvent.keyboard[SDLK_q] == 1) {
     result = true;
   }
@@ -194,33 +215,40 @@ void applySurfaces() {
   rzoom.h = 1080 / 4;
 
   double scalecon = scalefactor  / 500.0f;
+  //double scalecon = 1;
+  //
+  int formatX = 0;
+  int formatY = 0;
 
-  // Appliquer surface de base
-  if(surface != NULL) {
 
-    zoomsurface = rotozoomSurface(surface, 0, scalecon, 1);
-    zoommontagne = rotozoomSurface(surfacePlat, 0, scalecon, 1);
+  Uint32 clearColor;
+  SDL_Rect screenRect;
+  screenRect.x = screenRect.y = 0;
+  screenRect.w = screen->w;
+  screenRect.h = screen->h;
+  clearColor = SDL_MapRGB(screen->format, 102, 102, 102);
 
-    int xConst = 225;
-    int yConst = 101;
+  //in your render loop
+  //SDL_FillRect(screen, &screenRect, clearColor);
 
-    for(int i = -1; i < 6; i++) {
-      for(int j = -1; j < 7; j++) {
-        r.x = - ((xConst *  i) + permanentShiftX) * scalecon;
-        r.y = - ((yConst * j) + permanentShiftY) * scalecon;
-        SDL_BlitSurface(zoommontagne, &r, screen, NULL);
-      }
+
+
+  for (std::vector<Position>::iterator it = positionVector.begin() ; it != positionVector.end(); ++it) {
+    formatX = - ((xConst * (*it).x) + permanentShiftX) * scalecon;
+    formatY = - ((yConst * (*it).y) + permanentShiftY) * scalecon;
+    //r.x = - ((xConst * (*it).x) + permanentShiftX) * scalecon;
+    //r.y = - ((yConst * (*it).y) + permanentShiftY) * scalecon;
+
+    r.x = formatX;
+    r.y = formatY;
+   
+    std::string idValue = (*it).id;
+
+    if(surfMap[idValue] == NULL) {
+      notLoadedSurfVector.push_back(idValue);
+    } else {
+      SDL_BlitSurface(surfMap[idValue] , &r, screen, NULL);
     }
-
-    for(int i = -1; i < 6; i++) {
-      for(int j = -1; j < 7; j++) {
-        r.x = - ((xConst *  i) - (225 / 2 ) + permanentShiftX) * scalecon;
-        r.y = - ((yConst * j) - (101 / 2 ) + permanentShiftY) * scalecon;
-        SDL_BlitSurface(zoomsurface, &r, screen, NULL);
-      }
-    }
-  } else {
-    printf("SURFACE NULL !!!!! \n");
   }
 }
 
@@ -233,18 +261,29 @@ void flipSurfaces() {
 void freeSurfaces() {
   SDL_BlitSurface(empty, NULL, screen, NULL);
   if(surface != NULL) {
-    SDL_FreeSurface(zoomsurface);
-    SDL_FreeSurface(zoommontagne);
+//    SDL_FreeSurface(zoomsurface);
+//    SDL_FreeSurface(zoommontagne);
+//    SDL_FreeSurface(zoomplatnoncarre);
     zoomsurface = NULL;
     zoommontagne = NULL;
+    zoomplatnoncarre = NULL;
   }
 }
 
 
 int main( int argc, char* args[] ) {
 
+  positionVector.push_back(Position(0, 0, "relief"));
+  positionVector.push_back(Position(1, 0, "relief"));
+  positionVector.push_back(Position(0, 1, "relief"));
+  positionVector.push_back(Position(1, 1, "relief"));
 
-  //scalefactor = 500;
+  int tileOffset = 1;
+  positionVector.push_back(Position(0 + tileOffset, 0, "plat"));
+  positionVector.push_back(Position(1 + tileOffset, 0, "plat"));
+  positionVector.push_back(Position(0 + tileOffset, 1, "plat"));
+  positionVector.push_back(Position(1 + tileOffset, 1, "plat"));
+
   scalefactor = 325;
 
   /*
@@ -317,6 +356,7 @@ int main( int argc, char* args[] ) {
       scalefactor += delta;
       permanentShiftX += shiftX;
       permanentShiftY += shiftY;
+      yConst += shiftConstY; 
       applySurfaces();
 
       flipSurfaces();
