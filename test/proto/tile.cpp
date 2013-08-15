@@ -14,6 +14,8 @@
 #include "common/DynamicGrid.h"
 #include "common/Tile.h"
 
+#include <boost/assign/list_of.hpp>
+
 
 #define WIDTH 960 
 #define HEIGHT 540 
@@ -54,7 +56,9 @@ struct Position {
   int x;
   int y;
   std::string id;
-  Position(int x, int y, std::string id) : x(x), y(y), id(id) { }
+  std::vector<int> frames;
+  Position(int x, int y, std::string id) : x(x), y(y), id(id)  { }
+  Position(int x, int y, std::string id, std::vector<int> frames) : x(x), y(y), id(id), frames(frames) { }
 };
 
 std::vector<Position> positionVector;
@@ -216,22 +220,9 @@ void applySurfaces() {
   rzoom.h = 1080 / 4;
 
   double scalecon = scalefactor  / 500.0f;
-  //double scalecon = 1;
-  //
+
   int formatX = 0;
   int formatY = 0;
-
-
-  Uint32 clearColor;
-  SDL_Rect screenRect;
-  screenRect.x = screenRect.y = 0;
-  screenRect.w = screen->w;
-  screenRect.h = screen->h;
-  clearColor = SDL_MapRGB(screen->format, 102, 102, 102);
-
-  //in your render loop
-  //SDL_FillRect(screen, &screenRect, clearColor);
-
 
 
   for (std::vector<Position>::iterator it = positionVector.begin() ; it != positionVector.end(); ++it) {
@@ -239,12 +230,8 @@ void applySurfaces() {
     std::string idValue = (*it).id;
 
     if(idValue == "bateau/petitpoteau") {
-      //formatX = (xPosClicked + 27) / (80 - 27);
-      //formatY = (yPosClicked + 3) / (13 - 3);
       formatX = - (xPosClicked - 33);
       formatY = - (yPosClicked - 50);
-
-
     } else {
       formatX = - ((xConst * (*it).x) + permanentShiftX) * scalecon;
       formatY = - ((yConst * (*it).y) + permanentShiftY) * scalecon;
@@ -252,14 +239,17 @@ void applySurfaces() {
 
     r.x = formatX;
     r.y = formatY;
-   
-
-    
 
     if(surfMap[idValue] == NULL) {
       notLoadedSurfVector.push_back(idValue);
     } else {
-      SDL_BlitSurface(surfMap[idValue] , &r, screen, NULL);
+      if((*it).frames.size() > 0) {
+        if(std::find((*it).frames.begin(), (*it).frames.end(), currentFrame) != (*it).frames.end()) {
+          SDL_BlitSurface(surfMap[idValue] , &r, screen, NULL);
+        }
+      } else {
+        SDL_BlitSurface(surfMap[idValue] , &r, screen, NULL);
+      }
     }
   }
 }
@@ -284,8 +274,41 @@ void freeSurfaces() {
 
 
 int main( int argc, char* args[] ) {
+ 
+  //positionVector.push_back(Position(0, 0, "bateau/grillefinal", [1, 2, 3]));
 
-  positionVector.push_back(Position(0, 0, "bateau/grillefinal"));
+//  positionVector.push_back(Position(0, 0, "bateau/plan1f", boost::assign::list_of(1)(2)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan2f", boost::assign::list_of(3)(4)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan3f", boost::assign::list_of(5)(6)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan4f", boost::assign::list_of(7)(8)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan5f", boost::assign::list_of(9)(10)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan6f", boost::assign::list_of(11)(12)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan7f", boost::assign::list_of(13)(14)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan8f", boost::assign::list_of(15)(16)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan9f", boost::assign::list_of(17)(18)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan10f", boost::assign::list_of(19)(20)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan11f", boost::assign::list_of(21)(22)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan12f", boost::assign::list_of(23)(24)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan13f", boost::assign::list_of(25)(26)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan14f", boost::assign::list_of(27)(28)));
+//  positionVector.push_back(Position(0, 0, "bateau/plan15f", boost::assign::list_of(29)(0)));
+
+  positionVector.push_back(Position(0, 0, "bateau/plan1f", boost::assign::list_of(23)(22)));
+  positionVector.push_back(Position(0, 0, "bateau/plan2f", boost::assign::list_of(24)(21)));
+  positionVector.push_back(Position(0, 0, "bateau/plan3f", boost::assign::list_of(25)(20)));
+  positionVector.push_back(Position(0, 0, "bateau/plan4f", boost::assign::list_of(26)(19)));
+  positionVector.push_back(Position(0, 0, "bateau/plan5f", boost::assign::list_of(27)(18)));
+  positionVector.push_back(Position(0, 0, "bateau/plan6f", boost::assign::list_of(28)(17)));
+  positionVector.push_back(Position(0, 0, "bateau/plan7f", boost::assign::list_of(29)(16)));
+  positionVector.push_back(Position(0, 0, "bateau/plan8f", boost::assign::list_of(0)(15)));
+  positionVector.push_back(Position(0, 0, "bateau/plan9f", boost::assign::list_of(1)(14)));
+  positionVector.push_back(Position(0, 0, "bateau/plan10f", boost::assign::list_of(2)(13)));
+  positionVector.push_back(Position(0, 0, "bateau/plan11f", boost::assign::list_of(3)(12)));
+  positionVector.push_back(Position(0, 0, "bateau/plan12f", boost::assign::list_of(4)(11)));
+  positionVector.push_back(Position(0, 0, "bateau/plan13f", boost::assign::list_of(5)(10)));
+  positionVector.push_back(Position(0, 0, "bateau/plan14f", boost::assign::list_of(6)(9)));
+  positionVector.push_back(Position(0, 0, "bateau/plan15f", boost::assign::list_of(7)(8)));
+
 
   //positionVector.push_back(Position(0, 0, "bateau/justeplan_montagne"));
   //positionVector.push_back(Position(0, 0, "bateau/justegrille"));
