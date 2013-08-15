@@ -15,26 +15,20 @@
 #include "common/Tile.h"
 
 
-#define WIDTH 1305 
-#define HEIGHT 734 
+#define WIDTH 960 
+#define HEIGHT 540 
 
-//Screen attributes
-const int SCREEN_WIDTH = 1305;
-const int SCREEN_HEIGHT = 734;
 const int SCREEN_BPP = 32;
-
 const int FRAME_DIMENSION = 120;
-
-
-#define VIDEOWIDTH 1305 
-#define VIDEOHEIGHT 734 
-
-//The frames per second
 const int FRAMES_PER_SECOND = 30;
 
 int counter = 0;
 int currentFrame = 0;
 int currentFrameCloud = 0;
+int xPos = 0;
+int yPos = 0;
+int xPosClicked = 0;
+int yPosClicked = 0;
 
 //The surfaces
 SDL_Surface *background = NULL;
@@ -86,6 +80,7 @@ int permanentShiftY = 0;
 
 int xConst = 163;
 int yConst = 72;
+bool mouseClicked = false;
 
 SDL_Surface* loadSDLSurface(std::string fileName) {
   SDL_Surface* surface;
@@ -141,8 +136,6 @@ bool handleKeyEvent() {
   SDL_Event event;
   SDLMod mod;
 
-  int xPos = 0;
-  int yPos = 0;
   Uint8 mouseState = SDL_GetMouseState(&xPos, &yPos);
 
   int counterKeydown = 0;
@@ -151,6 +144,8 @@ bool handleKeyEvent() {
   shiftY = 0;
   shiftConstY = 0;
   shiftConstX = 0;
+  //mouseClicked = false;
+
   while(SDL_PollEvent(&event)) {
     switch(event.type) {
       case SDL_KEYDOWN:
@@ -160,23 +155,29 @@ bool handleKeyEvent() {
       case SDL_KEYUP:
         controllerEvent.keyboard[event.key.keysym.sym] = 0;
         break;
+      case SDL_MOUSEBUTTONDOWN:
+        mouseClicked = true;
+//        printf("X => %i\n", xPos);
+//        printf("Y => %i\n", yPos);
+//        printf("\n");
+        break;
     }
   }
 
-  if(controllerEvent.keyboard[SDLK_c] == 1 || xPos > (VIDEOWIDTH - 100)) {
-    shiftX += 5;
+  if(controllerEvent.keyboard[SDLK_c] == 1 || xPos > (WIDTH - 100)) {
+    //shiftX += 5;
   }
 
   if(controllerEvent.keyboard[SDLK_d] == 1 || xPos < (0 + 100)) {
-    shiftX -= 5;
+    //shiftX -= 5;
   }
 
   if(yPos < 100) {
-    shiftY -= 5;
+    //shiftY -= 5;
   }
 
-  if(yPos > (VIDEOHEIGHT - 100) ) {
-    shiftY += 5;
+  if(yPos > (HEIGHT - 100) ) {
+    //shiftY += 5;
   }
 
   if(controllerEvent.keyboard[SDLK_a] == 1) {
@@ -234,15 +235,26 @@ void applySurfaces() {
 
 
   for (std::vector<Position>::iterator it = positionVector.begin() ; it != positionVector.end(); ++it) {
-    formatX = - ((xConst * (*it).x) + permanentShiftX) * scalecon;
-    formatY = - ((yConst * (*it).y) + permanentShiftY) * scalecon;
-    //r.x = - ((xConst * (*it).x) + permanentShiftX) * scalecon;
-    //r.y = - ((yConst * (*it).y) + permanentShiftY) * scalecon;
+
+    std::string idValue = (*it).id;
+
+    if(idValue == "bateau/petitpoteau") {
+      //formatX = (xPosClicked + 27) / (80 - 27);
+      //formatY = (yPosClicked + 3) / (13 - 3);
+      formatX = - (xPosClicked - 33);
+      formatY = - (yPosClicked - 50);
+
+
+    } else {
+      formatX = - ((xConst * (*it).x) + permanentShiftX) * scalecon;
+      formatY = - ((yConst * (*it).y) + permanentShiftY) * scalecon;
+    }
 
     r.x = formatX;
     r.y = formatY;
    
-    std::string idValue = (*it).id;
+
+    
 
     if(surfMap[idValue] == NULL) {
       notLoadedSurfVector.push_back(idValue);
@@ -273,16 +285,22 @@ void freeSurfaces() {
 
 int main( int argc, char* args[] ) {
 
-  positionVector.push_back(Position(0, 0, "relief"));
-  positionVector.push_back(Position(1, 0, "relief"));
-  positionVector.push_back(Position(0, 1, "relief"));
-  positionVector.push_back(Position(1, 1, "relief"));
+  positionVector.push_back(Position(0, 0, "bateau/grillefinal"));
 
-  int tileOffset = 1;
-  positionVector.push_back(Position(0 + tileOffset, 0, "plat"));
-  positionVector.push_back(Position(1 + tileOffset, 0, "plat"));
-  positionVector.push_back(Position(0 + tileOffset, 1, "plat"));
-  positionVector.push_back(Position(1 + tileOffset, 1, "plat"));
+  //positionVector.push_back(Position(0, 0, "bateau/justeplan_montagne"));
+  //positionVector.push_back(Position(0, 0, "bateau/justegrille"));
+  positionVector.push_back(Position(0, 0, "bateau/petitpoteau"));
+  //positionVector.push_back(Position(0, 0, "bateau/petitpoteau"));
+//  positionVector.push_back(Position(0, 0, "relief"));
+//  positionVector.push_back(Position(1, 0, "relief"));
+//  positionVector.push_back(Position(0, 1, "relief"));
+//  positionVector.push_back(Position(1, 1, "relief"));
+//
+//  int tileOffset = 1;
+//  positionVector.push_back(Position(0 + tileOffset, 0, "plat"));
+//  positionVector.push_back(Position(1 + tileOffset, 0, "plat"));
+//  positionVector.push_back(Position(0 + tileOffset, 1, "plat"));
+//  positionVector.push_back(Position(1 + tileOffset, 1, "plat"));
 
   scalefactor = 325;
 
@@ -294,7 +312,7 @@ int main( int argc, char* args[] ) {
     return EXIT_FAILURE;
   }
 
-  empty = SDL_CreateRGBSurface(SDL_SWSURFACE, VIDEOWIDTH, VIDEOHEIGHT,
+  empty = SDL_CreateRGBSurface(SDL_SWSURFACE, WIDTH, HEIGHT,
      32, 0, 0, 0, 0);
 
   mutex = SDL_CreateMutex();
@@ -357,6 +375,12 @@ int main( int argc, char* args[] ) {
       permanentShiftX += shiftX;
       permanentShiftY += shiftY;
       yConst += shiftConstY; 
+
+      if(mouseClicked == true) {
+        xPosClicked = xPos;
+        yPosClicked = yPos;
+        mouseClicked = false;
+      }
       applySurfaces();
 
       flipSurfaces();
