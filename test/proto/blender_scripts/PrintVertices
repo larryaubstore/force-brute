@@ -1,0 +1,21 @@
+import bpy  
+#import Blender
+
+out = open('/tmp/vertices.txt', "w")  
+current_obj = bpy.context.active_object  
+  
+print("="*40) # printing marker  
+for face in current_obj.data.polygons:  
+    verts_in_face = face.vertices[:]  
+    #print("face index", face.index)  
+    #print("normal", face.normal)  
+    for vert in verts_in_face:
+        local_point = current_obj.data.vertices[vert].co
+        world_point = current_obj.matrix_world * local_point
+        #print("vert", vert, " vert co", world_point)  
+        # out.write(world_point)
+        out.write( '%f, %f, %f,\n' % (world_point.x, world_point.y, world_point.z) )
+        #out.write( '%f %f %f\n' % (local_point.x, local_point.y, local_point.z) )
+
+out.write(len
+out.close() 

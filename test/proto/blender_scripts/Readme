@@ -1,0 +1,23 @@
+Poteau avec transparence:
+    
+    - Calque 2 et 4
+    - Option "Shadows Only"
+    
+Grille+plan eau:
+    
+    - Calque 2
+    - Mapping texture: Color 1.000, Emit: 0.373, Normal: 0.882
+    
+Grille seulement:
+    
+    - Calque 2
+    - Mapping texture: Color 1.000, Emit: 0.373, Normal: 0.882, Alpha 1.00
+    
+    Dans Material "Transparency":
+        - Activer Z Transparency
+        - Alpha 0.000
+        
+ Plan eau + montagne:
+     - Calque 1, 2
+     - Désactiver TextureGrille
+ 

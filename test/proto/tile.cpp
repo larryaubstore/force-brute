@@ -26,6 +26,9 @@ const int FRAMES_PER_SECOND = 30;
 
 int counter = 0;
 int currentFrame = 0;
+int currentFrame240 = 0;
+int currentFrame480 = 0;
+int currentFrame960 = 0;
 int currentFrameCloud = 0;
 int xPos = 0;
 int yPos = 0;
@@ -85,6 +88,7 @@ int permanentShiftY = 0;
 int xConst = 163;
 int yConst = 72;
 bool mouseClicked = false;
+
 
 SDL_Surface* loadSDLSurface(std::string fileName) {
   SDL_Surface* surface;
@@ -232,6 +236,11 @@ void applySurfaces() {
     if(idValue == "bateau/petitpoteau") {
       formatX = - (xPosClicked - 33);
       formatY = - (yPosClicked - 50);
+    } else if(idValue == "bateau/nuage/nuage") {
+      //formatX = - (  (currentFrame480 * WIDTH / 480) - (263 + 60) );
+
+      formatX = - (  (currentFrame960 * WIDTH / 600) - (493 + 180) );
+      formatY = - ((yConst * (*it).y) + permanentShiftY) * scalecon;
     } else {
       formatX = - ((xConst * (*it).x) + permanentShiftX) * scalecon;
       formatY = - ((yConst * (*it).y) + permanentShiftY) * scalecon;
@@ -277,42 +286,27 @@ int main( int argc, char* args[] ) {
  
   //positionVector.push_back(Position(0, 0, "bateau/grillefinal", [1, 2, 3]));
 
-//  positionVector.push_back(Position(0, 0, "bateau/plan1f", boost::assign::list_of(1)(2)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan2f", boost::assign::list_of(3)(4)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan3f", boost::assign::list_of(5)(6)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan4f", boost::assign::list_of(7)(8)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan5f", boost::assign::list_of(9)(10)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan6f", boost::assign::list_of(11)(12)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan7f", boost::assign::list_of(13)(14)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan8f", boost::assign::list_of(15)(16)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan9f", boost::assign::list_of(17)(18)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan10f", boost::assign::list_of(19)(20)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan11f", boost::assign::list_of(21)(22)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan12f", boost::assign::list_of(23)(24)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan13f", boost::assign::list_of(25)(26)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan14f", boost::assign::list_of(27)(28)));
-//  positionVector.push_back(Position(0, 0, "bateau/plan15f", boost::assign::list_of(29)(0)));
-
-  positionVector.push_back(Position(0, 0, "bateau/plan1f", boost::assign::list_of(23)(22)));
-  positionVector.push_back(Position(0, 0, "bateau/plan2f", boost::assign::list_of(24)(21)));
-  positionVector.push_back(Position(0, 0, "bateau/plan3f", boost::assign::list_of(25)(20)));
-  positionVector.push_back(Position(0, 0, "bateau/plan4f", boost::assign::list_of(26)(19)));
-  positionVector.push_back(Position(0, 0, "bateau/plan5f", boost::assign::list_of(27)(18)));
-  positionVector.push_back(Position(0, 0, "bateau/plan6f", boost::assign::list_of(28)(17)));
-  positionVector.push_back(Position(0, 0, "bateau/plan7f", boost::assign::list_of(29)(16)));
-  positionVector.push_back(Position(0, 0, "bateau/plan8f", boost::assign::list_of(0)(15)));
-  positionVector.push_back(Position(0, 0, "bateau/plan9f", boost::assign::list_of(1)(14)));
-  positionVector.push_back(Position(0, 0, "bateau/plan10f", boost::assign::list_of(2)(13)));
-  positionVector.push_back(Position(0, 0, "bateau/plan11f", boost::assign::list_of(3)(12)));
-  positionVector.push_back(Position(0, 0, "bateau/plan12f", boost::assign::list_of(4)(11)));
-  positionVector.push_back(Position(0, 0, "bateau/plan13f", boost::assign::list_of(5)(10)));
-  positionVector.push_back(Position(0, 0, "bateau/plan14f", boost::assign::list_of(6)(9)));
-  positionVector.push_back(Position(0, 0, "bateau/plan15f", boost::assign::list_of(7)(8)));
+  positionVector.push_back(Position(0, 0, "bateau/0001", boost::assign::list_of(44)(45)(46)(47) ));
+  positionVector.push_back(Position(0, 0, "bateau/0002", boost::assign::list_of(42)(43)(48)(49) ));
+  positionVector.push_back(Position(0, 0, "bateau/0003", boost::assign::list_of(40)(41)(50)(51) ));
+  positionVector.push_back(Position(0, 0, "bateau/0004", boost::assign::list_of(38)(39)(52)(53) ));
+  positionVector.push_back(Position(0, 0, "bateau/0005", boost::assign::list_of(36)(37)(54)(55) ));
+  positionVector.push_back(Position(0, 0, "bateau/0006", boost::assign::list_of(34)(35)(56)(57) ));
+  positionVector.push_back(Position(0, 0, "bateau/0007", boost::assign::list_of(32)(33)(58)(59) ));
+  positionVector.push_back(Position(0, 0, "bateau/0008", boost::assign::list_of(0)(1)(30)(31) ));
+  positionVector.push_back(Position(0, 0, "bateau/0009", boost::assign::list_of(2)(3)(28)(29) ));
+  positionVector.push_back(Position(0, 0, "bateau/0010", boost::assign::list_of(4)(5)(26)(27) ));
+  positionVector.push_back(Position(0, 0, "bateau/0011", boost::assign::list_of(6)(7)(24)(25) ));
+  positionVector.push_back(Position(0, 0, "bateau/0012", boost::assign::list_of(8)(9)(22)(23) ));
+  positionVector.push_back(Position(0, 0, "bateau/0013", boost::assign::list_of(10)(11)(20)(21) ));
+  positionVector.push_back(Position(0, 0, "bateau/0014", boost::assign::list_of(12)(13)(18)(19) ));
+  positionVector.push_back(Position(0, 0, "bateau/0015", boost::assign::list_of(14)(15)(16)(17) ));
 
 
   //positionVector.push_back(Position(0, 0, "bateau/justeplan_montagne"));
   //positionVector.push_back(Position(0, 0, "bateau/justegrille"));
   positionVector.push_back(Position(0, 0, "bateau/petitpoteau"));
+  positionVector.push_back(Position(0, 0, "bateau/nuage/nuage"));
   //positionVector.push_back(Position(0, 0, "bateau/petitpoteau"));
 //  positionVector.push_back(Position(0, 0, "relief"));
 //  positionVector.push_back(Position(1, 0, "relief"));
@@ -422,8 +416,11 @@ int main( int argc, char* args[] ) {
         exit(1);
       }
 
-      currentFrame = (currentFrame + 1) % 30;
-
+      //currentFrame = (currentFrame + 1) % 30;
+      currentFrame = (currentFrame + 1) % 60;
+      currentFrame240 = (currentFrame240 + 1) % 240;
+      currentFrame480 = (currentFrame480 + 1) % 480;
+      currentFrame960 = (currentFrame960 + 1) % 960;
       if(  fps.get_ticks() < (1000 / FRAMES_PER_SECOND)  ) {
         //Sleep the remaining frame time
         SDL_Delay( ( 1000 / FRAMES_PER_SECOND ) - fps.get_ticks() );

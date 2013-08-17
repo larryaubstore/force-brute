@@ -1,0 +1,17 @@
+import bpy
+
+def statscall(context):
+    print("-- ", bpy.context.object["mystrength"])
+    #bpy.context.object["mystrength"] = bpy.context.object["mystrength"] - 0.005
+    bpy.context.object["mystrength"] = bpy.context.object["mystrength"] - 0.00075
+    bpy.data.objects['PlanEau'].modifiers['Displace'].strength = bpy.context.object["mystrength"]
+	
+bpy.context.object["mystrength"] = 0.006 - 0.0007500
+
+bpy.data.objects['PlanEau'].modifiers['Displace'].strength = bpy.context.object["mystrength"]
+
+bpy.app.handlers.render_stats.clear()
+bpy.app.handlers.render_stats.append(statscall)
+bpy.ops.render.render(animation=True, write_still=True)
+
+#bpy.data.objects['PlanEau'].modifiers[ 'Displace'].strength
