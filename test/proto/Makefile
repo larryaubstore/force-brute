@@ -42,7 +42,7 @@ zoom$(EXE): $(srcdir)/zoom.cpp Timer.o
 
 
 
-tile$(EXE): $(srcdir)/tile.cpp Timer.o Tile.o Renderer.o DynamicGrid.o ConfigFileReader.o Injector.o
+tile$(EXE): $(srcdir)/tile.cpp Timer.o Tile.o Renderer.o DynamicGrid.o ConfigFileReader.o Injector.o $(srcdir)/data.h $(srcdir)/projectionmap.h
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:

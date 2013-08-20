@@ -16,6 +16,8 @@
 
 #include <boost/assign/list_of.hpp>
 
+#include "projectionmap.h"
+
 
 #define WIDTH 960 
 #define HEIGHT 540 
@@ -30,28 +32,17 @@ int currentFrame240 = 0;
 int currentFrame480 = 0;
 int currentFrame960 = 0;
 int currentFrameCloud = 0;
+
 int xPos = 0;
 int yPos = 0;
 int xPosClicked = 0;
 int yPosClicked = 0;
 
 //The surfaces
-SDL_Surface *background = NULL;
-SDL_Surface *message = NULL;
 SDL_Surface *screen = NULL;
 SDL_Surface *empty = NULL;
 SDL_Surface *surface = NULL;
-SDL_Surface *surfacePlat = NULL;
-SDL_Surface *surfacePlatNonCarre = NULL;
 
-SDL_Surface *layer = NULL;
-SDL_Surface *zoomsurface = NULL;
-SDL_Surface *cloudsurface = NULL;
-SDL_Surface *zoommontagne = NULL;
-SDL_Surface *zoomplatnoncarre = NULL;
-
-//std::vector<SDL_Surface*> surfVector;
-//
 std::map <std::string, SDL_Surface*> surfMap;
 std::vector <std::string> notLoadedSurfVector;
 
@@ -268,6 +259,31 @@ void flipSurfaces() {
 }
 
 
+std::vector<vertex_screen_map> GetFirstThreeClosestVertices(float x, float y, std::vector<vertex_screen_map> vertexScreenMap) {
+  std::vector<vertex_screen_map> firstThreeClosestVertices;
+
+  firstThreeClosestVertices.push_back(vertexScreenMap[0]);
+  firstThreeClosestVertices.push_back(vertexScreenMap[1]);
+  firstThreeClosestVertices.push_back(vertexScreenMap[2]);
+
+  for (std::vector<vertex_screen_map>::iterator it = vertexScreenMap.begin() ; it != vertexScreenMap.end(); ++it) {
+    //(*it).screen_x;
+    //
+
+    if(firstThreeClosestVertices.size() == 0) {
+      firstThreeClosestVertices.push_back(*it);
+    } else if(firstThreeClosestVertices.size() == 1) {
+      //if(firstThreeClosestVertices[0
+    } else if(firstThreeClosestVertices.size() == 2) {
+
+    } else {
+
+    }
+  }
+  return firstThreeClosestVertices;
+}
+
+
 
 void freeSurfaces() {
   SDL_BlitSurface(empty, NULL, screen, NULL);
@@ -275,49 +291,82 @@ void freeSurfaces() {
 //    SDL_FreeSurface(zoomsurface);
 //    SDL_FreeSurface(zoommontagne);
 //    SDL_FreeSurface(zoomplatnoncarre);
-    zoomsurface = NULL;
-    zoommontagne = NULL;
-    zoomplatnoncarre = NULL;
   }
 }
 
 
 int main( int argc, char* args[] ) {
+
+	Matrix44<float> perspProjMatrix;
+	Matrix44<float> modelViewMatrix;
+
+  //{{0.685880482, -0.317370087, 0.654861867, 0}, {0.727633715, 0.312468529, -0.61066556, 0}, {-0.0108167641, 0.895343125, 0.445245326, 0}, {-0.363019913, 0.922901273, -55.501564, 1}}
+  modelViewMatrix[0][0] = 0.685880482;
+  modelViewMatrix[0][1] = -0.317370087;
+  modelViewMatrix[0][2] = 0.654861867;
+  modelViewMatrix[0][3] = 0;
+
+  modelViewMatrix[1][0] = 0.727633715;
+  modelViewMatrix[1][1] = 0.312468529;
+  modelViewMatrix[1][2] = -0.61066556;
+  modelViewMatrix[1][3] = 0;
+
+  modelViewMatrix[2][0] = -0.0108167641;
+  modelViewMatrix[2][1] = 0.895343125;
+  modelViewMatrix[2][2] = 0.445245326;
+  modelViewMatrix[2][3] = 0;
+
+  modelViewMatrix[3][0] = -0.363019913;
+  modelViewMatrix[3][1] = 0.922901273;
+  modelViewMatrix[3][2] = -55.501564;
+  modelViewMatrix[3][3] = 1;
  
-  //positionVector.push_back(Position(0, 0, "bateau/grillefinal", [1, 2, 3]));
+  //{{5.14315796, 0, 0, 0}, {0, 9.14339256, 0, 0}, {0, 0, -1.002002, -1}, {0, 0, -0.2002002, 0
+  perspProjMatrix[0][0] = 5.14315796;
+  perspProjMatrix[0][1] = 0;
+  perspProjMatrix[0][2] = 0;
+  perspProjMatrix[0][3] = 0;
 
-  positionVector.push_back(Position(0, 0, "bateau/0001", boost::assign::list_of(44)(45)(46)(47) ));
-  positionVector.push_back(Position(0, 0, "bateau/0002", boost::assign::list_of(42)(43)(48)(49) ));
-  positionVector.push_back(Position(0, 0, "bateau/0003", boost::assign::list_of(40)(41)(50)(51) ));
-  positionVector.push_back(Position(0, 0, "bateau/0004", boost::assign::list_of(38)(39)(52)(53) ));
-  positionVector.push_back(Position(0, 0, "bateau/0005", boost::assign::list_of(36)(37)(54)(55) ));
-  positionVector.push_back(Position(0, 0, "bateau/0006", boost::assign::list_of(34)(35)(56)(57) ));
-  positionVector.push_back(Position(0, 0, "bateau/0007", boost::assign::list_of(32)(33)(58)(59) ));
-  positionVector.push_back(Position(0, 0, "bateau/0008", boost::assign::list_of(0)(1)(30)(31) ));
-  positionVector.push_back(Position(0, 0, "bateau/0009", boost::assign::list_of(2)(3)(28)(29) ));
-  positionVector.push_back(Position(0, 0, "bateau/0010", boost::assign::list_of(4)(5)(26)(27) ));
-  positionVector.push_back(Position(0, 0, "bateau/0011", boost::assign::list_of(6)(7)(24)(25) ));
-  positionVector.push_back(Position(0, 0, "bateau/0012", boost::assign::list_of(8)(9)(22)(23) ));
-  positionVector.push_back(Position(0, 0, "bateau/0013", boost::assign::list_of(10)(11)(20)(21) ));
-  positionVector.push_back(Position(0, 0, "bateau/0014", boost::assign::list_of(12)(13)(18)(19) ));
-  positionVector.push_back(Position(0, 0, "bateau/0015", boost::assign::list_of(14)(15)(16)(17) ));
+  perspProjMatrix[1][0] = 0;
+  perspProjMatrix[1][1] = 9.14339256;
+  perspProjMatrix[1][2] = 0;
+  perspProjMatrix[1][3] = 0;
+
+  perspProjMatrix[2][0] = 0;
+  perspProjMatrix[2][1] = 0;
+  perspProjMatrix[2][2] = -1.002002;
+  perspProjMatrix[2][3] = -1;
+
+  perspProjMatrix[3][0] = 0;
+  perspProjMatrix[3][1] = 0;
+  perspProjMatrix[3][2] = -0.2002002;
+  perspProjMatrix[3][3] = 0;
 
 
-  //positionVector.push_back(Position(0, 0, "bateau/justeplan_montagne"));
-  //positionVector.push_back(Position(0, 0, "bateau/justegrille"));
+  std::vector<vertex_screen_map> vertexScreenMap = GetVertexScreenMap(WIDTH, HEIGHT, 1, -1, 1, perspProjMatrix, modelViewMatrix); 
+
+  positionVector.push_back(Position(0, 0, "bateau/0001" ));
+  positionVector.push_back(Position(0, 0, "bateau/picking_a"));
+
+//  positionVector.push_back(Position(0, 0, "bateau/0001", boost::assign::list_of(44)(45)(46)(47) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0002", boost::assign::list_of(42)(43)(48)(49) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0003", boost::assign::list_of(40)(41)(50)(51) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0004", boost::assign::list_of(38)(39)(52)(53) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0005", boost::assign::list_of(36)(37)(54)(55) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0006", boost::assign::list_of(34)(35)(56)(57) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0007", boost::assign::list_of(32)(33)(58)(59) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0008", boost::assign::list_of(0)(1)(30)(31) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0009", boost::assign::list_of(2)(3)(28)(29) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0010", boost::assign::list_of(4)(5)(26)(27) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0011", boost::assign::list_of(6)(7)(24)(25) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0012", boost::assign::list_of(8)(9)(22)(23) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0013", boost::assign::list_of(10)(11)(20)(21) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0014", boost::assign::list_of(12)(13)(18)(19) ));
+//  positionVector.push_back(Position(0, 0, "bateau/0015", boost::assign::list_of(14)(15)(16)(17) ));
+
+
   positionVector.push_back(Position(0, 0, "bateau/petitpoteau"));
   positionVector.push_back(Position(0, 0, "bateau/nuage/nuage"));
-  //positionVector.push_back(Position(0, 0, "bateau/petitpoteau"));
-//  positionVector.push_back(Position(0, 0, "relief"));
-//  positionVector.push_back(Position(1, 0, "relief"));
-//  positionVector.push_back(Position(0, 1, "relief"));
-//  positionVector.push_back(Position(1, 1, "relief"));
-//
-//  int tileOffset = 1;
-//  positionVector.push_back(Position(0 + tileOffset, 0, "plat"));
-//  positionVector.push_back(Position(1 + tileOffset, 0, "plat"));
-//  positionVector.push_back(Position(0 + tileOffset, 1, "plat"));
-//  positionVector.push_back(Position(1 + tileOffset, 1, "plat"));
 
   scalefactor = 325;
 
