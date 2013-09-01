@@ -6,12 +6,12 @@ saucelib = /home/larry/apps/sauce/.libs
 
 CC      = g++
 EXE	= 
-CFLAGS  = -g -O2 -I/usr/include/SDL -I/usr/local/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR
+CFLAGS  = -g -O2  -I/usr/local/include/SDL2 -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR
 INCLUDE = -I /home/larry/devel/force-brute -I /home/larry/apps/sauce
 
-LIBS	=  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL -lSDL_image -lSDL_gfx
+LIBS	=  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL_gfx
 
-TARGETS = tile$(EXE) Timer.o DynamicGrid.o Renderer.o Tile.o ConfigFileReader.o Injector.o
+TARGETS = tile$(EXE) Timer.o DynamicGrid.o Renderer.o Tile.o ConfigFileReader.o Injector.o show$(EXE)
 
 all: $(TARGETS) 
 
@@ -39,8 +39,8 @@ Injector.o : common/Injector.cpp
 zoom$(EXE): $(srcdir)/zoom.cpp Timer.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
-
-
+show$(EXE): $(srcdir)/showimage.c Timer.o
+	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 tile$(EXE): $(srcdir)/tile.cpp Timer.o Tile.o Renderer.o DynamicGrid.o ConfigFileReader.o Injector.o $(srcdir)/data.h $(srcdir)/projectionmap.h
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
