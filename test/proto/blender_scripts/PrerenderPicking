@@ -1,0 +1,34 @@
+import bpy
+
+bpy.data.materials["MaterialPlanEau"].texture_slots[2].offset[0] = -0.336
+bpy.data.materials["MaterialPlanEau"].texture_slots[2].offset[1] = -0.5015
+bpy.context.object["numberOfLoops"] = 0
+bpy.data.scenes["Scene"].render.filepath = "//../force-brute/test/proto/bateau/picking/test/" + str(bpy.context.object["numberOfLoops"]) + "_"
+
+def statscall(context):
+    print("-- ", bpy.context.object["mystrength"])
+    #bpy.context.object["mystrength"] = bpy.context.object["mystrength"] - 0.005
+    bpy.context.object["mystrength"] = bpy.context.object["mystrength"] - 0.00075
+    bpy.data.objects['PlanEau'].modifiers['Displace'].strength = bpy.context.object["mystrength"]
+    bpy.context.object["currentFrame"] = (bpy.context.object["currentFrame"] + 1) % 30
+    print(" -- frame -- ", bpy.context.object["currentFrame"])
+    if bpy.context.object["currentFrame"]  % 15 == 0:
+        bpy.context.object["numberOfLoops"] = bpy.context.object["numberOfLoops"] + 1
+        if bpy.context.object["numberOfLoops"] <= 15:
+            bpy.data.materials["MaterialPlanEau"].texture_slots[2].offset[1] = bpy.data.materials["MaterialPlanEau"].texture_slots[2].offset[1] + 0.0295
+            print(" -- LOOP #", bpy.context.object["numberOfLoops"])
+            bpy.data.scenes["Scene"].render.filepath = "//../force-brute/test/proto/bateau/picking/test/" + str(bpy.context.object["numberOfLoops"]) + "_"
+            renderingLoop()
+
+def renderingLoop():
+    bpy.context.object["currentFrame"] = 0
+    bpy.context.object["mystrength"] = 0.006 - 0.0007500
+    bpy.data.objects['PlanEau'].modifiers['Displace'].strength = bpy.context.object["mystrength"]
+    bpy.app.handlers.render_stats.clear()
+    bpy.app.handlers.render_stats.append(statscall)
+    bpy.ops.render.render(animation=True, write_still=True)
+    #bpy.data.objects['PlanEau'].modifiers[ 'Displace'].strength
+    
+    
+    
+renderingLoop()
