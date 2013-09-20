@@ -1,24 +1,3 @@
-/*
-  showimage:  A test application for the SDL image loading library.
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
-
-  This software is provided 'as-is', without any express or implied
-  warranty.  In no event will the authors be held liable for any damages
-  arising from the use of this software.
-
-  Permission is granted to anyone to use this software for any purpose,
-  including commercial applications, and to alter it and redistribute it
-  freely, subject to the following restrictions:
-
-  1. The origin of this software must not be misrepresented; you must not
-     claim that you wrote the original software. If you use this software
-     in a product, an acknowledgment in the product documentation would be
-     appreciated but is not required.
-  2. Altered source versions must be plainly marked as such, and must not be
-     misrepresented as being the original software.
-  3. This notice may not be removed or altered from any source distribution.
-*/
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -31,6 +10,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "points.h"
 
 #define WIDTH 960 
 #define HEIGHT 540 
@@ -69,29 +49,49 @@ SDL_Renderer *renderer;
 std::vector<Position> positionVector;
 
 
+///* Draw a Gimpish background pattern to show transparency in the image */
+//static void draw_background(SDL_Renderer *renderer, int w, int h)
+//{
+//    SDL_Color col[2] = {
+//        { 0x66, 0x66, 0x66, 0xff },
+//        { 0x99, 0x99, 0x99, 0xff },
+//    };
+//    int i, x, y;
+//    SDL_Rect rect;
+//
+//    rect.w = 8;
+//    rect.h = 8;
+//    for (y = 0; y < h; y += rect.h) {
+//        for (x = 0; x < w; x += rect.w) {
+//            /* use an 8x8 checkerboard pattern */
+//            i = (((x ^ y) >> 3) & 1);
+//            SDL_SetRenderDrawColor(renderer, col[i].r, col[i].g, col[i].b, col[i].a);
+//
+//            rect.x = x;
+//            rect.y = y;
+//            SDL_RenderFillRect(renderer, &rect);
+//        }
+//    }
+//}
+
 /* Draw a Gimpish background pattern to show transparency in the image */
-static void draw_background(SDL_Renderer *renderer, int w, int h)
+static void draw_rectangle(SDL_Renderer *renderer, int w, int h, int x, int y)
 {
-    SDL_Color col[2] = {
+    SDL_Color col[3] = {
         { 0x66, 0x66, 0x66, 0xff },
         { 0x99, 0x99, 0x99, 0xff },
+        { 0xff, 0x00, 0x00, 0xff },
     };
-    int i, x, y;
+    //int i, x, y;
     SDL_Rect rect;
 
-    rect.w = 8;
-    rect.h = 8;
-    for (y = 0; y < h; y += rect.h) {
-        for (x = 0; x < w; x += rect.w) {
-            /* use an 8x8 checkerboard pattern */
-            i = (((x ^ y) >> 3) & 1);
-            SDL_SetRenderDrawColor(renderer, col[i].r, col[i].g, col[i].b, col[i].a);
+    rect.w = 4;
+    rect.h = 4;
+    SDL_SetRenderDrawColor(renderer, col[2].r, col[2].g, col[2].b, col[2].a);
 
-            rect.x = x;
-            rect.y = y;
-            SDL_RenderFillRect(renderer, &rect);
-        }
-    }
+    rect.x = x; 
+    rect.y = y;
+    SDL_RenderFillRect(renderer, &rect);
 }
 
 SDL_Texture* loadSDLSurface(std::string fileName) {
@@ -295,6 +295,9 @@ int main(int argc, char *argv[])
   int i, w, h, done;
   SDL_Event event;
   const char *saveFile = NULL;
+  bool mouseClicked = false;
+
+  std::map<int, int> map_index_hypothenuse;
 
   initSurfaces();
 
@@ -325,6 +328,7 @@ int main(int argc, char *argv[])
 
     Uint8 mouseState = SDL_GetMouseState(&xPos, &yPos);
 
+    mouseClicked = false;
     while ( SDL_PollEvent(&event) ) {
         switch (event.type) {
             case SDL_KEYUP:
@@ -354,6 +358,7 @@ int main(int argc, char *argv[])
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 //done = 1;
+                mouseClicked = true;
                 break;
             case SDL_QUIT:
                 argv[i+1] = NULL;
@@ -449,6 +454,53 @@ int main(int argc, char *argv[])
       }
     }
 
+
+    int px;
+    int py;
+
+    int hypothenuse;
+    int dx;
+    int dy;
+
+    if(mouseClicked == true) {
+      map_index_hypothenuse.clear();
+      for(int counter = 0; counter < npoints-1; counter+=2) {
+        px = points[counter];
+        py = points[counter+1];
+
+
+        dx = px - xPos;
+        dy = py - yPos;
+
+        //hypothenuse = sqrt(px*px + py*py);
+        hypothenuse = sqrt(dx*dx + dy*dy);
+
+        if( map_index_hypothenuse.size() < 4 ) {
+           map_index_hypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+        } else {
+          for(std::map<int, int>::reverse_iterator rit = map_index_hypothenuse.rbegin(); rit != map_index_hypothenuse.rend(); ++rit) {
+            if( hypothenuse < rit->first) {
+              map_index_hypothenuse.erase(--rit.base());
+              map_index_hypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+            }
+          }
+        }
+      }
+
+      printf("XPOS => %i\n", xPos);
+      printf("YPOS => %i\n", yPos);
+      printf("SIZE => %i\n", map_index_hypothenuse.size());
+      for(std::map<int, int>::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
+
+        printf("\nPOINTS X => %i\n", points[iterator->second] );
+        printf("POINTS Y => %i\n", points[iterator->second+1] );
+      }
+    } else {
+      for(std::map<int, int>::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
+        draw_rectangle(renderer, 8, 8, points[iterator->second], points[iterator->second+1]);
+      }
+    }
+    //draw_rectangle(renderer, 8, 8, 500, 500);
 
     SDL_RenderPresent(renderer);
     currentFrame = (currentFrame + 1) % 60;
