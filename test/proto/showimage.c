@@ -10,6 +10,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "font.h"
 #include "points.h"
 
 #define WIDTH 960 
@@ -297,6 +298,21 @@ int main(int argc, char *argv[])
   const char *saveFile = NULL;
   bool mouseClicked = false;
 
+  if ( TTF_Init() < 0 ) {
+    fprintf(stderr, "Couldn't initialize TTF: %s\n",SDL_GetError());
+    SDL_Quit();
+    return(2);
+  }
+
+
+  TTF_Font *font = TTF_OpenFont("DroidSans.ttf", 12);
+  if(font == NULL) {
+    fprintf(stderr, "Couldn't load %d pt font from %s: %s\n", 12, "DroidSans.ttf", SDL_GetError());
+    return(2);
+  }
+  SDL_Color forecol = { 0x00, 0x00, 0x00, 0 };
+  
+
   std::map<int, int> map_index_hypothenuse;
 
   initSurfaces();
@@ -458,7 +474,7 @@ int main(int argc, char *argv[])
     int px;
     int py;
 
-    int hypothenuse;
+    float hypothenuse;
     int dx;
     int dy;
 
@@ -472,10 +488,10 @@ int main(int argc, char *argv[])
         dx = px - xPos;
         dy = py - yPos;
 
-        //hypothenuse = sqrt(px*px + py*py);
-        hypothenuse = sqrt(dx*dx + dy*dy);
+        
+        hypothenuse = sqrt(dx*dx + dy*dy + (dx-dy)*(dx-dy));
 
-        if( map_index_hypothenuse.size() < 4 ) {
+        if( map_index_hypothenuse.size() < 18 ) {
            map_index_hypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
         } else {
           for(std::map<int, int>::reverse_iterator rit = map_index_hypothenuse.rbegin(); rit != map_index_hypothenuse.rend(); ++rit) {
@@ -490,14 +506,39 @@ int main(int argc, char *argv[])
       printf("XPOS => %i\n", xPos);
       printf("YPOS => %i\n", yPos);
       printf("SIZE => %i\n", map_index_hypothenuse.size());
+
+      int counter = 0;
       for(std::map<int, int>::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
 
-        printf("\nPOINTS X => %i\n", points[iterator->second] );
-        printf("POINTS Y => %i\n", points[iterator->second+1] );
+        counter =  iterator->second;
+        printf("\nPOINTS X => %i\n", points[counter] );
+        printf("POINTS Y => %i\n", points[counter+1] );
+        printf("NORM     => %i\n", iterator->first );
       }
     } else {
+      int counter = 0;
       for(std::map<int, int>::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
-        draw_rectangle(renderer, 8, 8, points[iterator->second], points[iterator->second+1]);
+
+        counter =  iterator->second;
+        draw_rectangle(renderer, 8, 8, points[counter], points[counter+1]);
+
+        //SDL_Surface* text = TTF_RenderText_Solid(font, "test", forecol);
+        std::string mytest = convertInt(iterator->first);
+        SDL_Surface* text = TTF_RenderText_Solid(font, mytest.c_str(), forecol);
+        
+        Scene scene;
+        scene.messageRect.x = points[counter] + 3;
+        scene.messageRect.y = points[counter+1] + 1;
+        scene.messageRect.w = 25;
+        scene.messageRect.h = 25;
+        scene.message = SDL_CreateTextureFromSurface(renderer, text);
+
+        draw_scene(renderer, &scene);
+        
+        SDL_FreeSurface(text);
+        SDL_DestroyTexture(scene.message);
+ 
+
       }
     }
     //draw_rectangle(renderer, 8, 8, 500, 500);
