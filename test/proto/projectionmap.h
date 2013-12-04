@@ -137,7 +137,10 @@ public:
 			  x * mat[0][1] + y * mat[1][1] + z * mat[2][1] + mat[3][1],
 			  x * mat[0][2] + y * mat[1][2] + z * mat[2][2] + mat[3][2]);
 		T w = x * mat[0][3] + y * mat[1][3] + z * mat[2][3] + mat[3][3];
-		return (w != 1) ? pt / w : pt;
+
+	  return (w != 1) ? pt / w : pt;
+	  //return pt;
+
 	}
 	friend std::ostream & operator << (std::ostream &os, const Point3<T> &pt)
 	{
@@ -213,7 +216,7 @@ std::vector<vertex_screen_map> GetVertexScreenMap(int width,
 
 	for (int i = 0; i < nverts; ++i) {
 		Point3<float> ps = vertsPtr[i] * modelViewMatrix * perspProjMatrix;
-		if (ps.x < l || ps.x > r || ps.y < b || ps.y > t) continue;
+		//if (ps.x < l || ps.x > r || ps.y < b || ps.y > t) continue;
 		// convert projected point coordinates to pixel coordinates
 		unsigned px = std::min(unsigned((ps.x - l) / (r - l) * width), unsigned(width - 1));
 		unsigned py = std::min(unsigned((1 - (ps.y - b) / (t - b)) * height), unsigned(height - 1));
@@ -232,24 +235,31 @@ std::vector<vertex_screen_map> GetVertexScreenMap(int width,
     Point3<float> final;
     Point3<float> pointXRevert(1920 * px + 1, 0, 0);
 
-    Matrix44<float> test;
 
     //test.Invert();
     //perspProjMatrix.Invert();
 
     final = pointXRevert * invModelViewMatrix * invPerspProjMatrix ;
 
+    final = vertsPtr[i] * modelViewMatrix;
+
+
     
-    myfile << vertsPtr[i].x;
-    myfile << ";";
-    myfile << vertsPtr[i].y;
-    myfile << ";";
-    myfile << vertsPtr[i].z;
-    myfile << ";";
+//    myfile << vertsPtr[i].x;
+//    myfile << ";";
+//    myfile << vertsPtr[i].y;
+//    myfile << ";";
+//    myfile << vertsPtr[i].z;
+//    myfile << ";";
+//    myfile << px;
+//    myfile << ";";
+//    myfile << py;
+//    myfile << ";";
+
     myfile << px;
-    myfile << ";";
+    myfile << ",";
     myfile << py;
-    myfile << ";";
+    myfile << ",";
     myfile << std::endl;
 
 
@@ -258,37 +268,13 @@ std::vector<vertex_screen_map> GetVertexScreenMap(int width,
     } else {
       //printf(" --- DOUBLON\n");
     }
-
-    //myfile << " -- ";
-    //myfile << mapKey;
-    //myfile << std::endl;
-    
-//    if(screenx_setScreenY_map.find(px) ==  screenx_setScreenY_map.end()) {
-//      unsigned keyOrdered = 2 * py + py;
-//      printf("-- %u\n", px);
-//      std::set<unsigned> setElement;
-//      setElement.insert(py);
-//      screenx_setScreenY_map.insert( std::pair<unsigned, std::set<unsigned> >(px, setElement) );
-//    } else {
-//
-//      std::map<unsigned, std::set<unsigned> >::iterator it = screenx_setScreenY_map.find(px);
-//      (*it).second.insert(py);
-//    }
 	}
+
+  //Matrix44<float> test = modelViewMatrix * perspProjMatrix;
 
   myfile.close();
   printf(" == %i\n", mapOrdered.size());
-//  printf("-- %u\n", screenx_setScreenY_map.size());
-//  printf("\n");
-//
-//  //std::set<unsigned, std::greater<unsigned> >::iterator it;
-//  std::map<unsigned, std::set<unsigned> >::iterator it;
-//  for(it = screenx_setScreenY_map.begin(); it != screenx_setScreenY_map.end(); ++it) {
-//
-//    std::set<unsigned> myset = (*it).second;
-//    std::set<unsigned>::iterator myIt= myset.begin();
-//    printf(" --- %i\n", myset.size()); 
-//  }
+
   return vertexScreenMapVector;
 }
 

@@ -1,6 +1,6 @@
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#include <SDL_rotozoom.h>
+#include <SDL.h>
+
+#include <SDL_image.h>
 
 #include <string>
 #include <assert.h>
@@ -39,11 +39,10 @@ int xPosClicked = 0;
 int yPosClicked = 0;
 
 //The surfaces
-SDL_Surface *screen = NULL;
-SDL_Surface *empty = NULL;
-SDL_Surface *surface = NULL;
+SDL_Window * screen = NULL;
+SDL_Renderer *sdlRenderer;
 
-std::map <std::string, SDL_Surface*> surfMap;
+std::map <std::string, SDL_Texture*> surfMap;
 std::vector <std::string> notLoadedSurfVector;
 
 struct Position {
@@ -81,26 +80,19 @@ int yConst = 72;
 bool mouseClicked = false;
 
 
-SDL_Surface* loadSDLSurface(std::string fileName) {
-  SDL_Surface* surface;
-  FILE *fp = fopen(fileName.data(), "rb");
-  if( fp == NULL ) {
-    SDL_SetError("Couldn't open %s", fp);
-  } else {
-    temp_rwop = SDL_RWFromFP(fp, 0);
-    surface = IMG_Load_RW(temp_rwop, 0);
+SDL_Texture* loadSDLSurface(std::string fileName) {
 
-    SDL_FreeRW(temp_rwop);
-    temp_rwop = NULL;
-    fclose(fp);
-    return surface;
-  }
-  return NULL;
+  printf("-- %s\n", fileName.data()); 
+  SDL_Texture* texture = IMG_LoadTexture(sdlRenderer, fileName.data());
+  return(texture);
 }
 
 void chargeSurface() {
   for (std::vector<std::string>::iterator it = notLoadedSurfVector.begin() ; it != notLoadedSurfVector.end(); ++it) {
     surfMap[(*it)] = loadSDLSurface((*it) + ".png");
+    if (!surfMap[(*it)]) { 
+      fprintf(stderr, "Couldn't load %s\n", SDL_GetError());
+    }  
   }
   notLoadedSurfVector.clear();
 }
@@ -133,7 +125,6 @@ bool handleKeyEvent() {
   ControllerEvent controllerEvent;
   memset(&controllerEvent, 0, sizeof(ControllerEvent));
   SDL_Event event;
-  SDLMod mod;
 
   Uint8 mouseState = SDL_GetMouseState(&xPos, &yPos);
 
@@ -245,17 +236,39 @@ void applySurfaces() {
     } else {
       if((*it).frames.size() > 0) {
         if(std::find((*it).frames.begin(), (*it).frames.end(), currentFrame) != (*it).frames.end()) {
-          SDL_BlitSurface(surfMap[idValue] , &r, screen, NULL);
+          SDL_QueryTexture(surfMap[idValue], NULL, NULL, NULL, NULL);
+          SDL_RenderCopy(sdlRenderer, surfMap[idValue] , NULL, NULL);
         }
       } else {
-        SDL_BlitSurface(surfMap[idValue] , &r, screen, NULL);
+        SDL_QueryTexture(surfMap[idValue], NULL, NULL, NULL, NULL);
+        SDL_RenderCopy(sdlRenderer, surfMap[idValue] , NULL , NULL);
       }
     }
   }
+
+  const int numPoints = 4;
+  SDL_Point points[numPoints];
+
+  points[0].x = 134;
+  points[0].y = 89;
+  points[1].x = 129;
+  points[1].y = 103;
+  points[2].x = 171;
+  points[2].y = 89;
+  points[3].x = 167;
+  points[3].y = 103;
+
+
+  //-11.2217;-0.868118;0.379809;134;89;
+  //-10.5483;-1.5029;0.379608;129;103;
+  //-10.5735;-0.207413;0.379809;171;89;
+  //-9.90005;-0.842192;0.379608;167;103; 
+
 }
 
 void flipSurfaces() {
-  SDL_Flip(screen);
+  //SDL_Flip(screen);
+  SDL_RenderPresent(sdlRenderer);
 }
 
 
@@ -286,12 +299,12 @@ std::vector<vertex_screen_map> GetFirstThreeClosestVertices(float x, float y, st
 
 
 void freeSurfaces() {
-  SDL_BlitSurface(empty, NULL, screen, NULL);
-  if(surface != NULL) {
+  //SDL_BlitSurface(empty, NULL, screen, NULL);
+  //if(surface != NULL) {
 //    SDL_FreeSurface(zoomsurface);
 //    SDL_FreeSurface(zoommontagne);
 //    SDL_FreeSurface(zoomplatnoncarre);
-  }
+  //}
 }
 
 
@@ -343,7 +356,16 @@ int main( int argc, char* args[] ) {
   perspProjMatrix[3][3] = 0;
 
 
-  std::vector<vertex_screen_map> vertexScreenMap = GetVertexScreenMap(WIDTH, HEIGHT, 1, -1, 1, perspProjMatrix, modelViewMatrix); 
+
+  std::vector<vertex_screen_map> vertexScreenMap = GetVertexScreenMap(WIDTH, 
+                                                                      HEIGHT, 
+                                                                      1, 
+                                                                      -1, 
+                                                                      1, 
+                                                                      perspProjMatrix, 
+                                                                      modelViewMatrix,
+                                                                      perspProjMatrix.Invert(),
+                                                                      modelViewMatrix.Invert()); 
 
   positionVector.push_back(Position(0, 0, "bateau/0001" ));
   positionVector.push_back(Position(0, 0, "bateau/picking_a"));
@@ -367,57 +389,38 @@ int main( int argc, char* args[] ) {
 
   positionVector.push_back(Position(0, 0, "bateau/petitpoteau"));
   positionVector.push_back(Position(0, 0, "bateau/nuage/nuage"));
-
   scalefactor = 325;
 
-  /*
-   *  Initialise libSDL
-   */
-  if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTTHREAD) == -1) {
-    printf("cannot initialize SDL\n");
-    return EXIT_FAILURE;
-  }
+//  /*
+//   *  Initialise libSDL
+//   */
+//  if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) == -1) {
+//    printf("cannot initialize SDL\n");
+//    return EXIT_FAILURE;
+//  }
 
-  empty = SDL_CreateRGBSurface(SDL_SWSURFACE, WIDTH, HEIGHT,
-     32, 0, 0, 0, 0);
+//  empty = SDL_CreateRGBSurface(SDL_SWSURFACE, WIDTH, HEIGHT,
+//     32, 0, 0, 0, 0);
 
   mutex = SDL_CreateMutex();
 
-  int options = SDL_ANYFORMAT | SDL_HWSURFACE | SDL_DOUBLEBUF /*| SDL_FULLSCREEN*/;
+  Uint32 flags = SDL_WINDOW_HIDDEN;
 
-  screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, options);
-  if(!screen) {
+
+  if(SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, flags, &screen, &sdlRenderer)) {
     printf("cannot set video mode\n");
     return EXIT_FAILURE;
   }
 
+  SDL_SetWindowTitle(screen, "Titre fenêtre");
+  SDL_SetWindowSize(screen, WIDTH, HEIGHT);
+  SDL_ShowWindow(screen);
+
   // Création du thread pour charger les images
-  if ( (threadChargementImage = SDL_CreateThread(fonctionChargementImage, NULL)) == NULL ) {
+  if ( (threadChargementImage = SDL_CreateThread(fonctionChargementImage, NULL, NULL)) == NULL ) {
     printf("Impossible de créer le thread --> Chargement image\n");
     return EXIT_FAILURE;
   }
-
-  SurfaceSharedPtr<SDL_Surface>::type surface_ptr;
-  std::vector<TileSharedPtr> tile_vector;
-
-  TileSharedPtr tile_ptr(new Tile(0, 0, 1.0d));
-  tile_vector.push_back(tile_ptr);
-
-  tile_ptr.reset(new Tile(1, 0, 1.0d));
-  tile_vector.push_back(tile_ptr);
-
-  tile_ptr.reset(new Tile(2, 0, 1.0d));
-  tile_vector.push_back(tile_ptr);
-
-
-  boost::shared_ptr< DynamicGrid  > dynamicGrid_ptr(new DynamicGrid(225, 
-                                                                 101, 
-                                                                 permanentShiftX, 
-                                                                 permanentShiftY, 
-                                                                 1.0d, 
-                                                                 tile_vector));
-
-
 
   //Quit flag
   quit = false;
@@ -447,11 +450,12 @@ int main( int argc, char* args[] ) {
         yPosClicked = yPos;
         mouseClicked = false;
       }
+      
       applySurfaces();
-
       flipSurfaces();
 
       freeSurfaces();
+      SDL_Delay(100);
 
       if ( SDL_mutexP(mutex) < 0 ) {
         fprintf(stderr, "Couldn't lock mutex: %s", SDL_GetError());

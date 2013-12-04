@@ -6,7 +6,7 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include <SDL_rotozoom.h>
+//#include <SDL_rotozoom.h>
 
 
 class Renderer: public IRenderer<SDL_Surface>

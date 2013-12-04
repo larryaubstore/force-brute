@@ -102,6 +102,17 @@ SDL_Texture* loadSDLSurface(std::string fileName) {
   return(texture);
 }
 
+
+void insertIntoMap(int hypothenuse, int counter, std::map<int, int>& mapHypothenuse) {
+  if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+//    printf("INSERT\n");
+    mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+  } else {
+    hypothenuse = hypothenuse + 1;
+    insertIntoMap(hypothenuse, counter, mapHypothenuse);
+  }
+}
+
 void chargeSurface() {
   for (std::vector<Position>::iterator it = positionVector.begin() ; it != positionVector.end(); ++it) {
     surfMap[(*it).id] = loadSDLSurface((*it).id + ".png");
@@ -487,56 +498,54 @@ int main(int argc, char *argv[])
 
         dx = px - xPos;
         dy = py - yPos;
-
         
-        hypothenuse = sqrt(dx*dx + dy*dy + (dx-dy)*(dx-dy));
-
-        if( map_index_hypothenuse.size() < 18 ) {
-           map_index_hypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
-        } else {
-          for(std::map<int, int>::reverse_iterator rit = map_index_hypothenuse.rbegin(); rit != map_index_hypothenuse.rend(); ++rit) {
-            if( hypothenuse < rit->first) {
-              map_index_hypothenuse.erase(--rit.base());
-              map_index_hypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
-            }
-          }
-        }
+        hypothenuse = sqrt(dx*dx + dy*dy);
+        insertIntoMap(hypothenuse, counter, map_index_hypothenuse);
       }
 
-      printf("XPOS => %i\n", xPos);
-      printf("YPOS => %i\n", yPos);
-      printf("SIZE => %i\n", map_index_hypothenuse.size());
 
+      int myCounter = 0;
       int counter = 0;
+      int myhyp = 0;
       for(std::map<int, int>::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
 
-        counter =  iterator->second;
-        printf("\nPOINTS X => %i\n", points[counter] );
-        printf("POINTS Y => %i\n", points[counter+1] );
-        printf("NORM     => %i\n", iterator->first );
+        if(myCounter < 4) {
+          counter =  iterator->second;
+          myhyp = iterator->first;
+          printf("XPOS => %i YPOS => %i HYP => %i\n", points[counter], points[counter+1], myhyp);
+        }
+
+        myCounter++;
+
       }
+      printf("\n");
     } else {
       int counter = 0;
+      int myCounter = 0;
       for(std::map<int, int>::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
 
-        counter =  iterator->second;
-        draw_rectangle(renderer, 8, 8, points[counter], points[counter+1]);
+        if(myCounter < 4) {
+          counter =  iterator->second;
+          draw_rectangle(renderer, 8, 8, points[counter], points[counter+1]);
 
-        //SDL_Surface* text = TTF_RenderText_Solid(font, "test", forecol);
-        std::string mytest = convertInt(iterator->first);
-        SDL_Surface* text = TTF_RenderText_Solid(font, mytest.c_str(), forecol);
-        
-        Scene scene;
-        scene.messageRect.x = points[counter] + 3;
-        scene.messageRect.y = points[counter+1] + 1;
-        scene.messageRect.w = 25;
-        scene.messageRect.h = 25;
-        scene.message = SDL_CreateTextureFromSurface(renderer, text);
+          //SDL_Surface* text = TTF_RenderText_Solid(font, "test", forecol);
+          std::string mytest = convertInt(iterator->first);
+          SDL_Surface* text = TTF_RenderText_Solid(font, mytest.c_str(), forecol);
+          
+          Scene scene;
+          scene.messageRect.x = points[counter] + 3;
+          scene.messageRect.y = points[counter+1] + 1;
+          scene.messageRect.w = 25;
+          scene.messageRect.h = 25;
+          scene.message = SDL_CreateTextureFromSurface(renderer, text);
 
-        draw_scene(renderer, &scene);
-        
-        SDL_FreeSurface(text);
-        SDL_DestroyTexture(scene.message);
+          draw_scene(renderer, &scene);
+          
+          SDL_FreeSurface(text);
+          SDL_DestroyTexture(scene.message);
+
+          myCounter++;
+        }
  
 
       }
