@@ -50,31 +50,6 @@ SDL_Renderer *renderer;
 std::vector<Position> positionVector;
 
 
-///* Draw a Gimpish background pattern to show transparency in the image */
-//static void draw_background(SDL_Renderer *renderer, int w, int h)
-//{
-//    SDL_Color col[2] = {
-//        { 0x66, 0x66, 0x66, 0xff },
-//        { 0x99, 0x99, 0x99, 0xff },
-//    };
-//    int i, x, y;
-//    SDL_Rect rect;
-//
-//    rect.w = 8;
-//    rect.h = 8;
-//    for (y = 0; y < h; y += rect.h) {
-//        for (x = 0; x < w; x += rect.w) {
-//            /* use an 8x8 checkerboard pattern */
-//            i = (((x ^ y) >> 3) & 1);
-//            SDL_SetRenderDrawColor(renderer, col[i].r, col[i].g, col[i].b, col[i].a);
-//
-//            rect.x = x;
-//            rect.y = y;
-//            SDL_RenderFillRect(renderer, &rect);
-//        }
-//    }
-//}
-
 /* Draw a Gimpish background pattern to show transparency in the image */
 static void draw_rectangle(SDL_Renderer *renderer, int w, int h, int x, int y)
 {
@@ -103,13 +78,27 @@ SDL_Texture* loadSDLSurface(std::string fileName) {
 }
 
 
-void insertIntoMap(int hypothenuse, int counter, std::map<int, int>& mapHypothenuse) {
-  if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
-//    printf("INSERT\n");
-    mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+std::string convertIntm(int number)
+{
+   std::stringstream ss;//create a stringstream
+   ss << number;//add number to the stream
+   return ss.str();//return a string with the contents of the stream
+}
+
+
+void insertIntoMap(int hypothenuse, int counter, std::map< std::string, std::pair<int, int> >& mapHypothenuse, int px, int py) {
+  std::string key = convertIntm(px) + "--" +  convertIntm(py);
+  //std::cout << key << '\n';
+
+  //if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+  if(mapHypothenuse.find( key ) == mapHypothenuse.end()) {
+    //mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+
+    printf("-- %i\n", counter); 
+    mapHypothenuse.insert( std::pair< std::string, std::pair<int, int> >(key,  std::pair<int, int>(hypothenuse, counter)));
   } else {
-    hypothenuse = hypothenuse + 1;
-    insertIntoMap(hypothenuse, counter, mapHypothenuse);
+    //hypothenuse = hypothenuse + 1;
+    //insertIntoMap(hypothenuse, counter, mapHypothenuse);
   }
 }
 
@@ -219,84 +208,6 @@ void initSurfaces() {
   positionVector.push_back(Position(0, 0, "bateau/nuage/0058", boost::assign::list_of(58)(63), "240" ));
   positionVector.push_back(Position(0, 0, "bateau/nuage/0059", boost::assign::list_of(59)(62), "240" ));
   positionVector.push_back(Position(0, 0, "bateau/nuage/0060", boost::assign::list_of(60)(61), "240" ));
-
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0001", boost::assign::list_of(44)(45)(46)(47), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0002", boost::assign::list_of(42)(43)(48)(49), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0003", boost::assign::list_of(40)(41)(50)(51), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0004", boost::assign::list_of(38)(39)(52)(53), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0005", boost::assign::list_of(36)(37)(54)(55), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0006", boost::assign::list_of(34)(35)(56)(57), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0007", boost::assign::list_of(32)(33)(58)(59), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0008", boost::assign::list_of(0)(1)(30)(31), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0009", boost::assign::list_of(2)(3)(28)(29), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0010", boost::assign::list_of(4)(5)(26)(27), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0011", boost::assign::list_of(6)(7)(24)(25), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0012", boost::assign::list_of(8)(9)(22)(23), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0013", boost::assign::list_of(10)(11)(20)(21), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0014", boost::assign::list_of(12)(13)(18)(19), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0015", boost::assign::list_of(14)(15)(16)(17), "240" ));
-
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0001", boost::assign::list_of(1), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0002", boost::assign::list_of(2), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0003", boost::assign::list_of(3), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0004", boost::assign::list_of(4), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0005", boost::assign::list_of(5), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0006", boost::assign::list_of(6), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0007", boost::assign::list_of(7), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0008", boost::assign::list_of(8), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0009", boost::assign::list_of(9), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0010", boost::assign::list_of(10), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0011", boost::assign::list_of(11), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0012", boost::assign::list_of(12), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0013", boost::assign::list_of(13), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0014", boost::assign::list_of(14), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0015", boost::assign::list_of(15), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0016", boost::assign::list_of(16), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0017", boost::assign::list_of(17), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0018", boost::assign::list_of(18), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0019", boost::assign::list_of(19), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0020", boost::assign::list_of(20), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0021", boost::assign::list_of(21), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0022", boost::assign::list_of(22), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0023", boost::assign::list_of(23), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0024", boost::assign::list_of(24), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0025", boost::assign::list_of(25), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0026", boost::assign::list_of(26), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0027", boost::assign::list_of(27), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0028", boost::assign::list_of(28), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0029", boost::assign::list_of(29), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0030", boost::assign::list_of(30), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0031", boost::assign::list_of(31), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0032", boost::assign::list_of(32), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0033", boost::assign::list_of(33), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0034", boost::assign::list_of(34), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0035", boost::assign::list_of(35), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0036", boost::assign::list_of(36), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0037", boost::assign::list_of(37), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0038", boost::assign::list_of(38), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0039", boost::assign::list_of(39), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0040", boost::assign::list_of(40), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0041", boost::assign::list_of(41), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0042", boost::assign::list_of(42), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0043", boost::assign::list_of(43), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0044", boost::assign::list_of(44), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0045", boost::assign::list_of(45), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0046", boost::assign::list_of(46), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0047", boost::assign::list_of(47), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0048", boost::assign::list_of(48), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0049", boost::assign::list_of(49), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0050", boost::assign::list_of(50), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0051", boost::assign::list_of(51), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0052", boost::assign::list_of(52), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0053", boost::assign::list_of(53), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0054", boost::assign::list_of(54), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0055", boost::assign::list_of(55), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0056", boost::assign::list_of(56), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0057", boost::assign::list_of(57), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0058", boost::assign::list_of(58), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0059", boost::assign::list_of(59), "240" ));
-//  positionVector.push_back(Position(0, 0, "bateau/nuagecontinu/0060", boost::assign::list_of(60), "240" ));
-
 }
 
 int main(int argc, char *argv[])
@@ -324,7 +235,8 @@ int main(int argc, char *argv[])
   SDL_Color forecol = { 0x00, 0x00, 0x00, 0 };
   
 
-  std::map<int, int> map_index_hypothenuse;
+  //std::map<int, int> map_index_hypothenuse;
+  std::map< std::string, std::pair<int, int> > map_index_hypothenuse;
 
   initSurfaces();
 
@@ -447,10 +359,8 @@ int main(int argc, char *argv[])
         } else if(speed == "240") {
 
           int currentFrameCorrected = ceil(currentFrame240 / 2) + 1;
-          //int currentFrameCorrected = ceil(currentFrame120 / 2) + 1;
           
           if(std::find((*it).frames.begin(), (*it).frames.end(), currentFrameCorrected) != (*it).frames.end()) {
-          //if(std::find((*it).frames.begin(), (*it).frames.end(), currentFrame120 + 1) != (*it).frames.end()) {
             SDL_QueryTexture(surfMap[idValue], NULL, NULL, &w, &h);
 
             SrcR.x = 0;
@@ -500,18 +410,19 @@ int main(int argc, char *argv[])
         dy = py - yPos;
         
         hypothenuse = sqrt(dx*dx + dy*dy);
-        insertIntoMap(hypothenuse, counter, map_index_hypothenuse);
+        insertIntoMap(hypothenuse, counter, map_index_hypothenuse, px, py);
       }
 
 
       int myCounter = 0;
       int counter = 0;
+      //std::pair<int, int> counter;
       int myhyp = 0;
-      for(std::map<int, int>::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
+      for(std::map< std::string, std::pair<int, int> >::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
 
         if(myCounter < 4) {
-          counter =  iterator->second;
-          myhyp = iterator->first;
+          counter =  iterator->second.second;
+          myhyp = iterator->second.first;
           printf("XPOS => %i YPOS => %i HYP => %i\n", points[counter], points[counter+1], myhyp);
         }
 
@@ -522,14 +433,14 @@ int main(int argc, char *argv[])
     } else {
       int counter = 0;
       int myCounter = 0;
-      for(std::map<int, int>::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
+      for(std::map< std::string, std::pair<int, int> >::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
 
-        if(myCounter < 4) {
-          counter =  iterator->second;
+        if(myCounter < 8) {
+          counter =  iterator->second.second;
           draw_rectangle(renderer, 8, 8, points[counter], points[counter+1]);
 
           //SDL_Surface* text = TTF_RenderText_Solid(font, "test", forecol);
-          std::string mytest = convertInt(iterator->first);
+          std::string mytest = convertInt(iterator->second.first);
           SDL_Surface* text = TTF_RenderText_Solid(font, mytest.c_str(), forecol);
           
           Scene scene;
