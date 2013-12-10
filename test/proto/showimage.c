@@ -86,20 +86,12 @@ std::string convertIntm(int number)
 }
 
 
-void insertIntoMap(int hypothenuse, int counter, std::map< std::string, std::pair<int, int> >& mapHypothenuse, int px, int py) {
+void insertIntoMap(int hypothenuse, int counter, std::map< int, int >& mapHypothenuse, int px, int py) {
   std::string key = convertIntm(px) + "--" +  convertIntm(py);
-  //std::cout << key << '\n';
 
-  //if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
-  if(mapHypothenuse.find( key ) == mapHypothenuse.end()) {
-    //mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
-
-    printf("-- %i\n", counter); 
-    mapHypothenuse.insert( std::pair< std::string, std::pair<int, int> >(key,  std::pair<int, int>(hypothenuse, counter)));
-  } else {
-    //hypothenuse = hypothenuse + 1;
-    //insertIntoMap(hypothenuse, counter, mapHypothenuse);
-  }
+  if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+    mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+  } 
 }
 
 void chargeSurface() {
@@ -146,7 +138,6 @@ void initSurfaces() {
   positionVector.push_back(Position(0, 0, "bateau/picking/0015", boost::assign::list_of(14)(15)(16)(17) ));
 
   positionVector.push_back(Position(0, 0, "bateau/bateau/bateau"));
-  //positionVector.push_back(Position(0, 0, "bateau/nuage/nuage"));
   
   positionVector.push_back(Position(0, 0, "bateau/nuage/0001", boost::assign::list_of(1)(120), "240" ));
   positionVector.push_back(Position(0, 0, "bateau/nuage/0002", boost::assign::list_of(2)(119), "240" ));
@@ -235,8 +226,7 @@ int main(int argc, char *argv[])
   SDL_Color forecol = { 0x00, 0x00, 0x00, 0 };
   
 
-  //std::map<int, int> map_index_hypothenuse;
-  std::map< std::string, std::pair<int, int> > map_index_hypothenuse;
+  std::map<int, int> map_index_hypothenuse;
 
   initSurfaces();
 
@@ -401,7 +391,7 @@ int main(int argc, char *argv[])
 
     if(mouseClicked == true) {
       map_index_hypothenuse.clear();
-      for(int counter = 0; counter < npoints-1; counter+=2) {
+      for(int counter = 0; counter < 2*npoints; counter+=2) {
         px = points[counter];
         py = points[counter+1];
 
@@ -416,14 +406,13 @@ int main(int argc, char *argv[])
 
       int myCounter = 0;
       int counter = 0;
-      //std::pair<int, int> counter;
       int myhyp = 0;
-      for(std::map< std::string, std::pair<int, int> >::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
+      for(std::map< int, int >::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
 
-        if(myCounter < 4) {
-          counter =  iterator->second.second;
-          myhyp = iterator->second.first;
-          printf("XPOS => %i YPOS => %i HYP => %i\n", points[counter], points[counter+1], myhyp);
+        if(myCounter < 6) {
+          counter =  iterator->second;
+          myhyp = iterator->first;
+          printf("XPOS => %i YPOS => %i HYP => %i COUNTER => %i\n", points[counter], points[counter+1], myhyp, counter);
         }
 
         myCounter++;
@@ -433,32 +422,29 @@ int main(int argc, char *argv[])
     } else {
       int counter = 0;
       int myCounter = 0;
-      for(std::map< std::string, std::pair<int, int> >::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
+      for(std::map< int, int >::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
 
-        if(myCounter < 8) {
-          counter =  iterator->second.second;
-          draw_rectangle(renderer, 8, 8, points[counter], points[counter+1]);
+          if(myCounter < 6) { 
+            counter =  iterator->second;
+            
+            draw_rectangle(renderer, 8, 8, points[counter], points[counter+1]);
 
-          //SDL_Surface* text = TTF_RenderText_Solid(font, "test", forecol);
-          std::string mytest = convertInt(iterator->second.first);
-          SDL_Surface* text = TTF_RenderText_Solid(font, mytest.c_str(), forecol);
-          
-          Scene scene;
-          scene.messageRect.x = points[counter] + 3;
-          scene.messageRect.y = points[counter+1] + 1;
-          scene.messageRect.w = 25;
-          scene.messageRect.h = 25;
-          scene.message = SDL_CreateTextureFromSurface(renderer, text);
+            std::string mytest = convertInt(iterator->first);
+            SDL_Surface* text = TTF_RenderText_Solid(font, mytest.c_str(), forecol);
+            
+            Scene scene;
+            scene.messageRect.x = points[counter] + 3;
+            scene.messageRect.y = points[counter+1] + 1;
+            scene.messageRect.w = 25;
+            scene.messageRect.h = 25;
+            scene.message = SDL_CreateTextureFromSurface(renderer, text);
 
-          draw_scene(renderer, &scene);
-          
-          SDL_FreeSurface(text);
-          SDL_DestroyTexture(scene.message);
-
-          myCounter++;
-        }
- 
-
+            draw_scene(renderer, &scene);
+            
+            SDL_FreeSurface(text);
+            SDL_DestroyTexture(scene.message);
+            myCounter++;
+          }
       }
     }
     //draw_rectangle(renderer, 8, 8, 500, 500);
