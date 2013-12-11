@@ -49,9 +49,11 @@ std::vector <std::string> notLoadedSurfVector;
 SDL_Renderer *renderer;
 std::vector<Position> positionVector;
 
+std::vector<std::string> pickingPosition;
+
 
 /* Draw a Gimpish background pattern to show transparency in the image */
-static void draw_rectangle(SDL_Renderer *renderer, int w, int h, int x, int y)
+static void draw_rectangle(SDL_Renderer *renderer, int w, int h, int x, int y, bool near)
 {
     SDL_Color col[3] = {
         { 0x66, 0x66, 0x66, 0xff },
@@ -63,7 +65,13 @@ static void draw_rectangle(SDL_Renderer *renderer, int w, int h, int x, int y)
 
     rect.w = 4;
     rect.h = 4;
-    SDL_SetRenderDrawColor(renderer, col[2].r, col[2].g, col[2].b, col[2].a);
+
+    if(near) {
+      SDL_SetRenderDrawColor(renderer, col[2].r, col[2].g, col[2].b, col[2].a);
+    } else {
+      SDL_SetRenderDrawColor(renderer, col[0].r, col[0].g, col[0].b, col[0].a);
+      //SDL_SetRenderDrawColor(renderer, col[2].r, col[2].g, col[2].b, col[2].a);
+    }
 
     rect.x = x; 
     rect.y = y;
@@ -86,12 +94,51 @@ std::string convertIntm(int number)
 }
 
 
-void insertIntoMap(int hypothenuse, int counter, std::map< int, int >& mapHypothenuse, int px, int py) {
+void insertIntoMap(int hypothenuse, int counter, std::map< int, int >& mapHypothenuse, int px, int py, std::vector<std::string>& pickingVector) {
   std::string key = convertIntm(px) + "--" +  convertIntm(py);
+  if(std::find(pickingVector.begin(), pickingVector.end(), key) == pickingVector.end()) { 
+    pickingVector.push_back(key);
+    if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+      mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+    } else {
+      hypothenuse = hypothenuse + 3;
+      if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+        mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+      } else {
+        hypothenuse = hypothenuse + 5;
+        if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+          mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+        }
+      }
+    } 
+  }
 
-  if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
-    mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
-  } 
+   
+//    if(std::find(pickingVector.begin(), pickingVector.end(), key) != pickingVector.end()) { 
+//      pickingVector.push_back(key);
+//    }
+    
+//    hypothenuse = hypothenuse + 3;
+//    if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+//      mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+//    } else {
+//      hypothenuse = hypothenuse + 5;
+//      if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+//        mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+//      } else {
+//        hypothenuse = hypothenuse + 7;
+//        if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+//          mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+//        } else {
+//          hypothenuse = hypothenuse + 9;
+//          if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
+//            mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
+//          }
+//        }
+//      }
+//    }
+    //hypothenuse = hypothenuse + 1;
+    //insertIntoMap(hypothenuse, counter, mapHypothenuse, px, py);
 }
 
 void chargeSurface() {
@@ -391,6 +438,7 @@ int main(int argc, char *argv[])
 
     if(mouseClicked == true) {
       map_index_hypothenuse.clear();
+      pickingPosition.clear();
       for(int counter = 0; counter < 2*npoints; counter+=2) {
         px = points[counter];
         py = points[counter+1];
@@ -400,7 +448,10 @@ int main(int argc, char *argv[])
         dy = py - yPos;
         
         hypothenuse = sqrt(dx*dx + dy*dy);
-        insertIntoMap(hypothenuse, counter, map_index_hypothenuse, px, py);
+
+        if(hypothenuse < 100) {
+          insertIntoMap(hypothenuse, counter, map_index_hypothenuse, px, py, pickingPosition);
+        }
       }
 
 
@@ -409,7 +460,7 @@ int main(int argc, char *argv[])
       int myhyp = 0;
       for(std::map< int, int >::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
 
-        if(myCounter < 6) {
+        if(myCounter < 8) {
           counter =  iterator->second;
           myhyp = iterator->first;
           printf("XPOS => %i YPOS => %i HYP => %i COUNTER => %i\n", points[counter], points[counter+1], myhyp, counter);
@@ -424,10 +475,15 @@ int main(int argc, char *argv[])
       int myCounter = 0;
       for(std::map< int, int >::iterator iterator = map_index_hypothenuse.begin(); iterator != map_index_hypothenuse.end(); iterator++) {
 
-          if(myCounter < 6) { 
+          if(myCounter < 4) { 
             counter =  iterator->second;
-            
-            draw_rectangle(renderer, 8, 8, points[counter], points[counter+1]);
+           
+
+            if(myCounter < 4) { 
+              draw_rectangle(renderer, 8, 8, points[counter], points[counter+1], true);
+            } else {
+              draw_rectangle(renderer, 8, 8, points[counter], points[counter+1], false);
+            }
 
             std::string mytest = convertInt(iterator->first);
             SDL_Surface* text = TTF_RenderText_Solid(font, mytest.c_str(), forecol);
