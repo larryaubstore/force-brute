@@ -101,11 +101,11 @@ void insertIntoMap(int hypothenuse, int counter, std::map< int, int >& mapHypoth
     if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
       mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
     } else {
-      hypothenuse = hypothenuse + 3;
+      hypothenuse = hypothenuse + 1;
       if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
         mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
       } else {
-        hypothenuse = hypothenuse + 5;
+        hypothenuse = hypothenuse + 1;
         if(mapHypothenuse.find( hypothenuse ) == mapHypothenuse.end()) {
           mapHypothenuse.insert( std::pair<int, int>(hypothenuse, counter));
         }
@@ -168,24 +168,25 @@ void initSurfaces() {
   positionVector.push_back(Position(0, 0, "bateau/0014", boost::assign::list_of(12)(13)(18)(19) ));
   positionVector.push_back(Position(0, 0, "bateau/0015", boost::assign::list_of(14)(15)(16)(17) ));
 
-  positionVector.push_back(Position(0, 0, "bateau/picking/0001", boost::assign::list_of(44)(45)(46)(47) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0002", boost::assign::list_of(42)(43)(48)(49) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0003", boost::assign::list_of(40)(41)(50)(51) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0004", boost::assign::list_of(38)(39)(52)(53) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0005", boost::assign::list_of(36)(37)(54)(55) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0006", boost::assign::list_of(34)(35)(56)(57) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0007", boost::assign::list_of(32)(33)(58)(59) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0008", boost::assign::list_of(0)(1)(30)(31) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0009", boost::assign::list_of(2)(3)(28)(29) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0010", boost::assign::list_of(4)(5)(26)(27) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0011", boost::assign::list_of(6)(7)(24)(25) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0012", boost::assign::list_of(8)(9)(22)(23) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0013", boost::assign::list_of(10)(11)(20)(21) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0014", boost::assign::list_of(12)(13)(18)(19) ));
-  positionVector.push_back(Position(0, 0, "bateau/picking/0015", boost::assign::list_of(14)(15)(16)(17) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0001", boost::assign::list_of(44)(45)(46)(47) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0002", boost::assign::list_of(42)(43)(48)(49) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0003", boost::assign::list_of(40)(41)(50)(51) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0004", boost::assign::list_of(38)(39)(52)(53) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0005", boost::assign::list_of(36)(37)(54)(55) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0006", boost::assign::list_of(34)(35)(56)(57) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0007", boost::assign::list_of(32)(33)(58)(59) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0008", boost::assign::list_of(0)(1)(30)(31) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0009", boost::assign::list_of(2)(3)(28)(29) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0010", boost::assign::list_of(4)(5)(26)(27) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0011", boost::assign::list_of(6)(7)(24)(25) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0012", boost::assign::list_of(8)(9)(22)(23) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0013", boost::assign::list_of(10)(11)(20)(21) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0014", boost::assign::list_of(12)(13)(18)(19) ));
+//  positionVector.push_back(Position(0, 0, "bateau/picking/0015", boost::assign::list_of(14)(15)(16)(17) ));
 
   positionVector.push_back(Position(0, 0, "bateau/bateau/bateau"));
-  
+  positionVector.push_back(Position(0, 0, "bateau/montage/montagne"));
+
   positionVector.push_back(Position(0, 0, "bateau/nuage/0001", boost::assign::list_of(1)(120), "240" ));
   positionVector.push_back(Position(0, 0, "bateau/nuage/0002", boost::assign::list_of(2)(119), "240" ));
   positionVector.push_back(Position(0, 0, "bateau/nuage/0003", boost::assign::list_of(3)(118), "240" ));
