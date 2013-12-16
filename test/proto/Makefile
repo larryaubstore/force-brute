@@ -48,3 +48,4 @@ tile$(EXE): $(srcdir)/tile.cpp Timer.o Tile.o Renderer.o DynamicGrid.o ConfigFil
 clean:
 	rm -f $(TARGETS)
 
+# ./blender -b /home/larry/devel/proto1/montagne.blend -P /home/larry/devel/force-brute/test/proto/blender_scripts/RenderMapMontagne.py
