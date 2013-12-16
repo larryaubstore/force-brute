@@ -15,6 +15,8 @@
 #include <string.h>
 #include "data.h"
 
+#define WIDTH 960 
+#define HEIGHT 540 
 
 template<typename T>
 class Matrix44
@@ -41,9 +43,6 @@ public:
 	}
 
   Matrix44 Invert() {
-	  //T mInv[4][4];
-	  //
-	  //Matrix44
     Matrix44<T> mInv;
 
     T     a00, a01, a02, a03,
@@ -139,8 +138,6 @@ public:
 		T w = x * mat[0][3] + y * mat[1][3] + z * mat[2][3] + mat[3][3];
 
 	  return (w != 1) ? pt / w : pt;
-	  //return pt;
-
 	}
 	friend std::ostream & operator << (std::ostream &os, const Point3<T> &pt)
 	{
@@ -216,17 +213,10 @@ std::vector<vertex_screen_map> GetVertexScreenMap(int width,
 
 	for (int i = 0; i < nverts; ++i) {
 		Point3<float> ps = vertsPtr[i] * modelViewMatrix * perspProjMatrix;
-		//if (ps.x < l || ps.x > r || ps.y < b || ps.y > t) continue;
-		// convert projected point coordinates to pixel coordinates
-		unsigned px = std::min(unsigned((ps.x - l) / (r - l) * width), unsigned(width - 1));
+
+  	unsigned px = std::min(unsigned((ps.x - l) / (r - l) * width), unsigned(width - 1));
 		unsigned py = std::min(unsigned((1 - (ps.y - b) / (t - b)) * height), unsigned(height - 1));
     vertexScreenMapVector.push_back(vertex_screen_map(vertsPtr[i], px, py));
-
-    //unsigned mapKey = 3 * (vertsPtr[i].y) + 2 * (vertsPtr[i].x) + vertsPtr[i].z;
-    //unsigned mapKey = 2 * (py) + px;
-    //long mapKey = (3 * (vertsPtr[i].y ) + 2 * (vertsPtr[i].x ) + vertsPtr[i].z) * 1000000 ;
-    //double mapKey = (3 * (vertsPtr[i].y ) + 2 * (vertsPtr[i].x ) + vertsPtr[i].z);
-
 
     double mapKey = vertsPtr[i].y * vertsPtr[i].x  * vertsPtr[i].z;
 
@@ -236,25 +226,8 @@ std::vector<vertex_screen_map> GetVertexScreenMap(int width,
     Point3<float> pointXRevert(1920 * px + 1, 0, 0);
 
 
-    //test.Invert();
-    //perspProjMatrix.Invert();
-
     final = pointXRevert * invModelViewMatrix * invPerspProjMatrix ;
-
     final = vertsPtr[i] * modelViewMatrix;
-
-
-    
-//    myfile << vertsPtr[i].x;
-//    myfile << ";";
-//    myfile << vertsPtr[i].y;
-//    myfile << ";";
-//    myfile << vertsPtr[i].z;
-//    myfile << ";";
-//    myfile << px;
-//    myfile << ";";
-//    myfile << py;
-//    myfile << ";";
 
     myfile << px;
     myfile << ",";
@@ -270,8 +243,6 @@ std::vector<vertex_screen_map> GetVertexScreenMap(int width,
     }
 	}
 
-  //Matrix44<float> test = modelViewMatrix * perspProjMatrix;
-
   myfile.close();
   printf(" == %i\n", mapOrdered.size());
 
@@ -279,63 +250,68 @@ std::vector<vertex_screen_map> GetVertexScreenMap(int width,
 }
 
 
-//int main(int argc, char **argv)
-//{
-//	int width = 960, height = 540;
-//	float aspectRatio = 1;
-//	float l = -aspectRatio, r = aspectRatio, b = -1, t = 1; // left, right, bottom top coordinates
+//int main(int argc, char **argv) {
 //
-//	Matrix44<float> perspProjMatrix;
-//	Matrix44<float> modelViewMatrix;
-//
-//  //{{0.685880482, -0.317370087, 0.654861867, 0}, {0.727633715, 0.312468529, -0.61066556, 0}, {-0.0108167641, 0.895343125, 0.445245326, 0}, {-0.363019913, 0.922901273, -55.501564, 1}}
-//  modelViewMatrix[0][0] = 0.685880482;
-//  modelViewMatrix[0][1] = -0.317370087;
-//  modelViewMatrix[0][2] = 0.654861867;
-//  modelViewMatrix[0][3] = 0;
-//
-//  modelViewMatrix[1][0] = 0.727633715;
-//  modelViewMatrix[1][1] = 0.312468529;
-//  modelViewMatrix[1][2] = -0.61066556;
-//  modelViewMatrix[1][3] = 0;
-//
-//  modelViewMatrix[2][0] = -0.0108167641;
-//  modelViewMatrix[2][1] = 0.895343125;
-//  modelViewMatrix[2][2] = 0.445245326;
-//  modelViewMatrix[2][3] = 0;
-//
-//  modelViewMatrix[3][0] = -0.363019913;
-//  modelViewMatrix[3][1] = 0.922901273;
-//  modelViewMatrix[3][2] = -55.501564;
-//  modelViewMatrix[3][3] = 1;
-// 
-//  //{{5.14315796, 0, 0, 0}, {0, 9.14339256, 0, 0}, {0, 0, -1.002002, -1}, {0, 0, -0.2002002, 0
-//  perspProjMatrix[0][0] = 5.14315796;
-//  perspProjMatrix[0][1] = 0;
-//  perspProjMatrix[0][2] = 0;
-//  perspProjMatrix[0][3] = 0;
-//
-//  perspProjMatrix[1][0] = 0;
-//  perspProjMatrix[1][1] = 9.14339256;
-//  perspProjMatrix[1][2] = 0;
-//  perspProjMatrix[1][3] = 0;
-//
-//  perspProjMatrix[2][0] = 0;
-//  perspProjMatrix[2][1] = 0;
-//  perspProjMatrix[2][2] = -1.002002;
-//  perspProjMatrix[2][3] = -1;
-//
-//  perspProjMatrix[3][0] = 0;
-//  perspProjMatrix[3][1] = 0;
-//  perspProjMatrix[3][2] = -0.2002002;
-//  perspProjMatrix[3][3] = 0;
-//
-//  
-//	std::cerr << perspProjMatrix << std::endl;
-//	projectverts<float>(perspProjMatrix, modelViewMatrix, l, r, b, t, width, height, (Point3<float>*)verts, nverts, "./standard.ppm");
-//
-//	return 0;
-//}
+int main(int argc, char *argv[]) {
+	Matrix44<float> perspProjMatrix;
+	Matrix44<float> modelViewMatrix;
+
+  modelViewMatrix[0][0] = 0.685880482;
+  modelViewMatrix[0][1] = -0.317370087;
+  modelViewMatrix[0][2] = 0.654861867;
+  modelViewMatrix[0][3] = 0;
+
+  modelViewMatrix[1][0] = 0.727633715;
+  modelViewMatrix[1][1] = 0.312468529;
+  modelViewMatrix[1][2] = -0.61066556;
+  modelViewMatrix[1][3] = 0;
+
+  modelViewMatrix[2][0] = -0.0108167641;
+  modelViewMatrix[2][1] = 0.895343125;
+  modelViewMatrix[2][2] = 0.445245326;
+  modelViewMatrix[2][3] = 0;
+
+  modelViewMatrix[3][0] = -0.363019913;
+  modelViewMatrix[3][1] = 0.922901273;
+  modelViewMatrix[3][2] = -55.501564;
+  modelViewMatrix[3][3] = 1;
+ 
+  //{{5.14315796, 0, 0, 0}, {0, 9.14339256, 0, 0}, {0, 0, -1.002002, -1}, {0, 0, -0.2002002, 0
+  perspProjMatrix[0][0] = 5.14315796;
+  perspProjMatrix[0][1] = 0;
+  perspProjMatrix[0][2] = 0;
+  perspProjMatrix[0][3] = 0;
+
+  perspProjMatrix[1][0] = 0;
+  perspProjMatrix[1][1] = 9.14339256;
+  perspProjMatrix[1][2] = 0;
+  perspProjMatrix[1][3] = 0;
+
+  perspProjMatrix[2][0] = 0;
+  perspProjMatrix[2][1] = 0;
+  perspProjMatrix[2][2] = -1.002002;
+  perspProjMatrix[2][3] = -1;
+
+  perspProjMatrix[3][0] = 0;
+  perspProjMatrix[3][1] = 0;
+  perspProjMatrix[3][2] = -0.2002002;
+  perspProjMatrix[3][3] = 0;
+
+
+
+  std::vector<vertex_screen_map> vertexScreenMap = GetVertexScreenMap(WIDTH, 
+                                                                      HEIGHT, 
+                                                                      1, 
+                                                                      -1, 
+                                                                      1, 
+                                                                      perspProjMatrix, 
+                                                                      modelViewMatrix,
+                                                                      perspProjMatrix.Invert(),
+                                                                      modelViewMatrix.Invert()); 
+
+
+  return 0;
+}
+
 
 #endif
-
