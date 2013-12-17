@@ -1,0 +1,12 @@
+import bpy
+
+
+out = open('/tmp/ROW_' + str(bpy.data.scenes['SceneMontagne'].frame_start) + '.txt', "w") 
+
+
+for i in bpy.context.active_object.data.vertices:
+    if i.select:
+        local_point = i.co
+        world_point = bpy.data.objects['PlanEau'].matrix_world * local_point
+        #print(" -- vertex -- ", i.co)
+        out.write( '%f, %f, %f,\n' % (world_point.x, world_point.y, world_point.z) )
