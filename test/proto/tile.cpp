@@ -16,7 +16,6 @@
 
 #include <boost/assign/list_of.hpp>
 
-#include "projectionmap.h"
 
 
 #define WIDTH 960 
@@ -272,31 +271,6 @@ void flipSurfaces() {
 }
 
 
-std::vector<vertex_screen_map> GetFirstThreeClosestVertices(float x, float y, std::vector<vertex_screen_map> vertexScreenMap) {
-  std::vector<vertex_screen_map> firstThreeClosestVertices;
-
-  firstThreeClosestVertices.push_back(vertexScreenMap[0]);
-  firstThreeClosestVertices.push_back(vertexScreenMap[1]);
-  firstThreeClosestVertices.push_back(vertexScreenMap[2]);
-
-  for (std::vector<vertex_screen_map>::iterator it = vertexScreenMap.begin() ; it != vertexScreenMap.end(); ++it) {
-    //(*it).screen_x;
-    //
-
-    if(firstThreeClosestVertices.size() == 0) {
-      firstThreeClosestVertices.push_back(*it);
-    } else if(firstThreeClosestVertices.size() == 1) {
-      //if(firstThreeClosestVertices[0
-    } else if(firstThreeClosestVertices.size() == 2) {
-
-    } else {
-
-    }
-  }
-  return firstThreeClosestVertices;
-}
-
-
 
 void freeSurfaces() {
   //SDL_BlitSurface(empty, NULL, screen, NULL);
@@ -310,63 +284,9 @@ void freeSurfaces() {
 
 int main( int argc, char* args[] ) {
 
-	Matrix44<float> perspProjMatrix;
-	Matrix44<float> modelViewMatrix;
-
-  //{{0.685880482, -0.317370087, 0.654861867, 0}, {0.727633715, 0.312468529, -0.61066556, 0}, {-0.0108167641, 0.895343125, 0.445245326, 0}, {-0.363019913, 0.922901273, -55.501564, 1}}
-  modelViewMatrix[0][0] = 0.685880482;
-  modelViewMatrix[0][1] = -0.317370087;
-  modelViewMatrix[0][2] = 0.654861867;
-  modelViewMatrix[0][3] = 0;
-
-  modelViewMatrix[1][0] = 0.727633715;
-  modelViewMatrix[1][1] = 0.312468529;
-  modelViewMatrix[1][2] = -0.61066556;
-  modelViewMatrix[1][3] = 0;
-
-  modelViewMatrix[2][0] = -0.0108167641;
-  modelViewMatrix[2][1] = 0.895343125;
-  modelViewMatrix[2][2] = 0.445245326;
-  modelViewMatrix[2][3] = 0;
-
-  modelViewMatrix[3][0] = -0.363019913;
-  modelViewMatrix[3][1] = 0.922901273;
-  modelViewMatrix[3][2] = -55.501564;
-  modelViewMatrix[3][3] = 1;
- 
-  //{{5.14315796, 0, 0, 0}, {0, 9.14339256, 0, 0}, {0, 0, -1.002002, -1}, {0, 0, -0.2002002, 0
-  perspProjMatrix[0][0] = 5.14315796;
-  perspProjMatrix[0][1] = 0;
-  perspProjMatrix[0][2] = 0;
-  perspProjMatrix[0][3] = 0;
-
-  perspProjMatrix[1][0] = 0;
-  perspProjMatrix[1][1] = 9.14339256;
-  perspProjMatrix[1][2] = 0;
-  perspProjMatrix[1][3] = 0;
-
-  perspProjMatrix[2][0] = 0;
-  perspProjMatrix[2][1] = 0;
-  perspProjMatrix[2][2] = -1.002002;
-  perspProjMatrix[2][3] = -1;
-
-  perspProjMatrix[3][0] = 0;
-  perspProjMatrix[3][1] = 0;
-  perspProjMatrix[3][2] = -0.2002002;
-  perspProjMatrix[3][3] = 0;
 
 
-
-  std::vector<vertex_screen_map> vertexScreenMap = GetVertexScreenMap(WIDTH, 
-                                                                      HEIGHT, 
-                                                                      1, 
-                                                                      -1, 
-                                                                      1, 
-                                                                      perspProjMatrix, 
-                                                                      modelViewMatrix,
-                                                                      perspProjMatrix.Invert(),
-                                                                      modelViewMatrix.Invert()); 
-
+                                                                      
   positionVector.push_back(Position(0, 0, "bateau/0001" ));
   positionVector.push_back(Position(0, 0, "bateau/picking_a"));
 
