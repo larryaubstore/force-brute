@@ -14,16 +14,17 @@ class ConfigFileReader: public IConfigFileReader {
     std::vector<path> _fileList;
     std::string _rowDirectory;
     std::string _colDirectory;
-    std::map<std::string, std::pair<int, int> > _verticesMap;
+    
+    void GetFiles(const path & dir_path);
+
   public:
     ConfigFileReader(std::string rowDirectory, std::string colDirectory);
     ~ConfigFileReader();
 
-    void Initialize(const path & dir_path);
-
+    void Initialize();
     void Reset();
 
-    std::map<std::string, std::pair<int, int> > GetVerticesMap();
+    std::vector<path> GetFileList();
 };
 
 #endif

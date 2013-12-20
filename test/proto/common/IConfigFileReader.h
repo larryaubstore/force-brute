@@ -17,11 +17,11 @@ class IConfigFileReader
 
     virtual ~IConfigFileReader() {};
 
-    virtual void Initialize(const path & dir_path) = 0;
+    virtual void Initialize() = 0;
 
     virtual void Reset() = 0;
 
-    virtual std::map<std::string, std::pair<int, int> > GetVerticesMap() = 0;
+    virtual std::vector<path> GetFileList() = 0;
 };
 
 #endif

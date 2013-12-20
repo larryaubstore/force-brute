@@ -39,7 +39,7 @@ Injector.o : common/Injector.cpp
 zoom$(EXE): $(srcdir)/zoom.cpp Timer.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
-show$(EXE): $(srcdir)/showimage.c Timer.o $(srcdir)/font.h
+show$(EXE): $(srcdir)/showimage.c Timer.o $(srcdir)/font.h ConfigFileReader.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 tile$(EXE): $(srcdir)/tile.cpp Timer.o Tile.o Renderer.o DynamicGrid.o ConfigFileReader.o Injector.o 

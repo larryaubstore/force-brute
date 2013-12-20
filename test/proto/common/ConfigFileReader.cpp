@@ -11,24 +11,29 @@ ConfigFileReader::~ConfigFileReader() {
 
 }
 
-
-std::map<std::string, std::pair<int, int> > ConfigFileReader::GetVerticesMap() {
-  return _verticesMap;
-}
-
-void ConfigFileReader::Initialize(const path & dir_path) {
+void ConfigFileReader::GetFiles(const path & dir_path) {
   if ( exists( dir_path ) ) {
     directory_iterator end_itr; 
     for ( directory_iterator itr( dir_path ); itr != end_itr; ++itr ) {
       if ( is_directory(itr->status()) ) {
-        this->Initialize( itr->path() );
+        this->GetFiles( itr->path() );
       } else {
-        _fileList.push_back(itr->path());
+        this->_fileList.push_back(itr->path());
       }
     }
   }
 }
 
+
+void ConfigFileReader::Initialize() {
+  this->GetFiles(path(this->_rowDirectory));
+  this->GetFiles(path(this->_colDirectory));
+}
+
 void ConfigFileReader::Reset() {
 
+}
+
+std::vector<path> ConfigFileReader::GetFileList() {
+  return _fileList;
 }

@@ -12,10 +12,14 @@
 #include "SDL_image.h"
 #include "font.h"
 #include "points.h"
+#include "common/ConfigFileReader.h"
 
 #define WIDTH 960 
 #define HEIGHT 540 
 
+#include "boost/filesystem.hpp"
+
+using namespace boost::filesystem;
 
 int currentFrame = 0;
 int currentFrame120 = 0;
@@ -258,6 +262,14 @@ int main(int argc, char *argv[])
   SDL_Event event;
   const char *saveFile = NULL;
   bool mouseClicked = false;
+
+  ConfigFileReader* configFileReader = new ConfigFileReader("data", "test2");
+
+  path dataPath( "data" );
+
+  configFileReader->Initialize();
+  std::vector<path> fileList = configFileReader->GetFileList();
+  
 
   if ( TTF_Init() < 0 ) {
     fprintf(stderr, "Couldn't initialize TTF: %s\n",SDL_GetError());
