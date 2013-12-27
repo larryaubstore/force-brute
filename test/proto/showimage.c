@@ -19,6 +19,11 @@
 
 #include "boost/filesystem.hpp"
 
+
+#include <wallaroo/catalog.h>
+
+
+using namespace wallaroo;
 using namespace boost::filesystem;
 
 int currentFrame = 0;
@@ -263,13 +268,20 @@ int main(int argc, char *argv[])
   const char *saveFile = NULL;
   bool mouseClicked = false;
 
-  ConfigFileReader* configFileReader = new ConfigFileReader("data", "test2");
+  //ConfigFileReader* configFileReader = new ConfigFileReader("data", "test2");
+  //path dataPath( "data" );
 
-  path dataPath( "data" );
+  //configFileReader->Initialize();
+  //std::vector<path> fileList = configFileReader->GetFileList();
+  //
+ 
+  Catalog catalog;
+  catalog.Create( "config", "ConfigFileReader", std::string( "data" ), std::string( "test2") ); 
 
-  configFileReader->Initialize();
-  std::vector<path> fileList = configFileReader->GetFileList();
-  
+  assert( catalog.IsWiringOk() );
+
+  boost::shared_ptr< ConfigFileReader > configFileReader = catalog[ "config" ];
+
 
   if ( TTF_Init() < 0 ) {
     fprintf(stderr, "Couldn't initialize TTF: %s\n",SDL_GetError());

@@ -7,7 +7,7 @@ saucelib = /home/larry/apps/sauce/.libs
 CC      = g++
 EXE	= 
 CFLAGS  = -g -O2  -I/usr/local/include/SDL2 -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR
-INCLUDE = -I /home/larry/devel/force-brute -I /home/larry/apps/sauce -I wallaroo/wallaroo  -I /home/larry/devel/boost_1_55_0/boost
+INCLUDE = -I /home/larry/devel/force-brute -I /home/larry/apps/sauce -I wallaroo  -I /home/larry/devel/boost_1_55_0/boost
 
 LIBS	=  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL_gfx -lSDL2_ttf -lfreetype -lboost_system -lboost_filesystem  #libSDL2_ttf.so
 

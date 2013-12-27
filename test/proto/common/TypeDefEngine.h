@@ -9,6 +9,8 @@
 
 #include <SDL/SDL.h>
 
+#include <vector>
+
 class ITile;
 class IDynamicGrid;
 class IConfigFileReader;
@@ -27,6 +29,7 @@ typedef boost::shared_ptr<IDynamicGrid> DynamicGridSharedPtr;
 typedef boost::shared_ptr<ITile> TileSharedPtr;
 typedef boost::shared_ptr<IConfigFileReader> ConfigFileReaderSharedPtr;
 typedef boost::shared_ptr<IRenderer<SDL_Surface> > RendererSharedPtr;
+typedef std::pair<std::string, std::vector <std::string> > Filename_DataPair;
 
 
 class {
