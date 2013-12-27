@@ -1,23 +1,22 @@
-# Makefile to build the SDL tests
-
-srcdir  = .
-
+PROG = BLWORLD
+OBJS = projectionmap.o
 
 CC      = g++
-EXE	= 
 CFLAGS  = -g -O2  -I/usr/local/include/SDL2 -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR
 INCLUDE = -I /home/larry/devel/force-brute 
 
 LIBS	=  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL_gfx -lSDL2_ttf -lfreetype
 
-TARGETS = blscreen$(EXE) 
+#all: $(TARGETS) 
 
-all: $(TARGETS) 
+$(PROG): $(OBJS)
+
+.cpp.o:
+	$(CC) $(INCLUDE) $(CFLAGS) -c $*.cpp $(LIBS)
 
 
-blscreen$(EXE): $(srcdir)/projectionmap.cpp
-	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
+#blscreen$(EXE): $(srcdir)/projectionmap.cpp
+#	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:
-	rm -f $(TARGETS)
-
+	rm -f *~ $(OBJS) $(PROG)

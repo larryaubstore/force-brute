@@ -4,15 +4,15 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "Timer.h"
+#include <Timer.h>
 #include <boost/assign/list_of.hpp>
 #include <math.h> 
 
 #include "SDL.h"
 #include "SDL_image.h"
 #include "font.h"
-#include "points.h"
-#include "common/ConfigFileReader.h"
+#include <points.h>
+#include <ConfigFileReader.h>
 
 #define WIDTH 960 
 #define HEIGHT 540 

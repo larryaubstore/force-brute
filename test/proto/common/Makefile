@@ -2,6 +2,8 @@ CC = g++
 
 .SUFFIXES = .cpp
 
+
+
 CFLAGS  = -g -O2  -I/usr/local/include/SDL2 -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR
 PROG = COMMON
 OBJS = ConfigFileReader.o DynamicGrid.o Tile.o  Injector.o
