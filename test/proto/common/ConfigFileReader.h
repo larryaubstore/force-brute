@@ -2,7 +2,7 @@
 #define CONFIG_FILE_READER_H
 
 #include "IConfigFileReader.h"
-#include "boost/filesystem.hpp"   // includes all needed Boost.Filesystem declarations
+#include <boost/filesystem.hpp>   // includes all needed Boost.Filesystem declarations
 #include <boost/algorithm/string.hpp>
 #include <vector>
 
@@ -10,7 +10,7 @@
 #include <fstream>
 #include <string>
 
-#include "wallaroo/registered.h"
+#include <wallaroo/registered.h>
 
 using namespace boost::filesystem;
 using namespace wallaroo;
