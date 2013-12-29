@@ -42,22 +42,11 @@ int yPos = 0;
 int xPosClicked = 0;
 int yPosClicked = 0;
 
-struct Position {
-  int x;
-  int y;
-  std::string id;
-  std::vector<int> frames;
-  std::string speed;
-  Position(int x, int y, std::string id) : x(x), y(y), id(id)  { }
-  Position(int x, int y, std::string id, std::vector<int> frames) : x(x), y(y), id(id), frames(frames) { }
-  Position(int x, int y, std::string id, std::vector<int> frames, std::string speed) : x(x), y(y), id(id), frames(frames), speed(speed) { }
-};
 
 std::map <std::string, SDL_Texture*> surfMap;
 std::vector <std::string> notLoadedSurfVector;
 SDL_Renderer *renderer;
 std::vector<Position> positionVector;
-
 std::vector<std::string> pickingPosition;
 
 

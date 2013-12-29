@@ -31,6 +31,18 @@ typedef boost::shared_ptr<IConfigFileReader> ConfigFileReaderSharedPtr;
 typedef boost::shared_ptr<IRenderer<SDL_Surface> > RendererSharedPtr;
 typedef std::pair<std::string, std::vector <std::string> > Filename_DataPair;
 
+struct Position {
+  int x;
+  int y;
+  std::string id;
+  std::vector<int> frames;
+  std::string speed;
+  Position(int x, int y, std::string id) : x(x), y(y), id(id)  { }
+  Position(int x, int y, std::string id, std::vector<int> frames) : x(x), y(y), id(id), frames(frames) { }
+  Position(int x, int y, std::string id, std::vector<int> frames, std::string speed) : x(x), y(y), id(id), frames(frames), speed(speed) { }
+};
+
+
 
 class {
 public:
