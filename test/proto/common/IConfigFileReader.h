@@ -22,9 +22,10 @@ class IConfigFileReader
 
     virtual void Reset() = 0;
 
+    virtual bool HasNext() = 0;
+
     virtual Filename_DataPair Next() = 0;
 
-    virtual std::vector<path> GetFileList() = 0;
 };
 
 #endif

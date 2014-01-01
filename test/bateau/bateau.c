@@ -13,6 +13,8 @@
 #include "font.h"
 #include <points.h>
 #include <ConfigFileReader.h>
+#include <IFileReader.h>
+#include <FileReader.h>
 
 #define WIDTH 960 
 #define HEIGHT 540 
@@ -257,19 +259,25 @@ int main(int argc, char *argv[])
   const char *saveFile = NULL;
   bool mouseClicked = false;
 
-  //ConfigFileReader* configFileReader = new ConfigFileReader("data", "test2");
-  //path dataPath( "data" );
+  boost::shared_ptr<IFileReader> fileReaderPtr(new FileReader());
+  ConfigFileReader* configFileReader = new ConfigFileReader("data", "test2", fileReaderPtr);
 
-  //configFileReader->Initialize();
+  configFileReader->Initialize();
+
+  Filename_DataPair filename_datapair = configFileReader->Next();
+
+
+  
+
   //std::vector<path> fileList = configFileReader->GetFileList();
   //
- 
-  Catalog catalog;
-  catalog.Create( "config", "ConfigFileReader", std::string( "data" ), std::string( "test2") ); 
 
-  assert( catalog.IsWiringOk() );
+  //Catalog catalog;
+  //catalog.Create( "config", "ConfigFileReader", std::string( "data" ), std::string( "test2") ); 
 
-  boost::shared_ptr< ConfigFileReader > configFileReader = catalog[ "config" ];
+ // assert( catalog.IsWiringOk() );
+
+//  boost::shared_ptr< ConfigFileReader > configFileReader = catalog[ "config" ];
 
 
   if ( TTF_Init() < 0 ) {

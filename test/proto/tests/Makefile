@@ -1,47 +1,22 @@
-# Makefile to build the SDL tests
+CC = g++
 
-srcdir  = .
 
-saucelib = /home/larry/apps/sauce/.libs
 
-CC      = g++
-EXE	= 
-CFLAGS  = -g -O2 -I/usr/include/SDL -I/usr/local/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR
-INCLUDE = -I /home/larry/devel/force-brute -I ../common -I /home/larry/apps/sauce
 
-LIBS	=  -lcpptest -lm -lSDL -lSDL_image -lSDL_gfx
+CFLAGS  = -g -O2  -I/usr/local/include/SDL2 -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR
+PROG = TESTS
+COMMONDIR = ../common
+OBJS = TestFileReader.o $(COMMONDIR)/FileReader.o
 
-TARGETS = ProtoTestSuite$(EXE) TestDynamicGrid.o DynamicGrid.o Renderer.o Tile.o ConfigFileReader.o
+INCLUDE =  -I ../wallaroo -I /home/larry/devel/boost_1_55_0/boost -I ../common # -I /usr/local/include/SDL2
+LIBS  =  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL_gfx -lSDL2_ttf -lfreetype -lboost_system -lboost_filesystem
 
-all: $(TARGETS)
 
-#MockDynamicGrid.o : common/tests/MockDynamicGrid.h
-#	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
+$(PROG): $(OBJS)
 
-#MockSDL.o : common/tests/MockSDL.h
-#	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
+.cpp.o:
+	$(CC) $(INCLUDE) $(CFLAGS) -c $*.cpp $(LIBS)
 
-Tile.o: ../common/Tile.cpp
-	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
-
-Renderer.o : ../common/Renderer.cpp
-	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
-
-ConfigFileReader.o : ../common/ConfigFileReader.cpp
-	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
-
-DynamicGrid.o: ../common/DynamicGrid.cpp
-	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
-
-TestDynamicGrid.o: TestDynamicGrid.cpp
-	$(CC) $(INCLUDE) -c $?  -o $@ $(CFLAGS) $(LIBS)
-
-ProtoTestSuite$(EXE): $(srcdir)/ProtoTestSuite.cpp TestDynamicGrid.o DynamicGrid.o Renderer.o Tile.o ConfigFileReader.o
-	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
-
-#ProtoTestSuite$(EXE): $(srcdir)/ProtoTestSuite.cpp TestDynamicGrid.o DynamicGrid.o Renderer.o Tile.o $(saucelib)/libunittest.a ../common/DependencyInjection.h ConfigFileReader.o
-#	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 clean:
-	rm -f $(TARGETS) 
-
+	rm -f *~ $(OBJS) $(PROG)
