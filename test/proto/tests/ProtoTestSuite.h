@@ -7,9 +7,10 @@
 #include <cstring>
 #include <iostream>
 
-#include "TestDynamicGrid.h"
 
 //#include "scene/SceneStackTest.h"
+//
+#include "TestFileMapper.h"
 
 using namespace std;
 
@@ -74,7 +75,7 @@ int main(int argc, char* argv[])
         // Demonstrates the ability to use multiple test suites
         //
         Test::Suite ts;
-        ts.add(auto_ptr<Test::Suite>(new TestDynamicGrid));
+        ts.add(auto_ptr<Test::Suite>(new TestFileMapper));
         // Run the tests
         //
         auto_ptr<Test::Output> output(cmdline(argc, argv));
