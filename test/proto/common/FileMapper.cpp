@@ -14,13 +14,11 @@ FileMapper::~FileMapper() {
 
 
 std::map<std::string, int> FileMapper::GetVertexRowMap() {
-  std::map<std::string, int> vertexRowMap;
-  return vertexRowMap;
+  return _vertexRowMap;
 }
 
 std::map<std::string, int> FileMapper::GetVertexColMap() {
-  std::map<std::string, int> vertexColMap;
-  return vertexColMap;
+  return _vertexColMap;
 }
 
 
@@ -54,17 +52,29 @@ void FileMapper::ProcessFile(std::pair<std::string, std::vector <std::string> > 
       split( listSplitted, *it, boost::algorithm::is_any_of( "," ) );
 
       concat.flush();
+      //
+      
       
       if(listSplitted.size() == 2) {
         concat << listSplitted[0] << "_" << listSplitted[1];
         keyMap = concat.str();
 
+        std::cout << "ROW " << row << "= " << "KEYMAP = " << keyMap << "\n";
+
         if(row != -1) {
-          _vertexRowMap.insert(std::pair<std::string, int>(keyMap, row));
+          if(this->_vertexRowMap.find( keyMap ) != this->_vertexRowMap.end() ) {
+            this->_vertexRowMap.insert( std::make_pair<std::string, int>(keyMap, row));
+          }
         } else {
-          _vertexRowMap.insert(std::pair<std::string, int>(keyMap, col));
+          if(this->_vertexColMap.find( keyMap ) != this->_vertexColMap.end() ) {
+            this->_vertexColMap.insert( std::make_pair<std::string, int>(keyMap, col));
+          }
         }
       }
     }
+
+    std::cout << "SIZE " << this->_vertexRowMap.size() << "\n";
+    std::cout << "SIZE " << this->_vertexColMap.size() << "\n";
+
   } 
 }

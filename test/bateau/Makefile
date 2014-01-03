@@ -21,7 +21,7 @@ $(PROG): $(TRGTS)
 runner: bateau.o $(COMMONDIR)/Timer.o $(COMMONDIR)/ConfigFileReader.o $(COMMONDIR)/FileReader.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
-testrunner: $(TESTDIR)/ProtoTestSuite.o $(TESTDIR)/TestFileMapper.o
+testrunner: $(TESTDIR)/ProtoTestSuite.o $(TESTDIR)/TestFileMapper.o $(COMMONDIR)/FileMapper.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 all: $(TRGTS)
