@@ -51,30 +51,24 @@ void FileMapper::ProcessFile(std::pair<std::string, std::vector <std::string> > 
       listSplitted.clear();
       split( listSplitted, *it, boost::algorithm::is_any_of( "," ) );
 
-      concat.flush();
-      //
+      concat.str("");
       
       
       if(listSplitted.size() == 2) {
         concat << listSplitted[0] << "_" << listSplitted[1];
         keyMap = concat.str();
 
-        std::cout << "ROW " << row << "= " << "KEYMAP = " << keyMap << "\n";
 
         if(row != -1) {
-          if(this->_vertexRowMap.find( keyMap ) != this->_vertexRowMap.end() ) {
+          if(this->_vertexRowMap.find( keyMap ) == this->_vertexRowMap.end() ) {
             this->_vertexRowMap.insert( std::make_pair<std::string, int>(keyMap, row));
           }
         } else {
-          if(this->_vertexColMap.find( keyMap ) != this->_vertexColMap.end() ) {
+          if(this->_vertexColMap.find( keyMap ) == this->_vertexColMap.end() ) {
             this->_vertexColMap.insert( std::make_pair<std::string, int>(keyMap, col));
           }
         }
       }
     }
-
-    std::cout << "SIZE " << this->_vertexRowMap.size() << "\n";
-    std::cout << "SIZE " << this->_vertexColMap.size() << "\n";
-
   } 
 }
