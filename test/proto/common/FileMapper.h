@@ -13,6 +13,11 @@
 #include <boost/algorithm/string.hpp>
 #include <sstream>
 
+#include <algorithm> 
+#include <functional> 
+#include <cctype>
+#include <locale>
+
 class FileMapper: public IFileMapper
 {
   private:

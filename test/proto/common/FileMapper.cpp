@@ -1,6 +1,8 @@
 #include "FileMapper.h"
 
 
+
+
 FileMapper::FileMapper() {
 
 
@@ -53,11 +55,14 @@ void FileMapper::ProcessFile(std::pair<std::string, std::vector <std::string> > 
 
       concat.str("");
       
-      
-      if(listSplitted.size() == 2) {
-        concat << listSplitted[0] << "_" << listSplitted[1];
-        keyMap = concat.str();
+      if(listSplitted.size() >= 3) {
 
+        boost::algorithm::trim(listSplitted[0]);
+        boost::algorithm::trim(listSplitted[1]);
+        boost::algorithm::trim(listSplitted[2]);
+
+        concat << listSplitted[0] << "_" << listSplitted[1] << "_" << listSplitted[2];
+        keyMap = concat.str();
 
         if(row != -1) {
           if(this->_vertexRowMap.find( keyMap ) == this->_vertexRowMap.end() ) {

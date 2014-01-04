@@ -3,9 +3,10 @@
 void TestFileMapper::testProcessFile() {
   try { 
     std::vector<std::string> data;
-    data.push_back("133,31");
-    data.push_back("156,58");
-    data.push_back("191,28");
+
+    data.push_back("-19.151283, 1.621236, 0.380611,");
+    data.push_back("2.296391, -18.799578, 0.375799,");
+    data.push_back("-8.427446, -8.589170, 0.378205,");
 
     std::string filename = "ROW_4"; 
 
@@ -28,10 +29,9 @@ void TestFileMapper::testProcessFile() {
 void TestFileMapper::testProcessFileDuplicate() {
   try { 
     std::vector<std::string> data;
-    data.push_back("133,31");
-    data.push_back("133,31");
-    data.push_back("191,28");
-
+    data.push_back("-19.151283, 1.621236, 0.380611,");
+    data.push_back("2.296391, -18.799578, 0.375799,");
+    data.push_back("2.296391, -18.799578, 0.375799,");
     std::string filename = "ROW_4"; 
 
     std::pair<std::string, std::vector<std::string> > filename_dataFile;
