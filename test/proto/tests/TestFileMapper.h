@@ -1,7 +1,6 @@
 #ifndef TEST_FILEMAPPER_H
 #define TEST_FILEMAPPER_H
 
-#include <cpptest.h>
 #include <exception>
 #include <iostream>
 #include <stdio.h>
