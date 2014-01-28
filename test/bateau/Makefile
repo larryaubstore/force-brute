@@ -5,6 +5,7 @@ OBJS = bateau.o
 TRGTS = COMMON | BLWORLD $(OBJS) runner TESTS testrunner
 
 COMMONDIR = ../proto/common
+BLDIR = ../proto/blworld_to_screencoord
 TESTDIR = ../proto/tests
 
 CFLAGS  = -g -O2  -I/usr/local/include/SDL2 -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR
@@ -21,7 +22,7 @@ $(PROG): $(TRGTS)
 runner: bateau.o $(COMMONDIR)/Timer.o $(COMMONDIR)/ConfigFileReader.o $(COMMONDIR)/FileReader.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
-testrunner: $(TESTDIR)/ProtoTestSuite.o $(TESTDIR)/TestFileMapper.o $(TESTDIR)/TestBLWorldMapper.o  $(COMMONDIR)/FileMapper.o $(COMMONDIR)/BLWorldMapper.o
+testrunner: $(TESTDIR)/ProtoTestSuite.o $(TESTDIR)/TestFileMapper.o $(TESTDIR)/TestBLWorldMapper.o  $(COMMONDIR)/FileMapper.o $(COMMONDIR)/BLWorldMapper.o $(TESTDIR)/TestScreenCoord.o $(BLDIR)/ScreenCoord.o
 	$(CC) $(INCLUDE) -o $@ $? $(CFLAGS) $(LIBS)
 
 all: $(TRGTS)

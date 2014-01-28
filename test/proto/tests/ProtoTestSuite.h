@@ -12,6 +12,7 @@
 //
 #include "TestFileMapper.h"
 #include "TestBLWorldMapper.h"
+#include "TestScreenCoord.h"
 
 using namespace std;
 
@@ -78,6 +79,7 @@ int main(int argc, char* argv[])
         Test::Suite ts;
         ts.add(auto_ptr<Test::Suite>(new TestFileMapper));
         ts.add(auto_ptr<Test::Suite>(new TestBLWorldMapper));
+        ts.add(auto_ptr<Test::Suite>(new TestScreenCoord));
         // Run the tests
         //
         auto_ptr<Test::Output> output(cmdline(argc, argv));

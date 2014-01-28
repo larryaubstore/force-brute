@@ -1,5 +1,5 @@
 PROG = BLWORLD
-OBJS = projectionmap.o
+OBJS = projectionmap.o ScreenCoord.o
 
 CC      = g++
 CFLAGS  = -g -O2  -I/usr/local/include/SDL2 -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR

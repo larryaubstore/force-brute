@@ -6,9 +6,10 @@ CC = g++
 CFLAGS  = -g -O2  -I/usr/local/include/SDL2 -D_GNU_SOURCE=1 -D_REENTRANT -DHAVE_OPENGL -DSAUCE_STD_TR1_SMART_PTR
 PROG = TESTS
 COMMONDIR = ../common
-OBJS = TestFileMapper.o TestBLWorldMapper.o $(COMMONDIR)/FileReader.o $(COMMONDIR)/FileMapper.o $(COMMONDIR)/ConfigFileReader.o $(COMMONDIR)/BLWorldMapper.o ProtoTestSuite.o 
+BLDIR = ../blworld_to_screencoord
+OBJS = TestFileMapper.o TestBLWorldMapper.o TestScreenCoord.o $(COMMONDIR)/FileReader.o $(COMMONDIR)/FileMapper.o $(COMMONDIR)/ConfigFileReader.o $(COMMONDIR)/BLWorldMapper.o ProtoTestSuite.o $(BLDIR)/ScreenCoord.o 
 
-INCLUDE =  -I ../wallaroo -I /home/larry/devel/boost_1_55_0/boost -I ../common 
+INCLUDE =  -I ../wallaroo -I /home/larry/devel/boost_1_55_0/boost -I $(COMMONDIR) -I $(BLDIR)
 LIBS  =  -L/usr/lib/i386-linux-gnu -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL_gfx -lSDL2_ttf -lfreetype -lboost_system -lboost_filesystem
 
 
